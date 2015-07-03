@@ -1,4 +1,4 @@
-﻿<?
+<?
 $names = file('A:\home\test1.ru\www\pages\table.inf');
 
 $linkreisi = mysqli_connect('localhost','admin','admin','test');
@@ -23,11 +23,12 @@ while($row = mysqli_fetch_assoc($res)) {
 	<tr id="selecttr">
 		<th id="greytd"> Index </th>
 		<td id="1x'.($index-1).'" class="cell"> Number </td>
-		<td id="2x'.($index-1).'" class="cell"> Date </td>
-		<td id="3x'.($index-1).'" class="cell"> Manager </td>
+		<td id="2x'.($index-1).'" class="cell"> Sriv </td>
+		<td id="3x'.($index-1).'" class="cell"> Date </td>
+		<td id="4x'.($index-1).'" class="cell"> Manager </td>
 	</tr>';
-	$replace = array('Index', 'Number', 'Date', 'Manager');
-	$rowname = array('index', 'number', 'date', 'manager');
+	$replace = array('Index', 'Number', 'Sriv', 'Date', 'Manager');
+	$rowname = array('index', 'number', 'sriv', 'date', 'manager');
 	for($i=0; $i < 5; $i++){ $table = str_replace($replace[$i], $row[$rowname[$i]], $table); }
 	echo($table);
 	}
