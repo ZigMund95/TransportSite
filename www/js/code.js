@@ -1,39 +1,25 @@
-﻿function loadPage(page){
-	page = page.replace("#", "");
-	$.ajax({
-		url: 'pages/'+page+'.php',
-		success: function(html){
-			$("#fr").html(html);
-		}
-	})
+function loadPage(){
+	if(("#"+page != location.hash)&&(location.hash != "")){
+		page = location.hash;
+		page = page.replace("#", "");
+		$.ajax({
+			url: 'pages/'+page+'.php',
+			success: function(html){
+				$("#content").html(html);
+			}
+		});
+	}
 };
 
 jQuery(document).ready(function($){
 	
+	setInterval("loadPage()", 250);
 	$("#menu ul li ul").hide();
-	
-	/*var page = "main";
-	loadPage(page);
-	
-	/*$("a").click(
-	function(){
-		page = $(this).attr("href");
-		loadPage(page);
-		return false;
-	});*/
 	
 	$("a").click(function(){
 		if($(this).attr("href") != ""){
-		$("#fr").show();
-		$("#shadow").show();
-		loadPage($(this).attr("href"));
+			loadPage();
 		};
-		return false;
-	});
-	
-	$("body").on("click", "#shadow", function(){
-		$("#fr").hide();
-		$("#shadow").hide();
 	});
 	
 	$("#content").on("click","#add",function(){
@@ -68,13 +54,14 @@ jQuery(document).ready(function($){
 	
 	$("#reisi td").click(
 	function(){ 
-	$("#reisi td").css("border-color", "black")
-	$("#reisi td").attr("class", "cell")
-	$(this).css("border-color", "red") 
-	$(this).attr("class", "cell selected");
+		$("#reisi td").css("border-color", "black")
+		$("#reisi td").attr("class", "cell")
+		$(this).css("border-color", "red") 
+		$(this).attr("class", "cell selected");
 	});
 	
 	$(document).keyup(function(event){
+		if((event.keyCode > 36)&&(event.keyCode < 41)){
 		cell = $(".selected");
 		cellXY = cell.attr("id").split("x");
 		if(event.keyCode == 37){
@@ -112,10 +99,8 @@ jQuery(document).ready(function($){
 			$(str).css("border-color", "red"); 
 			$(str).attr("class", "cell selected");
 		}
+		event.keyCode = '';
 		return false;
-	});
-	
-	$("#footer").click(function(){
-		$("iframe").show();
+		}
 	});
 });

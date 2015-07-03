@@ -1,4 +1,4 @@
-﻿<? session_start(); 
+<?include("pages/configuration.php");
 
 if (!isset($_GET['page'])){
 	$page = 'main';
@@ -22,20 +22,19 @@ if(isset($_SESSION['userid'])){
 <html xmlns="http://www.w3.org/1999/xhtml" lang="ru" xml:lang="ru">
 	<head>
 		<title>test</title>
-		<meta http-equiv="content-type" content="text/html; charset=Windows-1251">
+		<meta http-equiv="content-type" content="text/html; charset=UTF-8">
 		<script src="js/jquery-1.11.3.js" type="text/javascript"> </script>
 		<script src="js/code.js" type="text/javascript"> </script>
 		<link rel="stylesheet" href="style.css" type="text/css" />
 	</head>
 	
 <body>
-<iframe src="pages/main.php"> </iframe>
 <div id="shadow"> </div>
 <div id="fr"> </div>
 <div id="page">
 
 <div id="header">
-	<a href="main"> <img src="images/logo.png" id="logo"> </a>
+	<a href="/"> <img src="images/logo.png" id="logo"> </a>
 	<p>
 		<?/*
 		echo('login='.$username);
@@ -54,8 +53,8 @@ if(isset($_SESSION['userid'])){
 					<a href='register'> Регистация </a>");
 		}*/?>
 		
-		<a href='login' class='login'> Вход </a>
-		<a href='register'> Регистация </a>
+		<a href='#login' class='login'> Вход </a>
+		<a href='#register'> Регистация </a>
 	
 	</p>
 </div>
