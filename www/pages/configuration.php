@@ -1,1 +1,1 @@
-<?session_start(); ?>
+<? ?>

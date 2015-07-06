@@ -45,6 +45,10 @@ display: block;
 background-image: url(images/button.png)
 }
 
+.logout_button{
+display: none;
+}
+
 #login{
 width: 100%;
 position: relative;
@@ -250,6 +254,20 @@ margin:0;
 a.auto,a.auto:hover,a.auto:visited {
 font:10px verdana, arial, helvetica, sans-serif;
 color:#469999;padding:0;margin: 0 20px 0 0;
+}
+
+#counters {
+border: 1px solid;
+}
+
+
+#counters table{
+margin-top: 20px;
+border: 1px solid;
+}
+
+#counters table td{
+border: 1px solid;
 }
 
 #fr{

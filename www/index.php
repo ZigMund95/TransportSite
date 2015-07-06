@@ -1,4 +1,4 @@
-<?include("pages/configuration.php");
+<? session_start();
 
 if (!isset($_GET['page'])){
 	$page = 'main';
@@ -6,7 +6,7 @@ if (!isset($_GET['page'])){
 else{
 	$page = $_GET['page'];
 }
-
+/*
 $username = "";
 if(isset($_SESSION['userid'])){
 	$link = mysqli_connect('localhost', 'admin', 'admin', 'test');
@@ -14,7 +14,7 @@ if(isset($_SESSION['userid'])){
 	$record = mysqli_query($link, "SELECT * FROM `users` WHERE `index`='".$userid."'");
 	$record1 = mysqli_fetch_assoc($record);
 	$username = $record1['login'];
-}
+}*/
 ?>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
@@ -36,25 +36,28 @@ if(isset($_SESSION['userid'])){
 <div id="header">
 	<a href="/"> <img src="images/logo.png" id="logo"> </a>
 	<p>
-		<?/*
-		echo('login='.$username);
-		
-		if($record1['login'] != ""){
-		//echo('logined as '.$record1['login'].'<br>');
+		<? echo("<input type=hidden id='inpsession' value='".$_SESSION['userid']."'>"); ?>
+		<a href='#login' class='login'> Вход </a>
+		<a href='#register'> Регистация </a>
+		<a href='\' id="logout_button"> Exit </a>
+		<? //include('pages/login.php');
+		/*
+		if(isset($_SESSION['userid'])){
+			echo('logined as '.$record1['login'].'<br>');
 		?>
 		<form method='POST'>
+			<a href='' id="logout_button"> Exit </a>
 			<button type=submit name='logout_button' value='submit'>
 				Exit
 			</button>
 		</form>
 		<?}
 		else{
-			echo("<a href='login' class='login'> Вход </a>
-					<a href='register'> Регистация </a>");
+			echo("<a href='#login' class='login'> Вход </a>
+					<a href='#register'> Регистация </a>");
 		}*/?>
 		
-		<a href='#login' class='login'> Вход </a>
-		<a href='#register'> Регистация </a>
+
 	
 	</p>
 </div>
@@ -111,6 +114,10 @@ include('pages/'.$page.'.php');
 
 
 <div id="footer">
+<? 
+echo '<';
+echo $_SESSION['userid'];
+echo '>';	?>
 <p> В этом блоке можно разместить копирайт и счетчики </p>
 </div>
 
