@@ -45,7 +45,7 @@ $pageinf = file('../pages/newrecord.inf');
 
 <form method="POST">
 <p class="column1">
-	Заказчик <input type=text class="width156"> <button type=submit class="width25">+</button> <br>
+	Заказчик <input type=text class="width156" id="counter"> <button type=submit id="countersform" class="width25">+</button> <br>
 	код в АТИ <input type=text class="width185"> <br>
 	маршрут <input type=text class="width185"> <br>
 	адрес погрузки <input type=text class="width185"> <br>

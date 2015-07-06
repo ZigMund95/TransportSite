@@ -11,11 +11,18 @@ function loadPage(){
 	}
 };
 
+function headerLogButton(){
+//$('#inpsession').val("$_SESSION['userid']");
+if($('#inpsession').val() != ''){ $('#header p a').hide(); $("#logout_button").show(); }
+	else{ $('#header p a').show(); $("#logout_button").hide(); }
+}
+
 jQuery(document).ready(function($){
 	
 	setInterval("loadPage()", 250);
-	$("#menu ul li ul").hide();
 	
+	$("#menu ul li ul").hide();
+	headerLogButton();
 	$("a").click(function(){
 		if($(this).attr("href") != ""){
 			loadPage();
@@ -49,7 +56,7 @@ jQuery(document).ready(function($){
 		$("ul", this).slideDown("fast");
 	},
 	function(){
-		$("ul", this).slideUp("fast");
+		$("ul", this).hide();
 	});
 	
 	$("#reisi td").click(
@@ -102,5 +109,51 @@ jQuery(document).ready(function($){
 		event.keyCode = '';
 		return false;
 		}
+	});
+	
+	$("#content").on("click", "#login_button", function(){
+		if (($("[name=login]").val() != '')&($("[name=password]").val() != '')){
+			$.ajax({
+				type: "POST",
+				url: "pages/login.php",
+				data: {login: $("[name=login]").val(), password: $("[name=password]").val()},
+				success: function(html){ $("#content").html(html); }
+			});
+		};
+		});
+		
+	$("#header").on("click", "#logout_button", function(){
+		$.ajax({
+				type: "POST",
+				url: "pages/login.php",
+				data: {event: "logout"},
+				success: function(html){ $("#content").html(html); }
+			});
+	});
+	
+	$("#content").on("click", "#countersform", function(){
+		$("#shadow").show();
+		$("#fr").show();
+		$.ajax({ url: "pages/counters.php",	success: function(html){ $("#fr").html(html); } });
+		return false;
+	});
+	
+	$("#shadow").click(function(){ $("#shadow").hide(); $("#fr").hide(); });
+	
+	$(document).keyup(function(event){
+		$("#counters").append($("#search").val()+'<br>');
+	});
+	
+	$("body").on("dblclick", "#counters td", function(){
+		var cell = $(this).attr('id');
+		var pos = cell.split('x');
+		var selecter = '#1x'+pos[1];
+		$("#counter").val($(selecter).html());
+		$("#shadow").hide(); 
+		$("#fr").hide();
+	});
+	
+	$("body").on("click", "#counters td", function(){
+		$(this).css('border', '1px solid red');
 	});
 });
