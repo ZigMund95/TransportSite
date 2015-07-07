@@ -1,3 +1,4 @@
+var page = '';
 function loadPage(){
 	if(("#"+page != location.hash)&&(location.hash != "")){
 		page = location.hash;
@@ -116,10 +117,11 @@ jQuery(document).ready(function($){
 			$.ajax({
 				type: "POST",
 				url: "pages/login.php",
-				data: {login: $("[name=login]").val(), password: $("[name=password]").val()},
-				success: function(html){ $("#content").html(html); }
+				data: {login_send: $("[name=login]").val(), password_send: $("[name=password]").val()},
+				success: function(html){ location.reload(); $("#content").html(html); }
 			});
 		};
+		return false;
 		});
 		
 	$("#header").on("click", "#logout_button", function(){
@@ -127,8 +129,9 @@ jQuery(document).ready(function($){
 				type: "POST",
 				url: "pages/login.php",
 				data: {event: "logout"},
-				success: function(html){ $("#content").html(html); }
+				success: function(html){ location.reload(); $("#content").html(html); }
 			});
+		return false;
 	});
 	
 	$("#content").on("click", "#countersform", function(){
@@ -148,12 +151,26 @@ jQuery(document).ready(function($){
 		var cell = $(this).attr('id');
 		var pos = cell.split('x');
 		var selecter = '#1x'+pos[1];
-		$("#counter").val($(selecter).html());
+		$("[name=zakazchik]").val($.trim($(selecter).html()));
 		$("#shadow").hide(); 
 		$("#fr").hide();
 	});
 	
 	$("body").on("click", "#counters td", function(){
 		$(this).css('border', '1px solid red');
+	});
+	
+	$("#content").on("click", "[name=ok]", function(){
+		var a = $("#formrecord").serialize();
+		$.ajax({
+			type: "POST",
+			url: "pages/newrecordadd.php",
+			data: a,
+			success: function(html){
+					$("#content").html(html);
+			}
+		});
+		$("#content").append(a);
+		return false;
 	});
 });

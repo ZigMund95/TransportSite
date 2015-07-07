@@ -1,9 +1,9 @@
 <? session_start();
 $link = mysqli_connect('localhost', 'admin', 'admin', 'test');
 
-if(isset($_POST["login"])){
-	$login = $_POST["login"];
-	$password = md5($_POST["password"]);
+if(isset($_POST["login_send"])){
+	$login = $_POST["login_send"];
+	$password = md5($_POST["password_send"]);
 	$record = mysqli_query($link, "SELECT * FROM `users` WHERE `login`='".$login."' AND `password`='".$password."'");
 		if($record){
 			if($record1 = mysqli_fetch_assoc($record)){
