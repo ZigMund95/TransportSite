@@ -39,7 +39,7 @@ if(isset($_SESSION['userid'])){
 		<? echo("<input type=hidden id='inpsession' value='".$_SESSION['userid']."'>"); ?>
 		<a href='#login' class='login'> Вход </a>
 		<a href='#register'> Регистация </a>
-		<a href='\' id="logout_button"> Exit </a>
+		<a href='/' id="logout_button"> Exit </a>
 		<? //include('pages/login.php');
 		/*
 		if(isset($_SESSION['userid'])){
@@ -66,37 +66,37 @@ if(isset($_SESSION['userid'])){
 <div id="menu">
 	<ul>
 		<li>
-			<a href='#newrecord' class='menu' title="Новый заказ"> Новый заказ </a> 
+			<a href='#newrecord' class='menu'> Новый заказ </a> 
 		</li>
 		
 		<li>
-			<a href="" class='menu' title="Справочники"> Справочники </a>
+			<a href="" class='menu'> Справочники </a>
 			<ul>
-				<li> <a href=""> 1 </a> </li>
-				<li> <a href=""> 2 </a> </li>
-				<li> <a href=""> 3 </a> </li>
+				<li> <a href=""> Наша фирма </a> </li>
+				<li> <a href="#counters"> Контрагенты </a> </li>
+				<li> <a href=""> Водители </a> </li>
 			</ul>
 		</li>
 		
 		<li>
-			<a href="" class='menu' title="Должники"> Должники </a>
+			<a href="" class='menu'> Должники </a>
 		</li>
 		
 		<li>
-			<a href="" class='menu' title="Реестр"> Реестр </a>
+			<a href="" class='menu'> Реестр </a>
 			<ul>
-				<li> <a href=""> 1 </a> </li>
-				<li> <a href=""> 2 </a> </li>
-				<li> <a href=""> 3 </a> </li>
-				<li> <a href=""> 4 </a> </li>
+				<li> <a href=""> Счета </a> </li>
+				<li> <a href=""> Счета-фактуры </a> </li>
+				<li> <a href=""> Акты вып. работ </a> </li>
+				<li> <a href=""> Заявки </a> </li>
 			</ul>
 		</li>
 		
 		<li>
-			<a href="" class='menu' title="Настройки"> Настройки </a>
+			<a href="" class='menu'> Настройки </a>
 			<ul>
-				<li> <a href=""> 1 </a> </li>
-				<li> <a href=""> 2 </a> </li>
+				<li> <a href=""> Вид </a> </li>
+				<li> <a href=""> Служебные </a> </li>
 			</ul>
 		</li>
 	</ul>
@@ -118,7 +118,6 @@ include('pages/'.$page.'.php');
 echo '<';
 echo $_SESSION['userid'];
 echo '>';	?>
-<p> В этом блоке можно разместить копирайт и счетчики </p>
 </div>
 
 </div>

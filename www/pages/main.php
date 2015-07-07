@@ -1,5 +1,5 @@
 <?
-$names = file('A:\home\test1.ru\www\pages\table.inf');
+$names = file('pages\table.inf');
 
 $linkreisi = mysqli_connect('localhost','admin','admin','test');
 
