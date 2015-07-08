@@ -1,13 +1,11 @@
-body{ 
-margin:0; 
-padding:0; 
-background-color:#fff;
-} 
+body{ margin:0; padding:0; background-color:#fff; } 
 
 #page{
 width: 95%;
+min-width: 800px;
 height: 100%;
-padding : 0;margin: 0 auto;
+margin: 0 auto;
+padding : 0;
 }
 
 #header{
@@ -17,11 +15,6 @@ height: 85px;
 border: 2px solid #6c7059;
 background-color: #6c7059;
 } 
-
-#header h1{
-margin: 0;
-padding: 20px 0 0 20px;
-}
 
 #header p{
 position: relative;
@@ -42,66 +35,10 @@ position:relative;
 float: left;
 display: block;
 
-background-image: url(images/button.png)
+background-image: url(images/button.png);
 }
 
-#login{
-width: 100%;
-position: relative;
-}
 
-#login table{
-width: 80%;
-border: 0;
-}
-
-#login table td{
-width: 50%;
-border: 0;
-}
-
-#newrecordpage{
-	margin: 0 auto;
-	width: 90%;
-	border: 0px solid red;
-}
-
-#newrecordpage td{
-	vertical-align: top;
-	padding-top: 10px;
-	border: 1px solid;
-}
-
-.row1{
-width: 90%;
-
-border: 1px solid red;
-}
-
-.row2{
-width: 90%;
-
-border: 1px solid red;
-}
-
-.column1{
-width: 40%;
-
-text-align: right;
-border: 1px solid;
-}
-
-.column2{
-width: 40%;
-
-text-align: right;
-border: 1px solid;
-}
-
-.width25{ margin-top: 2px; width: 25px; }
-.width156{ margin-top: 2px; width: 156px; }
-.width185{ margin-top: 2px; width: 185px; }
-.width400{ margin-top: 2px; width: 400px; }
 
 #menu_line{
 width: 100%;
@@ -116,7 +53,7 @@ border-bottom: 0;
 }
 
 #menu{
-width: 100%;
+width: 760px;
 height: 30px;
 margin: 5px 0 0 0;
 padding: 0;
@@ -212,41 +149,7 @@ font:10px verdana, arial, helvetica, sans-serif;
 
 }
 
-#reisi{
-border: 1px solid;
-margin: 8px;
-}
-
-#reisi td{
-border: 1px solid;
-}
-
-#reisi th{
-border: 1px solid;
-}
-
-#register{
-width: 100%;
-text-align: center;
-}
-
-#register table{
-width: 80%;
-border: 0;
-}
-
-#register  table tr td{
-width: 50%;
-border: 0;
-}
-
-#register table tr td input{
-width: 70%;
-}
-
-#greytd{
-background-color: #6c7059;
-}
+#greytd{ background-color: #6c7059; }
 
 #tdleft{ text-align: left; }
 
@@ -272,24 +175,6 @@ padding: 0 0 0 30px;
 margin:0;
 }
 
-a.auto,a.auto:hover,a.auto:visited {
-font:10px verdana, arial, helvetica, sans-serif;
-color:#469999;padding:0;margin: 0 20px 0 0;
-}
-
-#counters {
-border: 1px solid;
-}
-
-
-#counters table{
-margin-top: 20px;
-border: 1px solid;
-}
-
-#counters table td{
-border: 1px solid;
-}
 
 #fr{
 position: fixed;
