@@ -2,16 +2,17 @@
 
 <form method="POST" id="formrecord">
 
-<table id="newrecordpage">
+<table id="newrecord">
 	<tr>
-		<td id="tdright"> Дата <input type=text class="width185" name=""> </td>
-		<td id="tdright"> Срыв! <input type=text class="width185" name=""> </td>
-		<td id="tdright"> № заказа <input type=text class="width185" name=""> </td>
-		<td id="tdright"> Менеджер <input type=text class="width185" name=""> </td>
+		<td id="tdright"> Дата <input type=date class="width185" name="date"> </td>
+		<td id="tdright"> Срыв! <input type=text class="width185" name="sriv"> </td>
+		<td id="tdright"> № заказа <input type=text class="width185" name="number"> </td>
+		<td id="tdright"> Менеджер <input type=text class="width185" name="manager"> </td>
 	</tr>
 	
 	<tr>
 		<td id="tdright" colspan=2>
+		<hr>
 		Заказчик <input type=text class="width156" name="zakazchik"> <button type=submit id="countersform" class="width25">+</button> <br>
 		код в АТИ <input type=text class="width185" name="ati1"> <br>
 		маршрут <input type=text class="width185" name="marshrut"> <br>
@@ -34,6 +35,7 @@
 		</td>
 
 		<td id="tdright" colspan=2>
+		<hr>
 		Перевозчик <input type=text class="width156" id="counter"  name="perevozchik"> <button type=submit id="countersform" class="width25">+</button> <br>
 		код в АТИ <input type=text class="width185" name="ati2"> <br>
 		водитель <input type=text class="width156"  name="driver"> <button type=submit class="width25">+</button> <br>
@@ -55,6 +57,7 @@
 
 	<tr>
 		<td id="tdright" colspan=2>
+		<hr>
 		поступление от заказчика <br>
 		<input type=date class="width185" name="post_date1"> <input type=text class="width185" name="post_sum1"> <br>
 		<input type=date class="width185" name="post_date2"> <input type=text class="width185" name="post_sum2"> <br>
@@ -64,6 +67,7 @@
 		</td>
 	
 		<td id="tdright" colspan=2>
+		<hr>
 		оплачено перевозчику <br>
 		<input type=date class="width185" name="opl_date1"> <input type=text class="width185" name="opl_sum1"> <br>
 		<input type=date class="width185" name="opl_date2"> <input type=text class="width185" name="opl_sum2"> <br>
@@ -75,6 +79,7 @@
 	
 	<tr>
 		<td colspan=4 id="tdright">
+		<hr>
 			наш остаток <input type=text class="width185" name="ostat"> <br>
 			Примечания <input type=text class="width400" name="primech"> <br>
 			<button type=submit class="width156" name="ok">OK</button>

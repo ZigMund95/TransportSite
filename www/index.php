@@ -26,6 +26,7 @@ if(isset($_SESSION['userid'])){
 		<script src="js/jquery-1.11.3.js" type="text/javascript"> </script>
 		<script src="js/code.js" type="text/javascript"> </script>
 		<link rel="stylesheet" href="style.css" type="text/css" />
+		<link rel="stylesheet" href="pages.css" type="text/css" />
 	</head>
 	
 <body>
@@ -70,20 +71,20 @@ if(isset($_SESSION['userid'])){
 		</li>
 		
 		<li>
-			<a href="" class='menu'> Справочники </a>
+			<a href="" class='menu nothref'> Справочники </a>
 			<ul>
-				<li> <a href=""> Наша фирма </a> </li>
+				<li> <a href="#our_firm"> Наша фирма </a> </li>
 				<li> <a href="#counters"> Контрагенты </a> </li>
-				<li> <a href=""> Водители </a> </li>
+				<li> <a href="#drivers"> Водители </a> </li>
 			</ul>
 		</li>
 		
 		<li>
-			<a href="" class='menu'> Должники </a>
+			<a href="#dolzhniki" class='menu'> Должники </a>
 		</li>
 		
 		<li>
-			<a href="" class='menu'> Реестр </a>
+			<a href="" class='menu nothref'> Реестр </a>
 			<ul>
 				<li> <a href=""> Счета </a> </li>
 				<li> <a href=""> Счета-фактуры </a> </li>
@@ -93,10 +94,10 @@ if(isset($_SESSION['userid'])){
 		</li>
 		
 		<li>
-			<a href="" class='menu'> Настройки </a>
+			<a href="" class='menu nothref'> Настройки </a>
 			<ul>
-				<li> <a href=""> Вид </a> </li>
-				<li> <a href=""> Служебные </a> </li>
+				<li> <a href="#view"> Вид </a> </li>
+				<li> <a href="#sluzhebnie"> Служебные </a> </li>
 			</ul>
 		</li>
 	</ul>

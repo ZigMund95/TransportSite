@@ -1,0 +1,133 @@
+/*-------*/
+/*-REISI-*/
+/*-------*/
+#reisi{
+border: 1px solid;
+margin: 8px;
+}
+
+#reisi td{
+border: 1px solid;
+}
+
+#reisi th{
+border: 1px solid;
+}
+
+/*-------*/
+/*-LOGIN-*/
+/*-------*/
+#login{
+width: 100%;
+position: relative;
+}
+
+#login table{
+width: 80%;
+border: 0;
+}
+
+#login table td{
+width: 50%;
+border: 0;
+}
+
+/*----------*/
+/*-REGISTER-*/
+/*----------*/
+#register{
+width: 100%;
+text-align: center;
+}
+
+#register table{
+width: 80%;
+border: 0;
+}
+
+#register  table tr td{
+width: 50%;
+border: 0;
+}
+
+#register table tr td input{
+width: 70%;
+}
+
+/*-----------*/
+/*-NEWRECORD-*/
+/*-----------*/
+#newrecord{
+	margin: 0 auto;
+	width: 90%;
+	border: 0px solid red;
+}
+
+#newrecord td{
+	min-width: 200px;
+	vertical-align: top;
+	padding: 0;
+	border: 0px solid;
+}
+
+.width25{ margin-top: 2px; width: 25px; }
+.width156{ margin-top: 2px; width: 156px; }
+.width185{ margin-top: 2px; width: 185px; }
+.width400{ margin-top: 2px; width: 400px; }
+
+#newrecord input{
+margin-top: 5px;
+}
+
+/*----------*/
+/*-COUNTERS-*/
+/*----------*/
+#counters {
+border: 1px solid;
+}
+
+
+#counters table{
+margin-top: 20px;
+border: 1px solid;
+}
+
+#counters table td{
+border: 1px solid;
+}
+
+/*------------*/
+/*-SLUZHEBNIE-*/
+/*------------*/
+#sluzhebnie{
+width: 300px;
+position: relative;
+float: left;
+border: 1px solid red;
+}
+
+#sluzhebnie table{
+width: 90%;
+margin: auto;
+border: 1px solid;
+}
+
+#sluzhebnie table td{
+border: 1px solid;
+}
+
+/*-------------*/
+/*-CHANGE_PASS-*/
+/*-------------*/
+#change_pass{
+width: 400px;
+position: relative;	
+float: left;
+border: 1px solid;
+
+text-align: right;
+}
+
+#change_pass input{
+margin-top: 3px;
+}
