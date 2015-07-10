@@ -131,3 +131,15 @@ text-align: right;
 #change_pass input{
 margin-top: 3px;
 }
+
+/*-------------*/
+/*-VIEWTABLE-*/
+/*-------------*/
+#viewtable {
+width: 90%;
+}
+
+#viewtable td{
+border: 1px solid;
+vertical-align: top;
+}

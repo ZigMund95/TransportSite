@@ -38,8 +38,8 @@ if(isset($_SESSION['userid'])){
 	<a href="/"> <img src="images/logo.png" id="logo"> </a>
 	<p>
 		<? echo("<input type=hidden id='inpsession' value='".$_SESSION['userid']."'>"); ?>
-		<a href='#login' class='login'> Вход </a>
-		<a href='#register'> Регистация </a>
+		<a href='login' class='login'> Вход </a>
+		<a href='register'> Регистация </a>
 		<a href='/' id="logout_button"> Exit </a>
 		<? //include('pages/login.php');
 		/*
@@ -67,20 +67,20 @@ if(isset($_SESSION['userid'])){
 <div id="menu">
 	<ul>
 		<li>
-			<a href='#newrecord' class='menu'> Новый заказ </a> 
+			<a href='newrecord' class='menu'> Новый заказ </a> 
 		</li>
 		
 		<li>
 			<a href="" class='menu nothref'> Справочники </a>
 			<ul>
-				<li> <a href="#our_firm"> Наша фирма </a> </li>
-				<li> <a href="#counters"> Контрагенты </a> </li>
-				<li> <a href="#drivers"> Водители </a> </li>
+				<li> <a href="our_firm"> Наша фирма </a> </li>
+				<li> <a href="counters"> Контрагенты </a> </li>
+				<li> <a href="drivers"> Водители </a> </li>
 			</ul>
 		</li>
 		
 		<li>
-			<a href="#dolzhniki" class='menu'> Должники </a>
+			<a href="dolzhniki" class='menu'> Должники </a>
 		</li>
 		
 		<li>
@@ -96,8 +96,8 @@ if(isset($_SESSION['userid'])){
 		<li>
 			<a href="" class='menu nothref'> Настройки </a>
 			<ul>
-				<li> <a href="#view"> Вид </a> </li>
-				<li> <a href="#sluzhebnie"> Служебные </a> </li>
+				<li> <a href="view" class='openfr'> Вид </a> </li>
+				<li> <a href="sluzhebnie"> Служебные </a> </li>
 			</ul>
 		</li>
 	</ul>
@@ -107,7 +107,8 @@ if(isset($_SESSION['userid'])){
 <div id="content">
 <? 
 echo('pages/'.$page.'.php');
-include('pages/'.$page.'.php'); 
+//echo $_SESSION['visible_column'];
+//include('pages/'.$page.'.php'); 
 ?>
 </div>
 

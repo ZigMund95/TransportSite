@@ -2,7 +2,7 @@
 <hr>
 <div id="sluzhebnie">
 <br>
-<table>
+<table class='canselect'>
 <?
 
 $record = mysqli_query($link, "SELECT `index`,`login` FROM `users`");

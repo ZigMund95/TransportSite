@@ -1,23 +1,45 @@
+<? session_start();
 
-Поиск: <input type=text id='search'>
-<? $link_counters = mysqli_connect("localhost", "admin", "admin", "test");
+$link = mysqli_connect('localhost', 'admin', 'admin', 'test');
 
-echo '<div id="counters"> <table>';
+if(isset($_POST['hidden'])){
+	$POST = $_POST;
+	$record = mysqli_query($link, "SELECT * FROM `reisi` LIMIT 1");
+	$record1 = mysqli_fetch_assoc($record);
+	$query = '';
+	foreach($record1 as $key => $value){
+		if(isset($POST[$key])){ $query = $query.'1;'; } else{ $query = $query.'0;'; };
+	}
+	mysqli_query($link, "UPDATE `users` SET `visiblecolumns`='".$query."'");
+	$_SESSION['visible_column'] = $query;
+};
 
-$record = mysqli_query($link_counters, "SELECT * FROM `drivers`");
-$index = 1;
+
+//echo $_SESSION['visible_column'];
+$visibleColumn = split(';', $_SESSION['visible_column']);
+//print_r($visibleColumn);
+
+$config[] = '0';
+$record = mysqli_query($link, "SELECT * FROM `reisi_config`");
 while($record1 = mysqli_fetch_assoc($record)){
-$str = '<tr>
-			<td id="0x'.$index.'"> $1 </td>
-			<td id="1x'.$index.'"> $2 </td>
-		</tr>';
-$index++;
-$str = str_replace('$1', $record1['index'], $str);
-$str = str_replace('$2', $record1['name'], $str);
+	$config[$record1['name']] = $record1;
+};
 
-echo $str;
-}
+$record = mysqli_query($link, "SELECT * FROM `reisi` LIMIT 1");
+$record1 = mysqli_fetch_assoc($record);
+$i = 0;
+echo '<form method=POST id="viewform"> <table id="viewtable"> <tr> <td>';
+echo '<input type=hidden name="hidden" value="yep">';
+foreach($record1 as $key => $value){
+	if($visibleColumn[$i]=='1'){ $b = 'checked'; }else{ $b = ''; };
+	echo('<input type=checkbox name="'.$key.'" value="'.$key.'" '.$b.'> '.$config[$key]['value'].' <br>');
+	if(($i+1)%10 == 0){ echo '</td> <td>';};
+	$i++;
+};
+echo '</td> </tr> </table>';
 ?>
 
-	</table>
-</div>
+<button id='setvision'> OK </button>
+<button id='checkall'> Выделить все </button>
+
+</form>
