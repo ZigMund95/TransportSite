@@ -9,6 +9,7 @@ if(isset($_POST["login_send"])){
 			if($record1 = mysqli_fetch_assoc($record)){
 				echo("YES");
 				$_SESSION['userid'] = $record1['index'];
+				$_SESSION['visible_column'] = $record1['visiblecolumns'];
 			}
 			else{
 				echo("NO");
@@ -40,6 +41,7 @@ if (isset($_POST['login_button'])){
 
 if (isset($_POST['event'])){
 	unset($_SESSION['userid']);
+	unset($_SESSION['visible_column']);
 }
 ?>
 

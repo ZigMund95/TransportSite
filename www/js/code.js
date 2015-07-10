@@ -1,10 +1,21 @@
 var page = '1';
-function loadPage(){
+function loadPage(){/*
 	if(("#"+page != location.hash)&&(location.hash != "")){
 		page = location.hash;
 		page = page.replace("#", "");
 		$.ajax({
 			url: 'pages/'+page+'.php',
+			success: function(html){
+				$("#content").html(html);
+			}
+		});
+	}*/
+	if((page != location.pathname)&&(location.pathname != "")){
+		page = location.pathname;
+		//alert(page);
+		if(page == '/'){page1='main';}else{page1=page;};
+		$.ajax({
+			url: 'pages/'+page1+'.php',
 			success: function(html){
 				$("#content").html(html);
 			}
@@ -20,7 +31,6 @@ else{ $('#header p a').show(); $("#logout_button").hide(); }
 
 jQuery(document).ready(function($){
 	
-
 	setInterval("loadPage()", 250);
 	
 	$("#menu ul li ul").hide();
@@ -33,31 +43,37 @@ jQuery(document).ready(function($){
 		};
 	});
 	
-	$(".nothref").click(function(){
-		return false;
-	});
+	$(".nothref").click(function(){ return false; });
 	
-	$("#logo").hover(
+	$("#logo").hover( //НАВДЕНИЕ КУРСОРА НА ЛОГО В ШАПКЕ
 	function(){ $(this).attr('src', 'images/logo_hover.png'); },
 	function(){ $(this).attr('src', 'images/logo.png'); }
 	);
 	
-	$("#header p a").hover(
+	$("#header p a").hover( //НАВЕДЕНИЕ КУРСОРА НА КНОПКИ В ШАПКЕ
 	function(){ $(this).css("background-image", "url(images/button_hover.png)"); },
 	function(){ $(this).css("background-image", "url(images/button.png)"); }
 	);
 	
-	$("#menu ul li").hover(
-	function(){ $("ul", this).slideDown("fast"); },
+	$("#menu ul li").hover( //НАВЕЕНИЕ КУРСОРА НА ЭЛЕМЕНТЫ МЕНЮ
+	function(){
+		//$("ul", this).css("left", $(this).offsetLeft-100);
+		$("ul", this).slideDown("fast"); 
+	},
 	function(){	$("ul", this).hide(); }
 	);
 	
-	$("#reisi td").click(
-	function(){ 
-		$("#reisi td").css("border-color", "black")
-		$("#reisi td").attr("class", "cell")
-		$(this).css("border-color", "red") 
-		$(this).attr("class", "cell selected");
+	/*----------------------------*/
+	/*-ВЫДЕЛЕНИЕ ЯЧЕЙКИ В ТАБЛИЦЕ-*/
+	/*----------------------------*/
+	$("#content").on("click", ".canselect td", function(){
+		$("table td").css("border","1px solid black");
+		$("table td").css("background-color","white");
+		$("table td").attr("class","cell");
+		var row = '[posY='+$(this).attr('posY')+']';
+		$(row).css("border","1px solid red");
+		$(row).css("background-color","#ccc");
+		$(row).attr("class","cell selected");
 	});
 	
 	$(document).keyup(function(event){
@@ -98,6 +114,7 @@ jQuery(document).ready(function($){
 				success: function(html){ location.reload(); $("#content").html(html); }
 			});
 		};
+		window.location.pathname = '';
 		return false;
 		});
 		
@@ -118,11 +135,7 @@ jQuery(document).ready(function($){
 		return false;
 	});
 	
-	$("#shadow").click(function(){ $("#shadow").hide(); $("#fr").hide(); });
-	
-	$(document).keyup(function(event){
-		$("#counters").append($("#search").val()+'<br>');
-	});
+	$("#shadow").click(function(){ $("#shadow").hide(); $("#fr").hide(); }); //ЗАКРЫТИЕ МОДАЛЬНОГО ОКНА
 	
 	$("body").on("dblclick", "#counters td", function(){
 		var cell = $(this).attr('id');
@@ -145,20 +158,36 @@ jQuery(document).ready(function($){
 			data: a,
 			success: function(html){
 					$("#content").html(html);
-					//alert(a);
 			}
 		});
 		$("#content").append(a);
 		return false;
 	});
 	
-	$("#content").on("click", "table td", function(){
-		$("table td").css("border","1px solid black");
-		$("table td").css("background-color","white");
-		$("table td").attr("class","cell");
-		var row = '[posY='+$(this).attr('posY')+']';
-		$(row).css("border","1px solid red");
-		$(row).css("background-color","#ccc");
-		$(row).attr("class","cell selected");
+	$("body").on("click", "#setvision", function(){
+		var a = $("#viewform").serialize();
+		$.ajax({
+			type: 'POST',
+			url: 'pages/view.php',
+			data: a,
+			success: function(html){
+				$('#content').html(html);
+			}
+		});
+		location.load('');
+		return false;
+	});
+	
+	$("body").on("click", "#checkall", function(){
+		$('input').attr('checked', 'checked');
+		return false;
+	});
+	
+	$(".openfr").click(function(){
+		$("#shadow").show();
+		$("#fr").show();
+		//alert($(this).attr('href'));
+		$.ajax({ url: 'pages/'+$(this).attr('href')+'.php', success: function(html){ $("#fr").html(html); } });
+		return false;
 	});
 });
