@@ -177,7 +177,7 @@ margin:0;
 
 
 #fr{
-position: fixed;
+position: absolute;
 min-width: 500px;
 top: 20px;
 left: 15%;

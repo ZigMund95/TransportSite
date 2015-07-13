@@ -10,6 +10,7 @@ function loadPage(){/*
 			}
 		});
 	}*/
+	if(($('#sessioncheck').val() != '')||(location.pathname  == '/login')||(location.pathname  == '/register')){
 	if((page != location.pathname)&&(location.pathname != "")){
 		page = location.pathname;
 		//alert(page);
@@ -20,6 +21,7 @@ function loadPage(){/*
 				$("#content").html(html);
 			}
 		});
+	}
 	}
 };
 
@@ -66,7 +68,7 @@ jQuery(document).ready(function($){
 	/*----------------------------*/
 	/*-ВЫДЕЛЕНИЕ ЯЧЕЙКИ В ТАБЛИЦЕ-*/
 	/*----------------------------*/
-	$("#content").on("click", ".canselect td", function(){
+	$("body, #content").on("click", ".canselect td", function(){
 		$("table td").css("border","1px solid black");
 		$("table td").css("background-color","white");
 		$("table td").attr("class","cell");
@@ -186,8 +188,53 @@ jQuery(document).ready(function($){
 	$(".openfr").click(function(){
 		$("#shadow").show();
 		$("#fr").show();
-		//alert($(this).attr('href'));
 		$.ajax({ url: 'pages/'+$(this).attr('href')+'.php', success: function(html){ $("#fr").html(html); } });
 		return false;
+	});
+	
+	$("#content").on("click", ".openfr", function(){
+		$("#shadow").show();
+		$("#fr").show();
+		$.ajax({ url: 'pages/'+$(this).attr('href')+'.php', success: function(html){ $("#fr").html(html); } });
+		return false;
+	});
+	
+	$("#content").on("click", "#setconfig", function(){
+		$.ajax({
+			url: 'pages/setconfig.php',
+			success: function(html){
+				$('#content').html(html);
+			}
+		});
+	});
+	
+	$("body").bind("keyup", ".name", function(){
+		$('#name').val($('#name1').val()+' '+$('#name2').val()+' '+$('#name3').val());
+	});
+	
+	$("body").on("click", "#driveraddbutton", function(){
+		var a = $("#formdriver").serialize();
+		$.ajax({
+			type: "POST",
+			url: "pages/driver_add_send.php",
+			data: a,
+			success: function(html){
+				$("#content").html(html);
+			}
+		});
+		$("#fr").hide();
+		$("#shadow").hide();		
+		return false;
+	});
+	
+	$("body, #content").bind("keyup", "#drivers_search", function(){
+		$.ajax({
+			type: 'GET',
+			url: 'pages/drivers.php',
+			data: 'search='+$("#drivers_search").val(),
+			success: function(html){
+				$("#drivers").html(html);
+			}
+		});
 	});
 });

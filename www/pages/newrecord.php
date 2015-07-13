@@ -38,7 +38,7 @@
 		<hr>
 		Перевозчик <input type=text class="width156" id="counter"  name="perevozchik"> <button type=submit id="countersform" class="width25">+</button> <br>
 		код в АТИ <input type=text class="width185" name="ati2"> <br>
-		водитель <input type=text class="width156"  name="driver"> <button type=submit class="width25">+</button> <br>
+		водитель <input type=text class="width156"  name="driver"> <button type=submit href="drivers_search" id="openfr" class="openfr width25">+</button> <br>
 		Телефон 1 <input type=text class="width185"  name="phone1"> <br>
 		Телефон 2 <input type=text class="width185" name="phone2"> <br>
 		а/м <input type=text class="width185" name="car"> <br>

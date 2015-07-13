@@ -41,25 +41,8 @@ if(isset($_SESSION['userid'])){
 		<a href='login' class='login'> Вход </a>
 		<a href='register'> Регистация </a>
 		<a href='/' id="logout_button"> Exit </a>
-		<? //include('pages/login.php');
-		/*
-		if(isset($_SESSION['userid'])){
-			echo('logined as '.$record1['login'].'<br>');
-		?>
-		<form method='POST'>
-			<a href='' id="logout_button"> Exit </a>
-			<button type=submit name='logout_button' value='submit'>
-				Exit
-			</button>
-		</form>
-		<?}
-		else{
-			echo("<a href='#login' class='login'> Вход </a>
-					<a href='#register'> Регистация </a>");
-		}*/?>
+		<? echo("<input type=hidden id='sessioncheck' value='".$_SESSION['userid']."'>")?>
 		
-
-	
 	</p>
 </div>
 

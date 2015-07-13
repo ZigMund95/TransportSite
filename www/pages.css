@@ -96,6 +96,57 @@ border: 1px solid;
 border: 1px solid;
 }
 
+/*---------*/
+/*-DRIVERS-*/
+/*---------*/
+
+
+#drivers{
+border: 1px solid;
+padding: 10px;
+padding-bottom: 30px;
+}
+
+#drivers input{
+margin: 2px;
+}
+
+#drivers table{
+padding: 0;
+}
+
+#drivers table td{
+border: 1px solid;
+}
+
+#drivers a{
+color: #000;
+text-align: center;
+text-decoration: none;
+
+width: 190px;
+height: 20px;
+
+position:relative;
+float: left;
+display: block;
+
+margin-top: 5px;
+
+background: url(images/button.png) no-repeat;
+background-position: center;
+
+}
+
+/*-----------*/
+/*-DRIVERADD-*/
+/*-----------*/
+#driveradd{
+width: 360px;
+margin: auto;
+text-align: right;
+}
+
 /*------------*/
 /*-SLUZHEBNIE-*/
 /*------------*/
