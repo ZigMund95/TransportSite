@@ -1,9 +1,10 @@
 <?
 
 $link = mysqli_connect('localhost', 'admin', 'admin', 'test');
-//mysqli_query($link, "INSERT INTO `drivers`(`name`) VALUES ('asd')");
+mysqli_query($link, "INSERT INTO `counters`(`zakazchik`) VALUES ('asd')");
 
-$record = mysqli_query($link, "SELECT * FROM `drivers` LIMIT 1");
+
+$record = mysqli_query($link, "SELECT * FROM `counters` LIMIT 1");
 $index = 1;
 $names[] = '0';
 if($record1 = mysqli_fetch_assoc($record)){
@@ -14,17 +15,25 @@ if($record1 = mysqli_fetch_assoc($record)){
 		
 	};
 
-$values = array("", "Индекс", "Ф.И.О.", "Телефон 1", "Телефон 1", "Серия/номер паспорта", "Выдан паспорт", "Дата выдачи", "Прописка", "№ вод. удост.", 
-				"Тягач", "№ а/м", "Тип прицепа", "Объем прицепа", "№ прицепа", "Информация");
+$values = array("", "Индекс", "Фирма", "код в АТИ", "ИНН", "КПП", "ОГРН", "Расч. счет", "Банк", "БИК", 
+				"Кор. счет", "Руководитель", "Ф.И.О.", "Сателит 1", "Сателит 2", "Сателит 3",
+				"Юр. адрес", "Почтовый адрес", "Имя", "Телефон", "Моб. телефон", "ICQ", "Имя", "Телефон", "Моб. телефон", "ICQ",
+				"Имя", "Телефон", "Моб. телефон", "ICQ", "Факс", "Доп. информация");
 $query = '';
-for($i=1;$i<16;$i++){
+for($i=1;$i<32;$i++){
 	if($names[$i] == 'information'){ $b = ''; } else{ $b = ','; };
 	$query = $query."('".$names[$i]."', ".$i.", '".$values[$i]."')".$b;
 };
 
 echo ("INSERT INTO `drivers_config`(`name`, `position`, `value`) VALUES".$query);
 
-mysqli_query($link, "INSERT INTO `drivers_config`(`name`, `position`, `value`) VALUES".$query);
+$res = mysqli_query($link, "INSERT INTO `counters_config`(`name`, `position`, `value`) VALUES".$query);
+if($res){
+echo '<br> yes';
+}
+else{
+die(mysqli_error($link));
+};
 };
 
 /*$query = '';

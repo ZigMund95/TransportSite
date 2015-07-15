@@ -1,16 +1,16 @@
 /*-------*/
 /*-REISI-*/
 /*-------*/
-#reisi{
+.table{
 border: 1px solid;
 margin: 8px;
 }
 
-#reisi td{
+.table td{
 border: 1px solid;
 }
 
-#reisi th{
+.table th{
 border: 1px solid;
 }
 
@@ -96,27 +96,50 @@ border: 1px solid;
 border: 1px solid;
 }
 
+#counters a{
+color: #000;
+text-align: center;
+text-decoration: none;
+
+width: 190px;
+height: 20px;
+
+position:relative;
+float: left;
+display: block;
+
+margin-top: 5px;
+
+background: url(images/button.png) no-repeat;
+background-position: center;
+
+}
+
+/*------------*/
+/*-COUNTERADD-*/
+/*------------*/
+#counteradd{
+width: 80%;
+margin: auto;
+text-align: right;
+}
+
+#counteradd td{
+vertical-align: top;
+}
+
 /*---------*/
 /*-DRIVERS-*/
 /*---------*/
 
 
 #drivers{
-border: 1px solid;
 padding: 10px;
 padding-bottom: 30px;
 }
 
 #drivers input{
 margin: 2px;
-}
-
-#drivers table{
-padding: 0;
-}
-
-#drivers table td{
-border: 1px solid;
 }
 
 #drivers a{

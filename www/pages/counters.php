@@ -1,23 +1,68 @@
-
-Поиск: <input type=text id='search'>
-<? $link_counters = mysqli_connect("localhost", "admin", "admin", "test");
-
-echo '<div id="counters"> <table>';
-
-$record = mysqli_query($link_counters, "SELECT * FROM `counters`");
-$index = 1;
-while($record1 = mysqli_fetch_assoc($record)){
-$str = '<tr>
-			<td id="0x'.$index.'"> $1 </td>
-			<td id="1x'.$index.'"> $2 </td>
-		</tr>';
-$index++;
-$str = str_replace('$1', $record1['index'], $str);
-$str = str_replace('$2', $record1['name'], $str);
-
-echo $str;
+<? 
+function mb_ucwords($str) { 
+$str = mb_convert_case($str, MB_CASE_TITLE, "UTF-8"); 
+return ($str); 
 }
+
+if(isset($_POST['search'])){
+	$search = mb_ucwords($_POST['search']);
+	echo $search;
+}
+else{
+	$search = '';
+};
+
+$link = mysqli_connect('localhost','admin','admin','test');
+$config[] = '0';
+$record = mysqli_query($link, "SELECT * FROM `counters_config`");
+while($record1 = mysqli_fetch_assoc($record)){
+	$config[$record1['name']] = $record1;
+};
+
+function forsort($a, $b){ if($a['position'] > $b['position']){ return 1; }else{ return -1; }; };
+uasort($config, 'forsort');
+
+echo '<table name="counter" class="table canselect dblclick_select_counter">';
+
+echo '<tr id="greytd">';
+$i = 0;
+foreach($config as $key => $value){
+	if($value){
+		//if($visibleColumn[$i] == '1'){
+			echo ('<th>'.$config[$key]['value'].'</th>');
+		//}
+	$i++;
+	}
+};
+echo('</tr>');		
+
+if($search == ''){ $res = mysqli_query($link, "SELECT * FROM `counters`"); }
+else{ $res = mysqli_query($link, "SELECT * FROM `counters` WHERE `firm` LIKE '%".$search."%' "); };
+$indexY = 1;
+while($row = mysqli_fetch_assoc($res)) {
+
+	echo '<tr id="selecttr">';
+	$indexX = 1;
+	$i = 0;
+	foreach($row as $key => $value){		
+		if($key == 'index'){ echo '<th id="greytd">'.$value.'</th>';}
+		else{
+			if($value != '0000-00-00'){
+				echo('<td posX="'.$indexX.'" posY="'.$indexY.'" class="cell">'.$value.'</td>');
+			}
+			else{
+				echo('<td posX="'.$indexX.'" posY="'.$indexY.'" class="cell"> - </td>');
+			};
+		$indexX++;
+		};
+		$i++;
+	};
+	$indexY++;
+};
+
+
+echo('</table>');
 ?>
 
-	</table>
-</div>
+<a href='counter_add' class='openfr'> Добавить </a>
+
