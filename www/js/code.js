@@ -30,8 +30,20 @@ if($('#inpsession').val() != ''){ $('#header p a').hide(); $("#logout_button").s
 else{ $('#header p a').show(); $("#logout_button").hide(); }
 };
 
+var data;
+function loadRecordPage(data){
+//data1 = json_decode(data);
+alert(data['zakazchik']);
+for(var key in data){
+var value = data[key];
+$('[name='+key+']').val(value);
+};
+};
 
+//-------------------------------------------------------//
 jQuery(document).ready(function($){
+	
+	//showalert();
 	
 	setInterval("loadPage()", 250);
 	
@@ -69,10 +81,10 @@ jQuery(document).ready(function($){
 	/*-ВЫДЕЛЕНИЕ ЯЧЕЙКИ В ТАБЛИЦЕ-*/
 	/*----------------------------*/
 	$("body, #content").on("click", ".canselect td", function(){
-		$("table td").css("border","1px solid black");
-		$("table td").css("background-color","white");
-		$("table td").attr("class","cell");
-		var row = '[posY='+$(this).attr('posY')+']';
+		$(".canselect td").css("border","1px solid black");
+		$(".canselect td").css("background-color","white");
+		$(".canselect td").attr("class","cell");
+		var row = '[class][posY='+$(this).attr('posY')+']';
 		$(row).css("border","1px solid red");
 		$(row).css("background-color","#ccc");
 		$(row).attr("class","cell selected");
@@ -87,7 +99,7 @@ jQuery(document).ready(function($){
 			cell.css("border-color", "black");
 			cell.css("background-color","white");
 			cell.attr("class", "cell");
-			str = '[posY='+(parseInt(posY)-1)+']';
+			str = '[class][posY='+(parseInt(posY)-1)+']';
 			$(str).css("border-color", "red");
 			$(str).css("background-color","#ccc");
 			$(str).attr("class", "cell selected");
@@ -98,7 +110,7 @@ jQuery(document).ready(function($){
 			cell.css("border-color", "black");
 			cell.css("background-color","white");
 			cell.attr("class", "cell");
-			str = '[posY='+(parseInt(posY)+1)+']';
+			str = '[class][posY='+(parseInt(posY)+1)+']';
 			$(str).css("border-color", "red"); 
 			$(str).css("background-color","#ccc");
 			$(str).attr("class", "cell selected");
@@ -133,19 +145,40 @@ jQuery(document).ready(function($){
 	$("#content").on("click", "#countersform", function(){
 		$("#shadow").show();
 		$("#fr").show();
+		var namebutton = $(this).attr('name');
+		$("#fr").attr("name", namebutton);
 		$.ajax({ url: "pages/counters.php",	success: function(html){ $("#fr").html(html); } });
 		return false;
 	});
 	
 	$("#shadow").click(function(){ $("#shadow").hide(); $("#fr").hide(); }); //ЗАКРЫТИЕ МОДАЛЬНОГО ОКНА
 	
-	$("body").on("dblclick", "#counters td", function(){
-		var cell = $(this).attr('id');
-		var pos = cell.split('x');
-		var selecter = '#1x'+pos[1];
-		$("[name=zakazchik]").val($.trim($(selecter).html()));
+	$("body").on("dblclick", ".dblclick_select_counter td", function(){
+		$("[name="+$('#fr').attr('name')+"]").val($.trim($("[posX=1][posY="+$(this).attr('posY')+"]").html()));
+		if($('#fr').attr('name') == 'zakazchik'){ $("[name=ati1]").val($.trim($("[posX=2][posY="+$(this).attr('posY')+"]").html())); }
+		else{ $("[name=ati2]").val($.trim($("[posX=2][posY="+$(this).attr('posY')+"]").html())); };
 		$("#shadow").hide(); 
 		$("#fr").hide();
+	});
+	
+	$("body").on("dblclick", ".dblclick_select_driver td", function(){
+		$("[name=driver]").val($("[posX=1][posY="+$(this).attr('posY')+"]").html());
+		$("[name=phone1]").val($("[posX=2][posY="+$(this).attr('posY')+"]").html());
+		$("[name=phone2]").val($("[posX=3][posY="+$(this).attr('posY')+"]").html());
+		$("[name=car]").val($("[posX=10][posY="+$(this).attr('posY')+"]").html());
+		$("#fr").hide();
+		$("#shadow").hide();
+	});
+	
+	$("#content").on("dblclick", "#reisi td", function(){
+		var datasend = 'index='+$("[posX=1][posY="+$(this).attr('posY')+"]").html();
+		alert(datasend);
+		$.ajax({
+			type: 'GET',
+			url: 'pages/newrecord.php',
+			data: datasend,
+			success: function(html){ $('#content').html(html); }
+		});
 	});
 	
 	$("body").on("click", "#counters td", function(){
@@ -199,14 +232,7 @@ jQuery(document).ready(function($){
 		return false;
 	});
 	
-	$("#content").on("click", "#setconfig", function(){
-		$.ajax({
-			url: 'pages/setconfig.php',
-			success: function(html){
-				$('#content').html(html);
-			}
-		});
-	});
+
 	
 	$("body").bind("keyup", ".name", function(){
 		$('#name').val($('#name1').val()+' '+$('#name2').val()+' '+$('#name3').val());
@@ -227,13 +253,42 @@ jQuery(document).ready(function($){
 		return false;
 	});
 	
-	$("body, #content").bind("keyup", "#drivers_search", function(){
+	$("body").on("click", "#counteraddbutton", function(){
+		var a = $("#formcounter").serialize();
 		$.ajax({
-			type: 'GET',
-			url: 'pages/drivers.php',
-			data: 'search='+$("#drivers_search").val(),
+			type: "POST",
+			url: "pages/counter_add_send.php",
+			data: a,
+			success: function(html){
+				$("#content").html(html);
+			}
+		});
+		$("#fr").hide();
+		$("#shadow").hide();		
+		return false;
+	});
+	
+	var last_search = '';
+	$("body, #content").bind("keyup", "#search", function(){
+		if($("#search").val() != last_search){
+		last_search = $("#search").val();
+		var search_page = $("#search").attr('name');
+		$.ajax({
+			type: 'POST',
+			url: 'pages/'+search_page+'.php',
+			data: 'search='+$("#search").val(),
 			success: function(html){
 				$("#drivers").html(html);
+			}
+		});
+		};
+	});
+	
+	$("#content").on("click", "#setconfig", function(){
+		$.ajax({
+			url: 'pages/setconfig.php',
+			success: function(html){
+				$('#content').html(html);
 			}
 		});
 	});

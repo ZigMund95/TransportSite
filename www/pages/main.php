@@ -12,7 +12,10 @@ while($record1 = mysqli_fetch_assoc($record)){
 };
 
 
-echo '<table id="reisi" class="canselect">';
+function forsort($a, $b){ if($a['position'] > $b['position']){ return 1; }else{ return -1; }; };
+uasort($config, 'forsort');	
+
+echo '<table id="reisi" class="table canselect">';
 
 echo '<tr id="greytd">';
 $i = 0;
@@ -35,7 +38,7 @@ while($row = mysqli_fetch_assoc($res)) {
 	$i = 0;
 	foreach($row as $key => $value){
 		if($visibleColumn[$i] == '1'){
-		if($key == 'index'){ echo '<th id="greytd">'.$value.'</th>';}
+		if($key == 'index'){ echo '<th id="greytd" posX="'.$indexX.'" posY="'.$indexY.'">'.$value.'</th>';}
 		else{
 			if($value != '0000-00-00'){
 				echo('<td posX="'.$indexX.'" posY="'.$indexY.'" class="cell">'.$value.'</td>');

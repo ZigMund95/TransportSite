@@ -57,8 +57,8 @@ if(isset($_SESSION['userid'])){
 			<a href="" class='menu nothref'> Справочники </a>
 			<ul>
 				<li> <a href="our_firm"> Наша фирма </a> </li>
-				<li> <a href="counters"> Контрагенты </a> </li>
-				<li> <a href="drivers"> Водители </a> </li>
+				<li> <a href="counter_search"> Контрагенты </a> </li>
+				<li> <a href="drivers_search"> Водители </a> </li>
 			</ul>
 		</li>
 		

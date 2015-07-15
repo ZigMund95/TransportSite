@@ -13,7 +13,7 @@
 	<tr>
 		<td id="tdright" colspan=2>
 		<hr>
-		Заказчик <input type=text class="width156" name="zakazchik"> <button type=submit id="countersform" class="width25">+</button> <br>
+		Заказчик <input type=text class="width156" name="zakazchik"> <button type=submit id="countersform" name="zakazchik" class="width25">+</button> <br>
 		код в АТИ <input type=text class="width185" name="ati1"> <br>
 		маршрут <input type=text class="width185" name="marshrut"> <br>
 		адрес погрузки <input type=text class="width185" name="address_pogr"> <br>
@@ -36,7 +36,7 @@
 
 		<td id="tdright" colspan=2>
 		<hr>
-		Перевозчик <input type=text class="width156" id="counter"  name="perevozchik"> <button type=submit id="countersform" class="width25">+</button> <br>
+		Перевозчик <input type=text class="width156" id="counter"  name="perevozchik"> <button type=submit id="countersform" name="perevozchik" class="width25">+</button> <br>
 		код в АТИ <input type=text class="width185" name="ati2"> <br>
 		водитель <input type=text class="width156"  name="driver"> <button type=submit href="drivers_search" id="openfr" class="openfr width25">+</button> <br>
 		Телефон 1 <input type=text class="width185"  name="phone1"> <br>
@@ -87,3 +87,19 @@
 	</tr>
 </table>
 </form>
+
+<? 
+if(isset($_GET['index'])){ 
+$GET = $_GET;
+
+$link = mysqli_connect('localhost', 'admin', 'admin', 'test');
+
+$record = mysqli_query($link, 'SELECT * FROM `reisi` WHERE `index`='.$GET['index']);
+$record1 = mysqli_fetch_assoc($record);
+print_r($record1);
+echo '<br>';
+echo json_encode($record1);
+print('<script> loadRecordPage(('.json_encode($record1).')) </script>'); 
+} 
+?>
+

@@ -1,21 +1,16 @@
 <? 
+function mb_ucwords($str) { 
+$str = mb_convert_case($str, MB_CASE_TITLE, "UTF-8"); 
+return ($str); 
+}
 
-if(isset($_GET['search'])){
-	echo($_GET['search']);
-	$search = $_GET['search'];
+if(isset($_POST['search'])){
+	$search = mb_ucwords($_POST['search']);
+	echo $search;
 }
 else{
 	$search = '';
 };
-
-?>
-
-
-
-
-<?
-//$visibleColumn = split(';', $_SESSION['visible_column']);
-//print_r($visibleColumn);
 
 $link = mysqli_connect('localhost','admin','admin','test');
 $config[] = '0';
@@ -24,8 +19,10 @@ while($record1 = mysqli_fetch_assoc($record)){
 	$config[$record1['name']] = $record1;
 };
 
+function forsort($a, $b){ if($a['position'] > $b['position']){ return 1; }else{ return -1; }; };
+uasort($config, 'forsort');
 
-echo '<table id="drivers" class="canselect">';
+echo '<table name="driver" class="table canselect dblclick_select_driver">';
 
 echo '<tr id="greytd">';
 $i = 0;
@@ -37,26 +34,17 @@ foreach($config as $key => $value){
 	$i++;
 	}
 };
-echo('</tr>');
-
-//mb_internal_encoding('UTF-8'); 		
+echo('</tr>');		
 
 if($search == ''){ $res = mysqli_query($link, "SELECT * FROM `drivers`"); }
 else{ $res = mysqli_query($link, "SELECT * FROM `drivers` WHERE `name` LIKE '%".$search."%' "); };
 $indexY = 1;
 while($row = mysqli_fetch_assoc($res)) {
-	//echo('<tr> <td>'.$row['name'].'-'.$search.'</td> </tr>');
-	/*if(($row['name'] != '')&($search != '')){
-	if((mb_stripos(' '.$row['name'], $search) == false)){ break; };
-	
-	};*/
+
 	echo '<tr id="selecttr">';
-	//echo '<td>'.$row["primech"].'</td>';
 	$indexX = 1;
 	$i = 0;
-	foreach($row as $key => $value){
-		//if($visibleColumn[$i] == '1'){
-		
+	foreach($row as $key => $value){		
 		if($key == 'index'){ echo '<th id="greytd">'.$value.'</th>';}
 		else{
 			if($value != '0000-00-00'){
@@ -67,7 +55,6 @@ while($row = mysqli_fetch_assoc($res)) {
 			};
 		$indexX++;
 		};
-		//};
 		$i++;
 	};
 	$indexY++;

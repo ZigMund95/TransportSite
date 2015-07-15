@@ -1,8 +1,14 @@
 <?
+function mb_ucwords($str) { 
+$str = mb_convert_case($str, MB_CASE_TITLE, "UTF-8"); 
+return ($str); 
+}
+
 $link = mysqli_connect('localhost', 'admin', 'admin', 'test');
 
 if(isset($_POST['name'])){
 	$POST = $_POST;
+	$POST['name'] = mb_ucwords($POST['name']);
 	$query1 = '';
 	$query2 = '';
 	foreach($POST as $key => $value){

@@ -1,6 +1,6 @@
 <? session_start(); ?>
-<form method=GET>
-Поиск: <input type=text id='drivers_search'>
+<form method=POST>
+Поиск: <input type=text id='search' name='drivers'>
 </form>
 
 <div id='drivers'>
