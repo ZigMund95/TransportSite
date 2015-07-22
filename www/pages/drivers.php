@@ -5,11 +5,12 @@ return ($str);
 }
 
 if(isset($_POST['search'])){
-	$search = mb_ucwords($_POST['search']);
+	$search1 = mb_ucwords($_POST['search']);
+	$search2 = $_POST['search'];
 	echo $search;
 }
 else{
-	$search = '';
+	$search2 = '';
 };
 
 $link = mysqli_connect('localhost','admin','admin','test');
@@ -36,8 +37,8 @@ foreach($config as $key => $value){
 };
 echo('</tr>');		
 
-if($search == ''){ $res = mysqli_query($link, "SELECT * FROM `drivers`"); }
-else{ $res = mysqli_query($link, "SELECT * FROM `drivers` WHERE `name` LIKE '%".$search."%' "); };
+if($search2 == ''){ $res = mysqli_query($link, "SELECT * FROM `drivers`"); }
+else{ $res = mysqli_query($link, "SELECT * FROM `drivers` WHERE `name` LIKE '%".$search1."%' OR `name` LIKE '%".$search2."%' "); };
 $indexY = 1;
 while($row = mysqli_fetch_assoc($res)) {
 

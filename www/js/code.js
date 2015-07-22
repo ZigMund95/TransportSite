@@ -1,15 +1,5 @@
 var page = '1';
-function loadPage(){/*
-	if(("#"+page != location.hash)&&(location.hash != "")){
-		page = location.hash;
-		page = page.replace("#", "");
-		$.ajax({
-			url: 'pages/'+page+'.php',
-			success: function(html){
-				$("#content").html(html);
-			}
-		});
-	}*/
+function loadPage(){
 	if(($('#sessioncheck').val() != '')||(location.pathname  == '/login')||(location.pathname  == '/register')){
 	if((page != location.pathname)&&(location.pathname != "")){
 		page = location.pathname;
@@ -32,7 +22,6 @@ else{ $('#header p a').show(); $("#logout_button").hide(); }
 
 var data;
 function loadRecordPage(data){
-//data1 = json_decode(data);
 alert(data['zakazchik']);
 for(var key in data){
 var value = data[key];
@@ -40,9 +29,48 @@ $('[name='+key+']').val(value);
 };
 };
 
+/*
+function setDateFields(){
+var day = '';
+var month = '';
+var year = '';
+var months = ["", ["январь", 31], ["февраль", 28], ["март", 31], ["апрель", 30], ["май", 31], ["июнь", 30], 
+				["июль", 31], ["август", 31], ["сентябрь", 30], ["октябрь", 31], ["ноябрь", 30], ["декабрь", 31]];
+var currDate = Date();
+//var strDate = string(currDate)
+var currDay = currDate.slice(' ');
+//alert(currDate+'<'+currDay[-1]+'>');
+for(var i=1; i<32; i++){ day = day + '<option>'+i+'</option>'};
+for(var i=1; i<13; i++){ month = month + '<option>'+months[i][0]+'</option>'};
+for(var i=2015; i<2017; i++){ year = year + '<option>'+i+'</option>'};
+$(".date_field").html("<select id='day'>"+day+"</select> <select id='month'>"+month+"</select> <select id='year'>"+year+"</select> <input type=text name='"+$(this).attr('name')+"' class='date'>");
+
+var lastDay = 0;
+var lastMonth = 0;
+var lastYear = 0;
+$(".date_field").bind("change", "select", function(){ 
+	$('.date').val($('#day').val()+'-'+$('#month').val()+'-'+$('#year').val()); 	
+	if(lastMonth != $("#month")){
+		var j = 1;
+		alert('asd');
+		while(months[j][0] != $("#month").val()){ j++; };
+		var n = months[j][1]+1;
+		day = '';
+		for(var i=1; i<n; i++){ day = day + '<option>'+i+'</option>'}; 
+		$("#day").html(day);
+		$('.date').val(lastDay+'-'+$('#month').val()+'-'+lastYear);
+		$('#day').val(lastDay);
+	}
+	lastDay = $('#day').val();
+	lastMonth = $('#month').val();
+	lastYear = $('#year').val();
+});
+
+};*/
+
 //-------------------------------------------------------//
 jQuery(document).ready(function($){
-	
+
 	//showalert();
 	
 	setInterval("loadPage()", 250);
@@ -76,6 +104,9 @@ jQuery(document).ready(function($){
 	},
 	function(){	$("ul", this).hide(); }
 	);
+	
+	
+	//setDateFields();
 	
 	/*----------------------------*/
 	/*-ВЫДЕЛЕНИЕ ЯЧЕЙКИ В ТАБЛИЦЕ-*/
@@ -119,6 +150,10 @@ jQuery(document).ready(function($){
 		}
 	});
 	
+	
+	/*---------------------------*/
+	/*-НАЖАТИЕ КНОПОК ВХОД/ВЫХОД-*/
+	/*---------------------------*/
 	$("#content").on("click", "#login_button", function(){
 		if (($("[name=login]").val() != '')&($("[name=password]").val() != '')){
 			$.ajax({
@@ -131,7 +166,7 @@ jQuery(document).ready(function($){
 		window.location.pathname = '';
 		return false;
 		});
-		
+	
 	$("#header").on("click", "#logout_button", function(){
 		$.ajax({
 				type: "POST",
@@ -142,16 +177,36 @@ jQuery(document).ready(function($){
 		return false;
 	});
 	
+	
+	/*-----------------------------------*/
+	/*-ОТКРЫТИЕ/ЗАКРЫТИЕ МОДАЛЬНОГО ОКНА-*/
+	/*-----------------------------------*/	
+	$(".openfr").click(function(){
+		$("#shadow").show();
+		$("#fr").show();
+		$.ajax({ url: 'pages/'+$(this).attr('href')+'.php', success: function(html){ $("#fr").html(html); } });
+		return false;
+	});
+	
+	$("#content").on("click", ".openfr", function(){
+		$("#shadow").show();
+		$("#fr").show();
+		$.ajax({ url: 'pages/'+$(this).attr('href')+'.php', success: function(html){ $("#fr").html(html); } });
+		return false;
+	});
+	
 	$("#content").on("click", "#countersform", function(){
 		$("#shadow").show();
 		$("#fr").show();
 		var namebutton = $(this).attr('name');
 		$("#fr").attr("name", namebutton);
-		$.ajax({ url: "pages/counters.php",	success: function(html){ $("#fr").html(html); } });
+		$.ajax({ url: "pages/counter_search.php", success: function(html){ $("#fr").html(html); } });
+		
 		return false;
 	});
 	
-	$("#shadow").click(function(){ $("#shadow").hide(); $("#fr").hide(); }); //ЗАКРЫТИЕ МОДАЛЬНОГО ОКНА
+	$("#shadow").click(function(){ $("#shadow").hide(); $("#fr").hide(); });
+	
 	
 	$("body").on("dblclick", ".dblclick_select_counter td", function(){
 		$("[name="+$('#fr').attr('name')+"]").val($.trim($("[posX=1][posY="+$(this).attr('posY')+"]").html()));
@@ -159,6 +214,16 @@ jQuery(document).ready(function($){
 		else{ $("[name=ati2]").val($.trim($("[posX=2][posY="+$(this).attr('posY')+"]").html())); };
 		$("#shadow").hide(); 
 		$("#fr").hide();
+	});
+	
+	$("#content").on("dblclick", ".dblclick_select_counter td", function(){
+		$("#shadow").show(); 
+		$("#fr").show();
+		$("#content").append('asd');
+		/*$.ajax({
+			type: 'GET',
+			url: 'pages/counter_add.php',
+			success: function(html){ $("#fr").html(html); }*/
 	});
 	
 	$("body").on("dblclick", ".dblclick_select_driver td", function(){
@@ -217,21 +282,6 @@ jQuery(document).ready(function($){
 		$('input').attr('checked', 'checked');
 		return false;
 	});
-	
-	$(".openfr").click(function(){
-		$("#shadow").show();
-		$("#fr").show();
-		$.ajax({ url: 'pages/'+$(this).attr('href')+'.php', success: function(html){ $("#fr").html(html); } });
-		return false;
-	});
-	
-	$("#content").on("click", ".openfr", function(){
-		$("#shadow").show();
-		$("#fr").show();
-		$.ajax({ url: 'pages/'+$(this).attr('href')+'.php', success: function(html){ $("#fr").html(html); } });
-		return false;
-	});
-	
 
 	
 	$("body").bind("keyup", ".name", function(){
@@ -268,6 +318,7 @@ jQuery(document).ready(function($){
 		return false;
 	});
 	
+	
 	var last_search = '';
 	$("body, #content").bind("keyup", "#search", function(){
 		if($("#search").val() != last_search){
@@ -284,6 +335,10 @@ jQuery(document).ready(function($){
 		};
 	});
 	
+	
+	
+	
+	//---------------------------------------------------------------
 	$("#content").on("click", "#setconfig", function(){
 		$.ajax({
 			url: 'pages/setconfig.php',

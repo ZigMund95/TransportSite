@@ -14,6 +14,11 @@ border: 1px solid;
 border: 1px solid;
 }
 
+#reisi tr th img{
+position: relative;
+float: right;
+}
+
 /*-------*/
 /*-LOGIN-*/
 /*-------*/
@@ -216,4 +221,31 @@ width: 90%;
 #viewtable td{
 border: 1px solid;
 vertical-align: top;
+}
+
+
+
+
+#schet{
+border: 1px solid;
+}
+
+.withborder{
+border: 1px solid;
+}
+
+.lowfont{
+font-size: 11px;
+}
+
+#schet tr td{
+vertical-align: top;
+padding: 0;
+border: inherit;
+font-size: inherit;
+}
+
+
+#fontlow{
+
 }

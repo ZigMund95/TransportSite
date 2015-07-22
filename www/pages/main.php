@@ -22,7 +22,7 @@ $i = 0;
 foreach($config as $key => $value){
 	if($value){
 		if($visibleColumn[$i] == '1'){
-			echo ('<th>'.$config[$key]['value'].'</th>');
+			echo ('<th>'.$config[$key]['value'].'<img src="images/arrow.png">'.'</th>');
 		}
 	$i++;
 	}
