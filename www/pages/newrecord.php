@@ -25,7 +25,7 @@
 		требуемый подвижной <input type=text class="width185" name="podvizh"> <br>
 		особые условия <input type=text class="width185" name="treb"> <br>
 		адрес выгрузки <input type=text class="width185" name="address_vig"> <br>
-		дата выгрузки <input type=text class="width185" name="date_vig"> <br>
+		дата выгрузки <input type=date class="width185" name="date_vig" class="date_field"> <br>
 		время выгрузки <input type=text class="width185" name="time_vig"> <br>
 		контактное лицо <input type=text class="width185" name="contact2"> <br>
 		ставка БРУТТО <input type=text class="width185" name="brutto"> <br>
@@ -36,9 +36,9 @@
 
 		<td id="tdright" colspan=2>
 		<hr>
-		Перевозчик <input type=text class="width156" id="counter"  name="perevozchik"> <button type=submit id="countersform" name="perevozchik" class="width25">+</button> <br>
+		Перевозчик <input type=text class="width156" id="counter"  name="perevozchik"> <button type=submit  id="countersform" name="perevozchik" class="width25">+</button> <br>
 		код в АТИ <input type=text class="width185" name="ati2"> <br>
-		водитель <input type=text class="width156"  name="driver"> <button type=submit href="drivers_search" id="openfr" class="openfr width25">+</button> <br>
+		водитель <input type=text class="width156"  name="driver"> <button href="drivers_search" id="openfr" class="openfr width25">+</button> <br>
 		Телефон 1 <input type=text class="width185"  name="phone1"> <br>
 		Телефон 2 <input type=text class="width185" name="phone2"> <br>
 		а/м <input type=text class="width185" name="car"> <br>

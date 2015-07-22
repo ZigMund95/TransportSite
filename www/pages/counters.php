@@ -5,13 +5,15 @@ return ($str);
 }
 
 if(isset($_POST['search'])){
-	$search = mb_ucwords($_POST['search']);
+	$search1 = mb_ucwords($_POST['search']);
+	$search2 = $_POST['search'];
 	echo $search;
 }
 else{
-	$search = '';
+	$search2 = '';
 };
 
+echo $search1.' '.$search2;
 $link = mysqli_connect('localhost','admin','admin','test');
 $config[] = '0';
 $record = mysqli_query($link, "SELECT * FROM `counters_config`");
@@ -36,8 +38,8 @@ foreach($config as $key => $value){
 };
 echo('</tr>');		
 
-if($search == ''){ $res = mysqli_query($link, "SELECT * FROM `counters`"); }
-else{ $res = mysqli_query($link, "SELECT * FROM `counters` WHERE `firm` LIKE '%".$search."%' "); };
+if($search2 == ''){ $res = mysqli_query($link, "SELECT * FROM `counters`"); }
+else{ $res = mysqli_query($link, "SELECT * FROM `counters` WHERE `firm` LIKE '%".$search1."%' OR `firm` LIKE '%".$search2."%' "); };
 $indexY = 1;
 while($row = mysqli_fetch_assoc($res)) {
 

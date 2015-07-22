@@ -69,7 +69,7 @@ if(isset($_SESSION['userid'])){
 		<li>
 			<a href="" class='menu nothref'> Реестр </a>
 			<ul>
-				<li> <a href=""> Счета </a> </li>
+				<li> <a href="schet"> Счета </a> </li>
 				<li> <a href=""> Счета-фактуры </a> </li>
 				<li> <a href=""> Акты вып. работ </a> </li>
 				<li> <a href=""> Заявки </a> </li>
