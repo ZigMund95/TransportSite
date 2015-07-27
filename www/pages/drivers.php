@@ -37,8 +37,9 @@ foreach($config as $key => $value){
 };
 echo('</tr>');		
 
+//$link->set_charset('cp1251_general_ci');
 if($search2 == ''){ $res = mysqli_query($link, "SELECT * FROM `drivers`"); }
-else{ $res = mysqli_query($link, "SELECT * FROM `drivers` WHERE `name` LIKE '%".$search1."%' OR `name` LIKE '%".$search2."%' "); };
+else{ $res = mysqli_query($link, "SELECT * FROM `drivers` WHERE `name` LIKE '%".$search1."%' OR `name` LIKE '%".$search2."%'"); };
 $indexY = 1;
 while($row = mysqli_fetch_assoc($res)) {
 
@@ -46,16 +47,18 @@ while($row = mysqli_fetch_assoc($res)) {
 	$indexX = 1;
 	$i = 0;
 	foreach($row as $key => $value){		
-		if($key == 'index'){ echo '<th id="greytd">'.$value.'</th>';}
+		if($key == 'index'){ echo '<th id="greytd" posX="'.$indexX.'" posY="'.$indexY.'">'.$value.'</th>';}
 		else{
 			if($value != '0000-00-00'){
-				echo('<td posX="'.$indexX.'" posY="'.$indexY.'" class="cell">'.$value.'</td>');
+				$str = '<td posX="'.$indexX.'" posY="'.$indexY.'" class="cell">'.$value.'</td>';
+				if($search2 != ''){ $a = substr($search1, $str); $b = substr($search2, $str); $str = str_replace($a, "<b><u>".$a."</u></b>", $str); $str = str_replace($b, "<b><u>".$b."</u></b>", $str); };
+				echo($str);
 			}
 			else{
 				echo('<td posX="'.$indexX.'" posY="'.$indexY.'" class="cell"> - </td>');
 			};
-		$indexX++;
 		};
+		$indexX++;
 		$i++;
 	};
 	$indexY++;
@@ -65,5 +68,5 @@ while($row = mysqli_fetch_assoc($res)) {
 echo('</table>');
 ?>
 
-<a href='driver_	add' class='openfr'> Добавить </a>
+<a href='driver_add' class='openfr'> Добавить </a>
 

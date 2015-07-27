@@ -7,13 +7,11 @@ return ($str);
 if(isset($_POST['search'])){
 	$search1 = mb_ucwords($_POST['search']);
 	$search2 = $_POST['search'];
-	echo $search;
 }
 else{
 	$search2 = '';
 };
 
-echo $search1.' '.$search2;
 $link = mysqli_connect('localhost','admin','admin','test');
 $config[] = '0';
 $record = mysqli_query($link, "SELECT * FROM `counters_config`");
@@ -47,16 +45,18 @@ while($row = mysqli_fetch_assoc($res)) {
 	$indexX = 1;
 	$i = 0;
 	foreach($row as $key => $value){		
-		if($key == 'index'){ echo '<th id="greytd">'.$value.'</th>';}
+		if($key == 'index'){ echo '<th id="greytd" posX="'.$indexX.'" posY="'.$indexY.'">'.$value.'</th>';}
 		else{
 			if($value != '0000-00-00'){
-				echo('<td posX="'.$indexX.'" posY="'.$indexY.'" class="cell">'.$value.'</td>');
+				$str = '<td posX="'.$indexX.'" posY="'.$indexY.'" class="cell">'.$value.'</td>';
+				if($search2 != ''){ $a = substr($search1, $str); $b = substr($search2, $str); $str = str_replace($a, "<b><u>".$a."</u></b>", $str); $str = str_replace($b, "<b><u>".$b."</u></b>", $str); };
+				echo($str);
 			}
 			else{
 				echo('<td posX="'.$indexX.'" posY="'.$indexY.'" class="cell"> - </td>');
 			};
-		$indexX++;
 		};
+		$indexX++;
 		$i++;
 	};
 	$indexY++;
