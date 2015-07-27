@@ -239,6 +239,7 @@ font-size: 11px;
 }
 
 #schet tr td{
+width: 10%;
 vertical-align: top;
 padding: 0;
 border: inherit;
@@ -246,6 +247,10 @@ font-size: inherit;
 }
 
 
-#fontlow{
 
+
+.date_picker{
+
+position: relative;
+float: right;
 }

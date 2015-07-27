@@ -3,6 +3,7 @@
 	<tr>
 		<td>
 		<hr>
+		<input type=hidden name="index">
 		Фирма <input type=text class="width185" name="firm"> <br>
 		код в АТИ <input type=text class="width185" name="ati"> <br>
 		ИНН <input type=text class="width185" name="inn"> <br>
@@ -51,3 +52,15 @@
 	</tr>	
 </table>		
 </form>
+
+<? 
+if(isset($_GET['index'])){ 
+$GET = $_GET;
+
+$link = mysqli_connect('localhost', 'admin', 'admin', 'test');
+
+$record = mysqli_query($link, 'SELECT * FROM `counters` WHERE `index`='.$GET['index']);
+$record1 = mysqli_fetch_assoc($record);
+print('<script> loadRecordPage(('.json_encode($record1).')) </script>'); 
+} 
+?>

@@ -93,7 +93,9 @@ echo('pages/'.$page.'.php');
 //echo $_SESSION['visible_column'];
 //include('pages/'.$page.'.php'); 
 ?>
+
 </div>
+
 
 
 

@@ -1,6 +1,7 @@
 <div id='driveradd'>
 <form method="POST" id="formdriver">
 		<hr>
+		<input type=hidden name="index">
 		Фамилия <input type=text class="width185" id="name1" class="name"> <br>
 		Имя <input type=text class="width185" id="name2" class="name"> <br>
 		Отчество <input type=text class="width185" id="name3" class="name"> <br>
@@ -24,3 +25,15 @@
 		<button id="driveraddbutton"> Добавить </button>
 </form>
 </div>
+
+<? 
+if(isset($_GET['index'])){ 
+$GET = $_GET;
+
+$link = mysqli_connect('localhost', 'admin', 'admin', 'test');
+
+$record = mysqli_query($link, 'SELECT * FROM `drivers` WHERE `index`='.$GET['index']);
+$record1 = mysqli_fetch_assoc($record);
+print('<script> loadRecordPage(('.json_encode($record1).')) </script>'); 
+} 
+?>

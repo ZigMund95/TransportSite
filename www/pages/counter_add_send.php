@@ -15,10 +15,12 @@ if(isset($_POST['firm'])){
 		if($key == 'information'){ $b = ''; }else{ $b = ', '; };
 		$query1 = $query1."`".$key."`".$b;
 		$query2 = $query2."'".$value."'".$b;
+		$query3 = $query3."`".$key."`='".$value."'".$b;
 	};
 	
-	echo $query1.'<br>'.$query2;
-	$query = "INSERT INTO `counters` (".$query1.") VALUES (".$query2.")";
+	if($POST['index'] != ''){ $query = "UPDATE `counters` SET ".$query3." WHERE `index`='".$POST['index']."'"; }
+	else{ $query = "INSERT INTO `counters` (".$query1.") VALUES (".$query2.")"; };
+	echo '<br>'.$query;
 	$res = mysqli_query($link, $query);
 	if($res){ echo 'ok'; }
 	else{ echo '<br>'; die(mysqli_error($link)); };

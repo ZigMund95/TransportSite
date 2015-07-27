@@ -14,7 +14,7 @@ $key1 = $key;
 if(!in_array($key, $exceptCol)){
 if($key == 'date' ){ $char = ''; }else{ $char = ' ,'; };
 $keys = $keys.$char.'`'.$key.'`';
-if($value == ''){ $s = '0'; }else{ $s = $value; };
+$s = $value;
 $values = $values.$char."'".$s."'";
 };
 };
