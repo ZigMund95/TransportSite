@@ -4,6 +4,7 @@
 
 <table id="newrecord">
 	<tr>
+		<input type=hidden name="index">
 		<? $currdate = getdate(); $currdate = $currdate["0"]; ?>
 		<td id="tdright"> Дата <div name="date" class="date_picker"></div> </td>
 		<td id="tdright"> Срыв! <input type=text class="width185" name="sriv"> </td>
@@ -26,7 +27,7 @@
 		требуемый подвижной <input type=text class="width185" name="podvizh"> <br>
 		особые условия <input type=text class="width185" name="treb"> <br>
 		адрес выгрузки <input type=text class="width185" name="address_vig"> <br>
-		дата выгрузки <input type=date class="width185" name="date_vig" class="date_field"> <br>
+		дата выгрузки <div name="date_vig" class="date_picker"></div> <br>
 		время выгрузки <input type=text class="width185" name="time_vig"> <br>
 		контактное лицо <input type=text class="width185" name="contact2"> <br>
 		ставка БРУТТО <input type=text class="width185" name="brutto" onkeydown="return noLetters(event.keyCode);" onkeyup="calculateNetto();"> <br>
@@ -43,6 +44,7 @@
 		Телефон 1 <input type=text class="width185"  name="phone1" onkeydown="if(event.keyCode != 9){ return false; }"> <br>
 		Телефон 2 <input type=text class="width185" name="phone2" onkeydown="if(event.keyCode != 9){ return false; }"> <br>
 		а/м <input type=text class="width185" name="car" onkeydown="if(event.keyCode != 9){ return false; }"> <br>
+		ставка <input type=text class="width185" name="stavka"> <br>
 		форма оплаты <select class="width185" name="forma2" onchange="calculateNetto();"> <option> ? </option>  <option> нал </option>  <option> безнал </option>  <option> с НДС </option> </select> <br>
 		срок оплаты <input type=text class="width185"  name="srok_opl"> <br>
 		<br>
@@ -51,9 +53,9 @@
 		<a href="" id="open_schet"> Печать заявки </a>
 		<br>
 		<br>
-		факт дата выгрузки <input type=date class="width185" name="fact_date_vig"> <br>
-		ТТН получена <input type=date class="width185" name="ttn_poluch"> <br>
-		ТТН, счет отправлены <input type=date class="width185" name="ttn_otp"> <br>
+		факт дата выгрузки <div name="fact_date_vig" class="date_picker"></div> <br>
+		ТТН получена <div name="ttn_poluch" class="date_picker"></div> <br>
+		ТТН, счет отправлены <div name="ttn_otp" class="date_picker"></div> <br>
 		</td>
 	</tr>
 
@@ -61,21 +63,21 @@
 		<td id="tdright" colspan=2>
 		<hr>
 		поступление от заказчика <br>
-		<input type=date class="width185" name="post_date1"> <input type=text class="width185" name="post_sum1" onkeydown="return noLetters(event.keyCode)"> <br>
-		<input type=date class="width185" name="post_date2"> <input type=text class="width185" name="post_sum2" onkeydown="return noLetters(event.keyCode)"> <br>
-		<input type=date class="width185" name="post_date3"> <input type=text class="width185" name="post_sum3" onkeydown="return noLetters(event.keyCode)"> <br>
-		<input type=date class="width185" name="post_date4"> <input type=text class="width185" name="post_sum4" onkeydown="return noLetters(event.keyCode)"> <br>
-		долг <input type=text class="width185" onkeydown="if(event.keyCode != 9){ return false; }"> <br>
+		<div name="post_date1" class="date_picker"></div> <input type=text class="width185" name="post_sum1" onkeydown="return noLetters(event.keyCode)" onkeyup="calculateZakaz(1);"> <br>
+		<div name="post_date2" class="date_picker"></div> <input type=text class="width185" name="post_sum2" onkeydown="return noLetters(event.keyCode)" onkeyup="calculateZakaz(1);"> <br>
+		<div name="post_date3" class="date_picker"></div> <input type=text class="width185" name="post_sum3" onkeydown="return noLetters(event.keyCode)" onkeyup="calculateZakaz(1);"> <br>
+		<div name="post_date4" class="date_picker"></div> <input type=text class="width185" name="post_sum4" onkeydown="return noLetters(event.keyCode)" onkeyup="calculateZakaz(1);"> <br>
+		долг <input type=text name="dolg1" class="width185" onkeydown="if(event.keyCode != 9){ return false; }"> <br>
 		</td>
 	
 		<td id="tdright" colspan=2>
 		<hr>
 		оплачено перевозчику <br>
-		<input type=date class="width185" name="opl_date1"> <input type=text class="width185" name="opl_sum1" onkeydown="return noLetters(event.keyCode)"> <br>
-		<input type=date class="width185" name="opl_date2"> <input type=text class="width185" name="opl_sum2" onkeydown="return noLetters(event.keyCode)"> <br>
-		<input type=date class="width185" name="opl_date3"> <input type=text class="width185" name="opl_sum3" onkeydown="return noLetters(event.keyCode)"> <br>
-		<input type=date class="width185" name="opl_date4"> <input type=text class="width185" name="opl_sum4" onkeydown="return noLetters(event.keyCode)"> <br>
-		долг <input type=text class="width185" onkeydown="if(event.keyCode != 9){ return false; }"> <br>
+		<div name="opl_date1" class="date_picker"></div> <input type=text class="width185" name="opl_sum1" onkeydown="return noLetters(event.keyCode)" onkeyup="calculateZakaz(2);"> <br>
+		<div name="opl_date2" class="date_picker"></div> <input type=text class="width185" name="opl_sum2" onkeydown="return noLetters(event.keyCode)" onkeyup="calculateZakaz(2);"> <br>
+		<div name="opl_date3" class="date_picker"></div> <input type=text class="width185" name="opl_sum3" onkeydown="return noLetters(event.keyCode)" onkeyup="calculateZakaz(2);"> <br>
+		<div name="opl_date4" class="date_picker"></div> <input type=text class="width185" name="opl_sum4" onkeydown="return noLetters(event.keyCode)" onkeyup="calculateZakaz(2);"> <br>
+		долг <input type=text name="dolg2" class="width185" onkeydown="if(event.keyCode != 9){ return false; }"> <br>
 		</td>
 	</tr>
 	
@@ -90,15 +92,23 @@
 </table>
 </form>
 
+<script> setDateFields(); </script>
+
 <? 
 if(isset($_GET['index'])){ 
 $GET = $_GET;
 
 $link = mysqli_connect('localhost', 'admin', 'admin', 'test');
-
 $record = mysqli_query($link, 'SELECT * FROM `reisi` WHERE `index`='.$GET['index']);
 $record1 = mysqli_fetch_assoc($record);
+
+$dateCol = array('date', 'date_pogr', 'date_vig');
+foreach($dateCol as $key => $value){
+					$s = split('-', $record1[$value]);
+					$record1[$value] = $s[2].'-'.$s[1].'-'.$s[0];
+				}
+
 print('<script> loadRecordPage(('.json_encode($record1).')) </script>'); 
 } 
 ?>
-<script> setDateFields(); </script>
+

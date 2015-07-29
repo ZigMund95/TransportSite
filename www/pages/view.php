@@ -10,7 +10,7 @@ if(isset($_POST['hidden'])){
 	foreach($record1 as $key => $value){
 		if(isset($POST[$key])){ $query = $query.'1;'; } else{ $query = $query.'0;'; };
 	}
-	mysqli_query($link, "UPDATE `users` SET `visiblecolumns`='".$query."'");
+	mysqli_query($link, "UPDATE `users` SET `visiblecolumns`='".$query."' WHERE `index`='".$_SESSION['userid']."'");
 	$_SESSION['visible_column'] = $query;
 };
 

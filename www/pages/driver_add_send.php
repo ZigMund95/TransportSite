@@ -11,6 +11,7 @@ if(isset($_POST['name'])){
 	$POST['name'] = mb_ucwords($POST['name']);
 	$query1 = '';
 	$query2 = '';
+	$query3 = '';
 	foreach($POST as $key => $value){
 		if($key == 'information'){ $b = ''; }else{ $b = ', '; };
 		$query1 = $query1."`".$key."`".$b;

@@ -1,6 +1,14 @@
 /*-------*/
 /*-REISI-*/
 /*-------*/
+
+#reisi th, #reisi td{
+width: auto;
+min-width: 80px;
+max-height: 10px;
+display: table-cell;
+}
+
 .table{
 border: 1px solid;
 margin: 8px;
@@ -12,6 +20,10 @@ border: 1px solid;
 
 .table th{
 border: 1px solid;
+}
+
+.kepka{
+top: 200px;
 }
 
 #reisi tr th img{
@@ -239,6 +251,7 @@ font-size: 11px;
 }
 
 #schet tr td{
+margin: 0;
 width: 10%;
 vertical-align: top;
 padding: 0;
@@ -250,7 +263,5 @@ font-size: inherit;
 
 
 .date_picker{
-
-position: relative;
-float: right;
+display: inline;
 }
