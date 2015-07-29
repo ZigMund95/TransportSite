@@ -10,6 +10,8 @@ function loadPage(){
 			success: function(html){
 				$("#content").html(html);
 				$("#action").val("open");
+				if(page1 == "main"){ $("[href=view]").show(); }
+				else{ $("[href=view]").hide(); }
 			}
 		});
 	}
@@ -23,16 +25,33 @@ else{ $('#header p a').show(); $("#logout_button").hide(); }
 
 var data;
 function loadRecordPage(data){
-for(var key in data){
-var value = data[key];
-$('[name='+key+']').val(value);
 
-if(typeof data['car'] != 'undefined'){
-	var namearr = data['name'].split(' ');
-	$("#name1").val(namearr[0]);
-	$("#name2").val(namearr[1]);
-	$("#name3").val(namearr[2]);
-};
+for(var key in data){
+	var value = data[key];
+	$('[name='+key+']').val(value);
+
+	if(typeof data['car'] != 'undefined'){
+		var namearr = data['name'].split(' ');
+		$("#name1").val(namearr[0]);
+		$("#name2").val(namearr[1]);
+		$("#name3").val(namearr[2]);
+	};
+	
+	
+	var thiss = $('[name='+key+']').parent("div");
+	
+	
+	if(typeof $(thiss).attr("class") != 'undefined'){
+		var namethis = $(thiss).attr("name");
+		var months = ["", ["январь", 31], ["февраль", 28], ["март", 31], ["апрель", 30], ["май", 31], ["июнь", 30], 
+					["июль", 31], ["август", 31], ["сентябрь", 30], ["октябрь", 31], ["ноябрь", 30], ["декабрь", 31]];
+		var date = $('[name='+key+']').val().split("-");
+		if(date[0] < 10){ date[0] = date[0][1]; }
+		if(date[1] < 10){ date[1] = date[1][1]; }
+		$(thiss).find(".day").val(date[0]);
+		$(thiss).find(".month").val(months[date[1]][0]);
+		$(thiss).find(".year").val(date[2]);
+	}
 };
 };
 
@@ -65,49 +84,92 @@ if($("[name=forma1]").val() != '?' & $("[name=forma2]").val() != '?'){
 			}
 		}
 	}
-};
+}
+else{ $("[name=netto]").val("Выберите форму оплаты"); };
 }
 
+function calculateZakaz(a){
+	if(a==1){ $("[name=dolg1]").val($("[name=netto]").val()-$("[name=post_sum1]").val()-$("[name=post_sum2]").val()-$("[name=post_sum3]").val()-$("[name=post_sum4]").val()); }
+	else{ $("[name=dolg2]").val($("[name=stavka]").val()-$("[name=opl_sum1]").val()-$("[name=opl_sum2]").val()-$("[name=opl_sum3]").val()-$("[name=opl_sum4]").val()); };
+}
 
 function setDateFields(){
-var day = ''; var month = ''; var year = '';
-var months = ["", ["январь", 31], ["февраль", 28], ["март", 31], ["апрель", 30], ["май", 31], ["июнь", 30], 
-				["июль", 31], ["август", 31], ["сентябрь", 30], ["октябрь", 31], ["ноябрь", 30], ["декабрь", 31]];
-var currDate = Date();
-var currDay = currDate.slice(' ');
-for(var i=1; i<32; i++){ day = day + '<option>'+i+'</option>'};
-for(var i=1; i<13; i++){ month = month + '<option>'+months[i][0]+'</option>'};
-for(var i=2015; i<2017; i++){ year = year + '<option>'+i+'</option>'};
-$(".date_picker").html("<select id='day'>"+day+"</select> <select id='month'>"+month+"</select> <select id='year'>"+year+"</select> <input type=hidden name='"+$(".date_picker").attr('name')+"' class='date'>");
+var today = new Date();
 
-$('.date').val($('#day').val()+'-'+j+'-'+$('#year').val());
-var j = 1;
-while(months[j][0] != $("#month").val()){ j++; };
-var lastDay = 1; var lastMonth = 1; var lastYear = 2015;
+var day = ''; var month = ''; var year = '';
+var months = [["", 0], ["январь", 31], ["февраль", 28], ["март", 31], ["апрель", 30], ["май", 31], ["июнь", 30], 
+				["июль", 31], ["август", 31], ["сентябрь", 30], ["октябрь", 31], ["ноябрь", 30], ["декабрь", 31]];
+for(var i=1; i<32; i++){ day = day + '<option>'+i+'</option>'};
+for(var i=0; i<13; i++){ month = month + '<option>'+months[i][0]+'</option>'};
+for(var i=2015; i<2017; i++){ year = year + '<option>'+i+'</option>'};
+
+var lastDay = today.getDate(); var lastMonth = today.getMonth()+1; var lastYear = today.getFullYear();
+var date_picker = $(".date_picker");
+for(var i=0;i<14;i++){
+	date_picker.eq(i).html("<select class='day'>"+day+"</select> <select class='month'>"+month+"</select> <select class='year'>"+year+"</select> <input type=hidden name='"+date_picker.eq(i).attr('name')+"' class='date'>");
+
+	if(i<3){
+		date_picker.eq(i).find(".day").val(lastDay);
+		date_picker.eq(i).find(".month").val(months[lastMonth][0]);
+		date_picker.eq(i).find(".year").val(lastYear);
+	}
+	else{
+		date_picker.eq(i).append("<img src='images/cross.png' class='deletedate'>");
+		date_picker.eq(i).find(".day").val('');
+		date_picker.eq(i).find(".month").val('');
+		date_picker.eq(i).find(".year").val('');
+	}
+	var j = 0;
+	while(months[j][0] != date_picker.eq(i).find(".month").val() && j < 12){ j++; };
+	date_picker.eq(i).find('.date').val(date_picker.eq(i).find('.day').val()+'-'+j+'-'+date_picker.eq(i).find('.year').val());
+}
+
 $(".date_picker").on("change", "select", function(){ 
-	if(lastDay != $("#day").val() || lastMonth != $("#month").val() || lastYear != $("#year").val()){
-		lastDay = $("#day").val();
-		lastYear = $("#year").val();
-		if(lastYear % 4 == 0){ months[2][1] = 29; } else{ months[2][1] = 28; };
-		var j = 1;
-		while(months[j][0] != $("#month").val()){ j++; };
+	var thiss = $(this).parent("div");
+	if(lastDay != $(thiss).find(".day").val() || lastMonth != $(thiss).find(".month").val() || lastYear != $(thiss).find(".year").val()){
+		lastDay = $(thiss).find(".day").val();
+		lastYear = $(thiss).find(".year").val();
+		if(lastYear % 4 == 0){ months[2][1] = 29; } else{ months[2][1] = 28; }; // ПРОВЕРКА НА ВИСОКОСНОСТЬ ГОДА
+		var j = 0;
+		if($(thiss).find(".month").val() == ''){ $(thiss).find(".month").val(months[today.getMonth()+1][0]); };
+		if($(thiss).find(".year").val() == null){ $(thiss).find(".year").val(today.getFullYear()); };
+		while(months[j][0] != $(thiss).find(".month").val()){ j++; };
 		day = '';
 		for(var i=1; i<=months[j][1]; i++){ day = day + '<option>'+i+'</option>'}; 
-		$("#day").html(day);
-		$('#day').val(lastDay);
-		if($('#day').val() == null){ $('#day').val('1'); };
-		$('.date').val($('#day').val()+'-'+j+'-'+$('#year').val());
+		$(thiss).find(".day").html(day);	
+		$(thiss).find(".day").val(lastDay);
+		if($(thiss).find(".day").val() == null){ $(thiss).find(".day").val('1'); };
+		$(thiss).find(".date").val($(thiss).find(".day").val()+'-'+j+'-'+$(thiss).find(".year").val());
 	}
-	lastDay = $('#day').val();
-	lastMonth = $('#month').val();
-	lastYear = $('#year').val();
+	lastDay = $(thiss).find(".day").val();
+	lastMonth = $(thiss).find(".month").val();
+	lastYear = $(thiss).find(".year").val();
 });
-//var j = 1;
-//while(months[j][0] != $("#month").val()){ j++; };
-//var d;
-//alert(d = $('#day').val()+' '+'May'+' '+$('#year').val());
-//alert(Date(d));
+
+$(".date_picker").on("change", "input", function(){
+var date = $(this).val().split("-");
+var thiss = $(this).parent("div");
+if(date[0] < 10){ date[0] = date[0][1]; }
+if(date[1] < 10){ date[1] = date[1][1]; }
+$(thiss).find(".day").val(date[0]);
+$(thiss).find(".month").val(months[date[1]][0]);
+$(thiss).find(".year").val(date[2]);
+});
+
+$(".deletedate").click(function(){ 
+	var thiss = $(this).parent("div");
+	//alert('asd');
+	$(thiss).find(".day").val('');
+	$(thiss).find(".month").val('');
+	$(thiss).find(".year").val(''); 
+	$(thiss).find(".date").val($(thiss).find(".day").val()+'-'+j+'-'+$(thiss).find(".year").val());
+	return false;
+});
 };
+
+
+
+
 
 //-------------------------------------------------------//
 jQuery(document).ready(function($){
@@ -208,10 +270,9 @@ jQuery(document).ready(function($){
 				type: "POST",
 				url: "pages/login.php",
 				data: {login_send: $("[name=login]").val(), password_send: $("[name=password]").val()},
-				success: function(html){ location.reload(); $("#content").html(html); }
+				success: function(html){ location.reload(); $("#content").html(html); window.location.pathname = ''; }
 			});
 		};
-		//window.location.pathname = '';
 		return false;
 		});
 	
@@ -350,7 +411,9 @@ jQuery(document).ready(function($){
 					$("#content").html(html);
 			}
 		});
-		$("#content").append(a);
+		//$("#content").append(a);
+		window.location.pathname = '';
+		//location.reload();
 		return false;
 	});
 	
@@ -383,14 +446,12 @@ jQuery(document).ready(function($){
 		$.ajax({
 			type: "POST",
 			url: "pages/driver_add_send.php",
-			data: a,
-			success: function(html){
-				$("#content").html(html);
-			}
+			data: a
 		});
 		$("#fr").hide();
 		$("#shadow").hide();	
-		location.reload();
+		page = '1';
+		loadPage();
 		return false;
 	});
 	
@@ -399,13 +460,12 @@ jQuery(document).ready(function($){
 		$.ajax({
 			type: "POST",
 			url: "pages/counter_add_send.php",
-			data: a,
-			success: function(html){
-				$("#content").html(html);
-			}
+			data: a
 		});
 		$("#fr").hide();
-		$("#shadow").hide();		
+		$("#shadow").hide();	
+		page = '1';
+		loadPage();
 		return false;
 	});
 	
@@ -442,6 +502,42 @@ jQuery(document).ready(function($){
 		});
 	});
 	
-	setDateFields();
+	$("#content").on("click", "#reisi img", function(){
+		if($(this).attr("name") == "DESC"){ $(this).attr("name", "ASC"); }
+		else{ $(this).attr("name", "DESC"); };
+		$.ajax({
+			type: "GET",
+			data: "sort="+$(this).attr('id')+"&tsort="+$(this).attr('name'),
+			url: "pages/main.php",
+			success: function(html){
+				$("#content").html(html);
+			}
+		});
+	});
+
+
+setInterval("scrollChange()", 100);
+
+/*
+var o = document.getElementById("content");
+var kepka_top = 20;
+$("#content").scroll(function(){
+		var postop = (-1)*(kepka_top + $("#content").scrollTop());
+		$(".kepka").position({top: postop});
+		alert($(".kepka").position().top + ' ' + postop);
+	});*/
 });
+/*
+var asd = 0;
+function scrollChange(){
+	var o = document.getElementById("content");
+	o.onScroll = function(){
+	//if(asd != o.scrollTop){
+		o.scrollTop = asd;
+		asd = o.scrollTop;
+		//alert(asd);
+	}
+}
+
+*/
 

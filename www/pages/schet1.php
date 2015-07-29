@@ -15,6 +15,10 @@ echo('
 
 <table id="schet">
 	<tr>
+		<td> </td> <td> </td> <td> </td> <td> </td> <td> </td>
+		<td> </td> <td> </td> <td> </td> <td> </td> <td> </td>
+	</tr>
+	<tr>
 		<td colspan=10 id="tdcenter"> Общество с ограниченной ответственностью "Навигатор" </td>
 	</tr>
 	
@@ -148,17 +152,17 @@ echo('
 	</tr>
 	
 	<tr class="lowfont">
-		<td id="tdright"> - <td>
+		<td id="tdright"> - </td>
 		<td colspan=9> подача транспорта, непригодного для транспортировки груза приравнивается к срыву погрузки. </td>
 	</tr>
 	
 	<tr class="lowfont">
-		<td id="tdright"> - <td>
+		<td id="tdright"> - </td>
 		<td colspan=9> оплата за простой транспортного средства под погрузкой/разгрузкой составляет 1000руб за каждые полные сутки, начиная со вторых суток, при наличии отметок о прибытии и убытии транспортного средства в ТТН, либо в ТрН, либо в путевом листе. </td>
 	</tr>
 	
 	<tr class="lowfont">
-		<td id="tdright"> - <td>
+		<td id="tdright"> - </td>
 		<td colspan=9> за опоздание на погрузку/разгрузку 200 руб за каждый час </td>
 	</tr class="lowfont">
 	
