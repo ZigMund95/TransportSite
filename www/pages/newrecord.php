@@ -6,14 +6,14 @@
 	<tr>
 		<input type=hidden name="index">
 		<? $currdate = getdate(); $currdate = $currdate["0"]; ?>
-		<td id="tdright"> Дата <div name="date" class="date_picker"></div> </td>
-		<td id="tdright"> Срыв! <input type=text class="width185" name="sriv"> </td>
-		<td id="tdright"> № заказа <input type=text class="width185" name="number" onkeydown="if(event.keyCode != 9){ return false; }"> </td>
-		<td id="tdright"> Менеджер <input type=text class="width185" name="manager" value=<? echo $_SESSION['userid']; ?> onkeydown="if(event.keyCode != 9){ return false; }"> </td>
+		<td class="tdright"> Дата <div name="date" class="date_picker"></div> </td>
+		<td class="tdright"> Срыв! <input type=text class="width185" name="sriv"> </td>
+		<td class="tdright"> № заказа <input type=text class="width185" name="number" onkeydown="if(event.keyCode != 9){ return false; }"> </td>
+		<td class="tdright"> Менеджер <input type=text class="width185" name="manager" value=<? echo $_SESSION['userid']; ?> onkeydown="if(event.keyCode != 9){ return false; }"> </td>
 	</tr>
 	
 	<tr>
-		<td id="tdright" colspan=2>
+		<td class="tdright" colspan=2>
 		<hr>
 		Заказчик <input type=text class="width156" name="zakazchik" onkeydown="if(event.keyCode != 9){ return false; }"> <button href="counter_search" name="zakazchik" id="openfr" class="openfr width25">+</button> <br>
 		код в АТИ <input type=text class="width185" name="ati1" onkeydown="if(event.keyCode != 9){ return false; }"> <br>
@@ -36,7 +36,7 @@
 		стака НЕТТО <input type=text class="width185"  name="netto" onkeydown="if(event.keyCode != 9){ return false; }">  <br>
 		</td>
 
-		<td id="tdright" colspan=2>
+		<td class="tdright" colspan=2>
 		<hr>
 		Перевозчик <input type=text class="width156" id="counter"  name="perevozchik" onkeydown="if(event.keyCode != 9){ return false; }"> <button href="counter_search" name="perevozchik" id="openfr" class="openfr width25">+</button> <br>
 		код в АТИ <input type=text class="width185" name="ati2" onkeydown="if(event.keyCode != 9){ return false; }"> <br>
@@ -50,7 +50,7 @@
 		<br>
 		<br>
 		наша фирма <input type=text class="width156" name="our_firm"> <button type=submit class="width25">+</button> <br>
-		<a href="" id="open_schet"> Печать заявки </a>
+		<a href="" id="open_zayavka"> Печать заявки </a>
 		<br>
 		<br>
 		факт дата выгрузки <div name="fact_date_vig" class="date_picker"></div> <br>
@@ -60,29 +60,29 @@
 	</tr>
 
 	<tr>
-		<td id="tdright" colspan=2>
+		<td class="tdright" colspan=2>
 		<hr>
 		поступление от заказчика <br>
-		<div name="post_date1" class="date_picker"></div> <input type=text class="width185" name="post_sum1" onkeydown="return noLetters(event.keyCode)" onkeyup="calculateZakaz(1);"> <br>
-		<div name="post_date2" class="date_picker"></div> <input type=text class="width185" name="post_sum2" onkeydown="return noLetters(event.keyCode)" onkeyup="calculateZakaz(1);"> <br>
-		<div name="post_date3" class="date_picker"></div> <input type=text class="width185" name="post_sum3" onkeydown="return noLetters(event.keyCode)" onkeyup="calculateZakaz(1);"> <br>
-		<div name="post_date4" class="date_picker"></div> <input type=text class="width185" name="post_sum4" onkeydown="return noLetters(event.keyCode)" onkeyup="calculateZakaz(1);"> <br>
+		<div name="post_date1" class="date_picker"></div> <input type=text class="width185" name="post_sum1" onkeydown="return noLetters(event.keyCode)" onkeyup="calculateZakaz();"> <br>
+		<div name="post_date2" class="date_picker"></div> <input type=text class="width185" name="post_sum2" onkeydown="return noLetters(event.keyCode)" onkeyup="calculateZakaz();"> <br>
+		<div name="post_date3" class="date_picker"></div> <input type=text class="width185" name="post_sum3" onkeydown="return noLetters(event.keyCode)" onkeyup="calculateZakaz();"> <br>
+		<div name="post_date4" class="date_picker"></div> <input type=text class="width185" name="post_sum4" onkeydown="return noLetters(event.keyCode)" onkeyup="calculateZakaz();"> <br>
 		долг <input type=text name="dolg1" class="width185" onkeydown="if(event.keyCode != 9){ return false; }"> <br>
 		</td>
 	
-		<td id="tdright" colspan=2>
+		<td class="tdright" colspan=2>
 		<hr>
 		оплачено перевозчику <br>
-		<div name="opl_date1" class="date_picker"></div> <input type=text class="width185" name="opl_sum1" onkeydown="return noLetters(event.keyCode)" onkeyup="calculateZakaz(2);"> <br>
-		<div name="opl_date2" class="date_picker"></div> <input type=text class="width185" name="opl_sum2" onkeydown="return noLetters(event.keyCode)" onkeyup="calculateZakaz(2);"> <br>
-		<div name="opl_date3" class="date_picker"></div> <input type=text class="width185" name="opl_sum3" onkeydown="return noLetters(event.keyCode)" onkeyup="calculateZakaz(2);"> <br>
-		<div name="opl_date4" class="date_picker"></div> <input type=text class="width185" name="opl_sum4" onkeydown="return noLetters(event.keyCode)" onkeyup="calculateZakaz(2);"> <br>
+		<div name="opl_date1" class="date_picker"></div> <input type=text class="width185" name="opl_sum1" onkeydown="return noLetters(event.keyCode)" onkeyup="calculateZakaz();"> <br>
+		<div name="opl_date2" class="date_picker"></div> <input type=text class="width185" name="opl_sum2" onkeydown="return noLetters(event.keyCode)" onkeyup="calculateZakaz();"> <br>
+		<div name="opl_date3" class="date_picker"></div> <input type=text class="width185" name="opl_sum3" onkeydown="return noLetters(event.keyCode)" onkeyup="calculateZakaz();"> <br>
+		<div name="opl_date4" class="date_picker"></div> <input type=text class="width185" name="opl_sum4" onkeydown="return noLetters(event.keyCode)" onkeyup="calculateZakaz();"> <br>
 		долг <input type=text name="dolg2" class="width185" onkeydown="if(event.keyCode != 9){ return false; }"> <br>
 		</td>
 	</tr>
 	
 	<tr>
-		<td colspan=4 id="tdright">
+		<td colspan=4 class="tdright">
 		<hr>
 			наш остаток <input type=text class="width185" name="ostat" onkeydown="if(event.keyCode != 9){ return false; }"> <br>
 			Примечания <input type=text class="width400" name="primech"> <br>

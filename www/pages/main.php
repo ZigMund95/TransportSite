@@ -20,9 +20,10 @@ uasort($config, 'forsort');
 
 //echo '<p class="kepka"> sdd </p>';
 
-echo '<table id="reisi" class="table canselect">';
-
-echo '<tr id="greytd">';
+echo '<div>';
+echo '<table class="table fixed">';
+for($i=0;$i<38;$i++){ echo '<col> '; };
+echo '<tr class="greytd">';
 $i = 0;
 foreach($config as $key => $value){
 	if($value){
@@ -32,8 +33,11 @@ foreach($config as $key => $value){
 	$i++;
 	}
 };
-echo('</tr>');
-
+echo '</tr>';
+echo '</table>';
+echo '<div class="tableData">';
+echo '<table id="reisi" class="table canselect">';
+for($i=0;$i<38;$i++){ echo '<col> '; };
 $dateCol = array('date', 'date_pogr', 'date_vig', 'fact_date_vig', 'ttn_poluch', 'ttn_otp', 'post_date1', 'post_date2', 'post_date3', 'post_date4',
 				'opl_date1', 'opl_date2', 'opl_date3', 'opl_date4');
 if($_SESSION["userid"] == "3"){ $manager = ''; }
@@ -47,7 +51,7 @@ while($row = mysqli_fetch_assoc($res)) {
 	$i = 0;
 	foreach($row as $key => $value){
 		if($visibleColumn[$i] == '1'){
-		if($key == 'index'){ echo '<th id="greytd" posX="'.$indexX.'" posY="'.$indexY.'">'.$value.'</th>';}
+		if($key == 'index'){ echo '<th class="greytd" posX="'.$indexX.'" posY="'.$indexY.'">'.$value.'</th>';}
 		else{
 			if($value != '0000-00-00' && $value != ''){
 				if(in_array($key, $dateCol)){
@@ -68,7 +72,7 @@ while($row = mysqli_fetch_assoc($res)) {
 };
 
 
-echo('</table>');
+echo('</table> </div> </div>');
 
 ?>
 
