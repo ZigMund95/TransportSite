@@ -56,7 +56,7 @@ while($row = mysqli_fetch_assoc($res)) {
 				echo($str);
 			}
 			else{
-				echo('<td posX="'.$indexX.'" posY="'.$indexY.'" class="cell"> - </td>');
+				echo('<td posX="'.$indexX.'" posY="'.$indexY.'" class="cell"> - </td>'); 
 			};
 		};
 		$indexX++;
