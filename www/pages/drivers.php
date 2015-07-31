@@ -23,21 +23,22 @@ while($record1 = mysqli_fetch_assoc($record)){
 function forsort($a, $b){ if($a['position'] > $b['position']){ return 1; }else{ return -1; }; };
 uasort($config, 'forsort');
 
-echo '<table name="driver" class="table canselect dblclick_select_driver">';
-
-echo '<tr id="greytd">';
+echo '<div>';
+echo '<table class="table fixed">';
+for($i=0;$i<15;$i++){ echo '<col> '; };
+echo '<tr class="greytd">';
 $i = 0;
 foreach($config as $key => $value){
 	if($value){
-		//if($visibleColumn[$i] == '1'){
 			echo ('<th>'.$config[$key]['value'].'</th>');
-		//}
 	$i++;
 	}
 };
-echo('</tr>');		
+echo'</tr>';		
+echo '<div>';
+echo '<table name="driver" class="table canselect dblclick_select_driver">';
+for($i=0;$i<15;$i++){ echo '<col> '; };
 
-//$link->set_charset('cp1251_general_ci');
 if($search2 == ''){ $res = mysqli_query($link, "SELECT * FROM `drivers`"); }
 else{ $res = mysqli_query($link, "SELECT * FROM `drivers` WHERE `name` LIKE '%".$search1."%' OR `name` LIKE '%".$search2."%'"); };
 $indexY = 1;
@@ -47,7 +48,7 @@ while($row = mysqli_fetch_assoc($res)) {
 	$indexX = 1;
 	$i = 0;
 	foreach($row as $key => $value){		
-		if($key == 'index'){ echo '<th id="greytd" posX="'.$indexX.'" posY="'.$indexY.'">'.$value.'</th>';}
+		if($key == 'index'){ echo '<th class="greytd" posX="'.$indexX.'" posY="'.$indexY.'">'.$value.'</th>';}
 		else{
 			if($value != '0000-00-00'){
 				$str = '<td posX="'.$indexX.'" posY="'.$indexY.'" class="cell">'.$value.'</td>';
@@ -65,7 +66,7 @@ while($row = mysqli_fetch_assoc($res)) {
 };
 
 
-echo('</table>');
+echo('</table> </div> </div>');
 ?>
 
 <a href='driver_add' class='openfr'> Добавить </a>

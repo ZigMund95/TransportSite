@@ -121,8 +121,7 @@ display:inline;
 position: relative; 
 
 border: 2px solid #6c7059;
-overflow: hidden;
-overflow: scroll;
+overflow-x: auto;
 }
 
 #content p{
@@ -155,13 +154,13 @@ font:10px verdana, arial, helvetica, sans-serif;
 
 }
 
-#greytd{ background-color: #6c7059; }
+.greytd{ background-color: #6c7059; }
 
-#tdleft{ text-align: left; }
+.tdleft{ text-align: left; }
 
-#tdright{ text-align: right; }
+.tdright{ text-align: right; }
 
-#tdcenter{ text-align: center; }
+.tdcenter{ text-align: center; }
 
 span.c1 {
 display:none;

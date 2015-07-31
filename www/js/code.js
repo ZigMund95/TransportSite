@@ -12,10 +12,13 @@ function loadPage(){
 				$("#action").val("open");
 				if(page1 == "main"){ $("[href=view]").show(); }
 				else{ $("[href=view]").hide(); }
+				$(".tableData").css({height: $("#content")[0].offsetHeight-$(".fixed")[0].offsetHeight-21});
+				$(".tableData").css({width: $(".fixed")[0].offsetWidth+21});
 			}
 		});
 	}
 	}
+	
 };
 
 function headerLogButton(){
@@ -86,11 +89,12 @@ if($("[name=forma1]").val() != '?' & $("[name=forma2]").val() != '?'){
 	}
 }
 else{ $("[name=netto]").val("Выберите форму оплаты"); };
+calculateZakaz();
 }
 
-function calculateZakaz(a){
-	if(a==1){ $("[name=dolg1]").val($("[name=netto]").val()-$("[name=post_sum1]").val()-$("[name=post_sum2]").val()-$("[name=post_sum3]").val()-$("[name=post_sum4]").val()); }
-	else{ $("[name=dolg2]").val($("[name=stavka]").val()-$("[name=opl_sum1]").val()-$("[name=opl_sum2]").val()-$("[name=opl_sum3]").val()-$("[name=opl_sum4]").val()); };
+function calculateZakaz(){
+	$("[name=dolg1]").val($("[name=netto]").val()-$("[name=post_sum1]").val()-$("[name=post_sum2]").val()-$("[name=post_sum3]").val()-$("[name=post_sum4]").val());
+	$("[name=dolg2]").val($("[name=stavka]").val()-$("[name=opl_sum1]").val()-$("[name=opl_sum2]").val()-$("[name=opl_sum3]").val()-$("[name=opl_sum4]").val());
 }
 
 function setDateFields(){
@@ -174,6 +178,7 @@ $(".deletedate").click(function(){
 //-------------------------------------------------------//
 jQuery(document).ready(function($){
 	
+	
 	setInterval("loadPage()", 250);
 	
 	$("#menu ul li ul").hide();
@@ -198,7 +203,7 @@ jQuery(document).ready(function($){
 	function(){ $(this).css("background-image", "url(images/button.png)"); }
 	);
 	
-	$("#content a").hover( //НАВЕДЕНИЕ КУРСОРА НА КНОПКИ В ШАПКЕ
+	$("#content a").hover(
 	function(){ $(this).css("background-image", "url(images/button_hover.png)"); },
 	function(){ $(this).css("background-image", "url(images/button.png)"); }
 	);
@@ -218,7 +223,7 @@ jQuery(document).ready(function($){
 		$(".canselect td").css("border","1px solid black");
 		$(".canselect td").css("background-color","white");
 		$(".canselect td").attr("class","cell");
-		var row = '[class][posY='+$(this).attr('posY')+']';
+		var row = '[class=cell][posY='+$(this).attr('posY')+']';
 		$(row).css("border","1px solid red");
 		$(row).css("background-color","#ccc");
 		$(row).attr("class","cell selected");
@@ -233,7 +238,7 @@ jQuery(document).ready(function($){
 			cell.css("border-color", "black");
 			cell.css("background-color","white");
 			cell.attr("class", "cell");
-			str = '[class][posY='+(parseInt(posY)-1)+']';
+			str = '[class=cell][posY='+(parseInt(posY)-1)+']';
 			$(str).css("border-color", "red");
 			$(str).css("background-color","#ccc");
 			$(str).attr("class", "cell selected");
@@ -244,7 +249,7 @@ jQuery(document).ready(function($){
 			cell.css("border-color", "black");
 			cell.css("background-color","white");
 			cell.attr("class", "cell");
-			str = '[class][posY='+(parseInt(posY)+1)+']';
+			str = '[class=cell][posY='+(parseInt(posY)+1)+']';
 			$(str).css("border-color", "red"); 
 			$(str).css("background-color","#ccc");
 			$(str).attr("class", "cell selected");
@@ -306,6 +311,12 @@ jQuery(document).ready(function($){
 	$("#content").on("click", ".openfr", function(){
 		$("#shadow").show();
 		$("#fr").show();
+		//$("#fr").animate({height: "show"}, 'normal');
+		
+		/*
+		$("#fr").css({top: "-100%"});
+		$("#fr").animate({top: "20px"}, 'normal');*/
+		
 		var namebutton = $(this).attr('name');
 		$("#fr").attr("name", namebutton);
 		if($(this).attr("href") == "counter_search" || $(this).attr("href") == "drivers_search"){ var action = 'select'; }
@@ -324,7 +335,11 @@ jQuery(document).ready(function($){
 		return false;
 	});
 	
-	$("#shadow").click(function(){ $("#shadow").hide(); $("#fr").hide(); });
+	$("#shadow").click(function(){ 
+		//$("#fr").animate({height: "hide"}, 'normal'); 
+		$("#shadow").hide();  
+		$("#fr").hide(); 
+	});
 	//}
 	
 	/*-------------------------------------------*/
@@ -486,23 +501,23 @@ jQuery(document).ready(function($){
 		};
 	});
 	
-	$("#content").on("click", "#open_schet", function(){
+	$("#content").on("click", "#open_zayavka", function(){
 		var form = $("#formrecord").serialize();
-		window.open('pages/schet1.php?'+form);
+		window.open('pages/zayavka.php?'+form);
 		return false;
 	});
 	
 	//---------------------------------------------------------------
 	$("#content").on("click", "#setconfig", function(){
 		$.ajax({
-			url: 'pages/setconfig.php',
+			url: 'pages/setconfig.php',	
 			success: function(html){
 				$('#content').html(html);
 			}
 		});
 	});
 	
-	$("#content").on("click", "#reisi img", function(){
+	$("#content").on("click", ".fixed img", function(){
 		if($(this).attr("name") == "DESC"){ $(this).attr("name", "ASC"); }
 		else{ $(this).attr("name", "DESC"); };
 		$.ajax({
@@ -511,33 +526,33 @@ jQuery(document).ready(function($){
 			url: "pages/main.php",
 			success: function(html){
 				$("#content").html(html);
+				$(".tableData").css({height: $("#content")[0].offsetHeight-$(".fixed")[0].offsetHeight-21});
+				$(".tableData").css({width: $(".fixed")[0].offsetWidth+21});
 			}
 		});
 	});
 
+	
+	$("#content").on("click", "#sluzhebnie table td", function(){
+		$("#change_pass").show();
+		$("#change_pass [name=login]").val($(".selected[posX=1]").html());
+	});
 
-setInterval("scrollChange()", 100);
-
-/*
-var o = document.getElementById("content");
-var kepka_top = 20;
-$("#content").scroll(function(){
-		var postop = (-1)*(kepka_top + $("#content").scrollTop());
-		$(".kepka").position({top: postop});
-		alert($(".kepka").position().top + ' ' + postop);
-	});*/
+	
+	$("#content").on("click", "[name=change_pass_send_button]", function(){
+		if($("[name=new_pass]").val() == $("[name=confirm_new_pass]").val() && $("[name=confirm_new_pass]").val() != ''){
+		var change_pass = $("#change_pass_form").serialize();
+		$.ajax({
+			type: "POST",
+			url: "pages/sluzhebnie.php",
+			data: change_pass,
+			success: function(html){ if(html.indexOf("notfind")+1){ alert('Неверный старый пароль'); } else{ $("#content").html(html); }}
+		});
+		}
+		else( alert('Пароли не совпадают или не введены'));
+		return false;
+		
+	});
+	
+	
 });
-/*
-var asd = 0;
-function scrollChange(){
-	var o = document.getElementById("content");
-	o.onScroll = function(){
-	//if(asd != o.scrollTop){
-		o.scrollTop = asd;
-		asd = o.scrollTop;
-		//alert(asd);
-	}
-}
-
-*/
-
