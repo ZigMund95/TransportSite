@@ -67,17 +67,17 @@ else{
 	<form method='POST'>
 		<table>
 			<tr>
-				<td id='tdright'> Login: </td>
-				<td id='tdleft'> <input type=text name='login'> </td>
+				<td class='tdright'> Login: </td>
+				<td class='tdleft'> <input type=text name='login'> </td>
 			</tr>
 			
 			<tr>
-				<td id='tdright' class='redfield'> Password: </td>
-				<td id='tdleft'> <input type=password name='password'> </td>
+				<td class='tdright' class='redfield'> Password: </td>
+				<td class='tdleft'> <input type=password name='password'> </td>
 			<tr>
 			
 			<tr>
-				<td colspan=2 id='tdcenter'>
+				<td colspan=2 class='tdcenter'>
 					<button type=submit name='login_button' id="login_button" value='submit'>
 						OK
 					</button>

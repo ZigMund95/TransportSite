@@ -12,8 +12,16 @@ function loadPage(){
 				$("#action").val("open");
 				if(page1 == "main"){ $("[href=view]").show(); }
 				else{ $("[href=view]").hide(); }
-				$(".tableData").css({height: $("#content")[0].offsetHeight-$(".fixed")[0].offsetHeight-21});
-				$(".tableData").css({width: $(".fixed")[0].offsetWidth+21});
+				if(typeof $(".fixed").css("width") != "undefined"){
+					$(".tableData").css({height: $("#content")[0].offsetHeight-$(".fixed")[0].offsetHeight-22});
+					$(".tableData").css({width: $(".fixed")[0].offsetWidth+21});
+				}
+				
+				if(typeof $(".table1").css("width") != "undefined"){
+					$(".table1 col").eq(0).css("width", "10%");
+					$(".table1 col").eq(1).css("width", "70%");
+					$(".table1 col").eq(2).css("width", "20%");
+				};
 			}
 		});
 	}
@@ -191,6 +199,8 @@ jQuery(document).ready(function($){
 		};
 	});
 	
+	if($("#sessioncheck").val() != '3'){ $("[href=sluzhebnie]").hide(); };
+	
 	$(".nothref").click(function(){ return false; });
 	
 	$("#logo").hover( //НАВДЕНИЕ КУРСОРА НА ЛОГО В ШАПКЕ
@@ -304,6 +314,7 @@ jQuery(document).ready(function($){
 		$("#fr").attr("name", namebutton);
 		if($(this).attr("href") == "counter_search" || $(this).attr("href") == "drivers_search"){ var action = 'select'; }
 		else{ var action = 'open'; };
+		var action = $(this).attr("rule");
 		$.ajax({ url: 'pages/'+$(this).attr('href')+'.php', success: function(html){ $("#fr").html(html); $("#action").val(action); } });
 		return false;
 	});
@@ -311,17 +322,14 @@ jQuery(document).ready(function($){
 	$("#content").on("click", ".openfr", function(){
 		$("#shadow").show();
 		$("#fr").show();
-		//$("#fr").animate({height: "show"}, 'normal');
-		
-		/*
-		$("#fr").css({top: "-100%"});
-		$("#fr").animate({top: "20px"}, 'normal');*/
-		
 		var namebutton = $(this).attr('name');
 		$("#fr").attr("name", namebutton);
 		if($(this).attr("href") == "counter_search" || $(this).attr("href") == "drivers_search"){ var action = 'select'; }
 		else{ var action = 'open'; };
-		$.ajax({ url: 'pages/'+$(this).attr('href')+'.php', success: function(html){ $("#fr").html(html); $("#action").val(action); } });
+		var action = $(this).attr("rule");
+		var button = $(this).attr("butN");
+		
+		$.ajax({ url: 'pages/'+$(this).attr('href')+'.php', success: function(html){ $("#fr").html(html); $("#action").val(action); $("#button_pressed").val(button);} });
 		return false;
 	});
 	
@@ -336,7 +344,6 @@ jQuery(document).ready(function($){
 	});
 	
 	$("#shadow").click(function(){ 
-		//$("#fr").animate({height: "hide"}, 'normal'); 
 		$("#shadow").hide();  
 		$("#fr").hide(); 
 	});
@@ -353,6 +360,29 @@ jQuery(document).ready(function($){
 			else{ $("[name=ati2]").val($.trim($("[posX=3][posY="+$(this).attr('posY')+"]").html())); };
 			$("#shadow").hide(); 
 			$("#fr").hide();
+		}
+		else{
+			if($("#action").val() == 'select_sluzhebnaya'){
+				alert('<'+$("[class=table1] [posY="+$("#button_pressed").val()+"]").find("td").eq(0).html()+'>');
+				if($("[class=table1] [posY="+$("#button_pressed").val()+"]").find("td").eq(0).html() != ''){
+					var b = "&indexC="+$("#button_pressed").val();
+				}
+				else{ var b = ''; };
+				alert("indexCounter="+$.trim($("[posX=1][posY="+$(this).attr('posY')+"]").html())+b);
+				$.ajax({
+					type: "GET",
+					url: "pages/sluzhebnie.php",
+					data: "indexCounter="+$.trim($("[posX=1][posY="+$(this).attr('posY')+"]").html())+b,
+					success: function(html){ 
+						$("#content").html(html); 
+						$(".table1 col").eq(0).css("width", "10%");
+						$(".table1 col").eq(1).css("width", "70%");
+						$(".table1 col").eq(2).css("width", "20%");
+					}
+				});
+				$("#shadow").hide(); 
+				$("#fr").hide();
+			}
 		}
 	});
 	
@@ -426,9 +456,7 @@ jQuery(document).ready(function($){
 					$("#content").html(html);
 			}
 		});
-		//$("#content").append(a);
 		window.location.pathname = '';
-		//location.reload();
 		return false;
 	});
 	
@@ -437,12 +465,12 @@ jQuery(document).ready(function($){
 		$.ajax({
 			type: 'POST',
 			url: 'pages/view.php',
-			data: a,
-			success: function(html){
-				$('#content').html(html);
-			}
+			data: a
 		});
-		location.load('');
+		page = '1';
+		loadPage();
+		$("#fr").hide();
+		$("#shadow").hide();
 		return false;
 	});
 	
@@ -554,5 +582,49 @@ jQuery(document).ready(function($){
 		
 	});
 	
+	var width = 0;
+	var x1 = 0;
+	var x2 = 0;
+	$("#content").on("mousedown", ".fixed th", function(){
+		width = $(".fixed col").eq($(this).attr("posX")).css("width");
+		x1 = event.offsetX;
+	});
 	
+	$("#content").on("mousemove", ".fixed th img", function(){
+		return false;
+	});
+	
+	$("#content").on("dblclick", ".fixed th", function(){
+		$(".fixed col").eq($(this).attr("posX")).css("width", "110");
+		$("#reisi col").eq($(this).attr("posX")).css("width", "110");
+	});
+	
+	$("#content").on("mousemove", ".fixed th", function(){
+		if(width != 0){
+		x2 = event.offsetX;
+		if((x1-x2) < -5 || (x1-x2) > 5){
+			
+		width2 = width.split('px');
+		width1 = (+width2[0]+(x2-x1));
+		$(".fixed col").eq($(this).attr("posX")).css("width", width1);
+		$("#reisi col").eq($(this).attr("posX")).css("width", width1);
+		$(".tableData").css({height: $("#content")[0].offsetHeight-$(".fixed")[0].offsetHeight-22});
+		$(".tableData").css({width: $(".fixed")[0].offsetWidth+21});
+		}
+		}
+	});
+	
+	$("#content").on("mouseup", ".fixed th", function(){
+		x2 = event.offsetX;
+		if((x1-x2) < -5 || (x1-x2) > 5){
+		width = width.split('px');
+		width1 = (+width[0]+(x2-x1));
+		$(".fixed col").eq($(this).attr("posX")).css("width", width1);
+		$("#reisi col").eq($(this).attr("posX")).css("width", width1);
+		}
+		width = 0;
+	});
+	
+	$("#content").on("selectstart", ".fixed th", function(){ return false; });
+	$("#content").on("selectstart", function(){ if(width != 0){ return false; }});
 });

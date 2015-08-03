@@ -37,27 +37,27 @@ if (isset($_POST['register'])){
 	<form method="POST">
 		<table>
 			<tr>
-				<td id='tdright'> Login: </td>
-				<td id='tdleft'> <input type=text name='login'> </td>
+				<td class='tdright'> Login: </td>
+				<td class='tdleft'> <input type=text name='login'> </td>
 			</tr>
 			
 			<tr>
-				<td id='tdright'> E-mail: </td>
-				<td id='tdleft'> <input type=text name='email'> </td>
+				<td class='tdright'> E-mail: </td>
+				<td class='tdleft'> <input type=text name='email'> </td>
 			</tr>
 			
 			<tr>
-				<td id='tdright'> Password: </td>
-				<td id='tdleft'> <input type=password name='password'> </td>
+				<td class='tdright'> Password: </td>
+				<td class='tdleft'> <input type=password name='password'> </td>
 			</tr>
 			
 			<tr>
-				<td id='tdright'> Confirm password: </td>
-				<td id='tdleft'> <input type=password name='confirm_password'> </td>
+				<td class='tdright'> Confirm password: </td>
+				<td class='tdleft'> <input type=password name='confirm_password'> </td>
 			</tr>
 			
 			<tr>
-				<td colspan=2 id='tdcenter'>
+				<td colspan=2 class='tdcenter'>
 					<button type=submit name='register' value='submit'>
 						OK
 					</button>

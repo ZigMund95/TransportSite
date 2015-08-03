@@ -7,19 +7,38 @@ if(isset($_POST["login"])){
 	if(mysqli_fetch_assoc($res)){ echo 'Изменен пароль для пользователя <b>'.$_POST['login'].'</b>'; }
 	else{ die('notfind'); };
 }
+
+if(isset($_GET["indexCounter"])){
+	
+	if(isset($_GET["indexC"])){ mysqli_query($link, "UPDATE `sluzhebnaya` SET `indexCounter`='".$_GET["indexCounter"]."' WHERE `index`='".$_GET["indexC"]."'"); }
+	else{ mysqli_query($link, "INSERT INTO `sluzhebnaya` (`indexCounter`) VALUES ('".$_GET["indexCounter"]."')"); };
+}
 ?>
 
 <div id="sluzhebnaya">
 перевозчики, для которых экспедиция установлена в размере 5% <span class="bir"> 5% </span>
-<table class="table1 tdcenter">
 
+<table class="table1">
+<col> <col> <col>
 <?
-for($i=1;$i<11;$i++){
-echo '<tr>';
-echo '<td>'.$i.'</td>';
-echo '<td>  </td>';
+$res = mysqli_query($link, "SELECT * FROM `sluzhebnaya`");
+$i = 1;
+while($res1 = mysqli_fetch_assoc($res)){
+$counter = mysqli_query($link, "SELECT `firm` FROM `counters` WHERE `index`=".$res1["indexCounter"]);
+$counter1 = mysqli_fetch_assoc($counter);
+echo '<tr posY="'.$res1["index"].'"	>';
+echo '<td class="tdright">'.$i.'</td>';
+echo '<td>'.$counter1["firm"].'</td>';
+echo '<td> <button href="counter_search" rule="select_sluzhebnaya" butN="'.$res1["index"].'" class="openfr"> Изменить </button> </td>';
 echo '</tr>';
-}
+$i++;
+$j = $res1["index"]+1;
+};
+echo '<tr posY="'.$j.'">';
+echo '<td class="tdright"></td>';
+echo '<td></td>';
+echo '<td> <button href="counter_search" rule="select_sluzhebnaya" butN="'.$j.'" class="openfr"> Добавить </button> </td>';
+echo '</tr>';
 ?>
 
 </table>

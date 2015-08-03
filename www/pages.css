@@ -1,38 +1,29 @@
 /*-------*/
 /*-REISI-*/
 /*-------*/
-
-
 .table{
 width: 20px;
 border: 1px solid;
 table-layout: fixed;
 }
 
-.table col{
-width: 110px;
-}
+.table col{ width: 110px; }
 
+.table td{ border: 1px solid; }
 
-.table td{
-border: 1px solid;
-}
-
-.table th{
-border: 1px solid;
-}
+.table th{ border: 1px solid; }
 
 .tableData{
 height: 300px;
 width: inherit;
 overflow-y:auto;
-
 }
 
 #reisi tr th img{
 position: relative;
 float: right;
 }
+
 
 /*-------*/
 /*-LOGIN-*/
@@ -51,6 +42,7 @@ border: 0;
 width: 50%;
 border: 0;
 }
+
 
 /*----------*/
 /*-REGISTER-*/
@@ -74,20 +66,21 @@ border: 0;
 width: 70%;
 }
 
+
 /*-----------*/
 /*-NEWRECORD-*/
 /*-----------*/
 #newrecord{
-	margin: 0 auto;
-	width: 90%;
-	border: 0px solid red;
+margin: 0 auto;
+width: 90%;
+border: 0px solid red;
 }
 
 #newrecord td{
-	min-width: 200px;
-	vertical-align: top;
-	padding: 0;
-	border: 0px solid;
+min-width: 200px;
+vertical-align: top;
+padding: 0;
+border: 0px solid;
 }
 
 .width25{ margin-top: 2px; width: 25px; }
@@ -102,9 +95,7 @@ margin-top: 5px;
 /*----------*/
 /*-COUNTERS-*/
 /*----------*/
-#counters {
-border: 1px solid;
-}
+#counters { border: 1px solid; }
 
 
 #counters table{
@@ -112,24 +103,18 @@ margin-top: 20px;
 border: 1px solid;
 }
 
-#counters table td{
-border: 1px solid;
-}
+#counters table td{ border: 1px solid; }
 
 #counters a{
 color: #000;
 text-align: center;
 text-decoration: none;
-
 width: 190px;
 height: 20px;
-
 position:relative;
 float: left;
 display: block;
-
 margin-top: 5px;
-
 background: url(images/button.png) no-repeat;
 background-position: center;
 
@@ -144,9 +129,7 @@ margin: auto;
 text-align: right;
 }
 
-#counteradd td{
-vertical-align: top;
-}
+#counteradd td{ vertical-align: top; }
 
 /*---------*/
 /*-DRIVERS-*/
@@ -158,24 +141,18 @@ padding: 10px;
 padding-bottom: 30px;
 }
 
-#drivers input{
-margin: 2px;
-}
+#drivers input{ margin: 2px; }
 
 #drivers a{
 color: #000;
 text-align: center;
 text-decoration: none;
-
 width: 190px;
 height: 20px;
-
 position:relative;
 float: left;
 display: block;
-
 margin-top: 5px;
-
 background: url(images/button.png) no-repeat;
 background-position: center;
 
@@ -206,9 +183,7 @@ margin: auto;
 border: 1px solid;
 }
 
-#sluzhebnie table td{
-border: 1px solid;
-}
+#sluzhebnie table td{ border: 1px solid; }
 
 /*-------------*/
 /*-CHANGE_PASS-*/
@@ -218,21 +193,16 @@ width: 400px;
 position: relative;	
 float: left;
 border: 1px solid;
-
 display: none;
 text-align: right;
 }
 
-#change_pass input{
-margin-top: 3px;
-}
+#change_pass input{ margin-top: 3px; }
 
-/*-------------*/
+/*-----------*/
 /*-VIEWTABLE-*/
-/*-------------*/
-#viewtable {
-width: 90%;
-}
+/*-----------*/
+#viewtable { width: 90%; }
 
 #viewtable td{
 border: 1px solid;
@@ -240,19 +210,15 @@ vertical-align: top;
 }
 
 
+/*-------*/
+/*-SCHET-*/
+/*-------*/
 
+#schet{ border: 1px solid; /* border-collapse: collapse; */ }
 
-#schet{
-border: 1px solid;
-}
+.withborder{ border: 1px solid; }
 
-.withborder{
-border: 1px solid;
-}
-
-.lowfont{
-font-size: 11px;
-}
+.lowfont{ font-size: 11px; }
 
 #schet tr td{
 margin: 0;
@@ -264,17 +230,10 @@ font-size: inherit;
 }
 
 
-.date_picker{
-display: inline;
-}
-
-.table1{
-width: 100%;
-}
-
-.table1 td{
-width: 50%;
-}
+/*------------*/
+/*-SLUZHEBNIE-*/
+/*------------*/
+.table1{ width: 100%; }
 
 .border40{
 width: 400px;
@@ -284,19 +243,26 @@ margin-left: 40px;
 background-color: #eee;
 }
 
-.ycell{
-background-color: #ff0;
-}
+.ycell{ background-color: #ff0; }
 
 .bir{
-
+position: absolute;
+right: 14%;
+border: 1px solid;
+margin: 0;
+margin-right: 90px;
 font-size: 20px;
 background-color: #0ff;
+display: inline;
 }
 
 #sluzhebnaya{
-text-align: right;
 margin: auto;
 width: 60%;
+min-width: 700px;
 border: 1px solid;
 }
+
+.table2{ width: 100%; }
+
+.table2 td{ width: 50%; }
