@@ -15,7 +15,7 @@
 	<tr>
 		<td class="tdright" colspan=2>
 		<hr>
-		Заказчик <input type=text class="width156" name="zakazchik" onkeydown="if(event.keyCode != 9){ return false; }"> <button href="counter_search" name="zakazchik" id="openfr" class="openfr width25">+</button> <br>
+		Заказчик <input type=text class="width156" name="zakazchik" onkeydown="if(event.keyCode != 9){ return false; }"> <button href="counter_search" rule="select" name="zakazchik" id="openfr" class="openfr width25">+</button> <br>
 		код в АТИ <input type=text class="width185" name="ati1" onkeydown="if(event.keyCode != 9){ return false; }"> <br>
 		маршрут <input type=text class="width185" name="marshrut"> <br>
 		адрес погрузки <input type=text class="width185" name="address_pogr"> <br>
@@ -38,9 +38,9 @@
 
 		<td class="tdright" colspan=2>
 		<hr>
-		Перевозчик <input type=text class="width156" id="counter"  name="perevozchik" onkeydown="if(event.keyCode != 9){ return false; }"> <button href="counter_search" name="perevozchik" id="openfr" class="openfr width25">+</button> <br>
+		Перевозчик <input type=text class="width156" id="counter"  name="perevozchik" onkeydown="if(event.keyCode != 9){ return false; }"> <button href="counter_search" rule="select" name="perevozchik" id="openfr" class="openfr width25">+</button> <br>
 		код в АТИ <input type=text class="width185" name="ati2" onkeydown="if(event.keyCode != 9){ return false; }"> <br>
-		водитель <input type=text class="width156"  name="driver" onkeydown="if(event.keyCode != 9){ return false; }"> <button href="drivers_search" id="openfr" class="openfr width25">+</button> <br>
+		водитель <input type=text class="width156"  name="driver" onkeydown="if(event.keyCode != 9){ return false; }"> <button href="drivers_search" rule="select" id="openfr" class="openfr width25">+</button> <br>
 		Телефон 1 <input type=text class="width185"  name="phone1" onkeydown="if(event.keyCode != 9){ return false; }"> <br>
 		Телефон 2 <input type=text class="width185" name="phone2" onkeydown="if(event.keyCode != 9){ return false; }"> <br>
 		а/м <input type=text class="width185" name="car" onkeydown="if(event.keyCode != 9){ return false; }"> <br>

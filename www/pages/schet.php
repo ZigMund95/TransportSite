@@ -1,6 +1,6 @@
 <div class="border40">
 
-<table class="table1">
+<table class="table2">
 <col> <col>
 <tr>
 <td class="tdright"> счет № </td>

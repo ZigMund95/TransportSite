@@ -1,11 +1,8 @@
 <? session_start();
-//$names = file('pages\table.inf');
-
 if(isset($_GET["sort"])){ $sort = $_GET["sort"]; $tsort = $_GET["tsort"]; }
 else{ $sort = ""; $tsort = 'DESC'; }
 
 $visibleColumn = split(';', $_SESSION['visible_column']);
-//print_r($visibleColumn);
 
 $link = mysqli_connect('localhost','admin','admin','test');
 $config[] = '0';
@@ -17,8 +14,6 @@ while($record1 = mysqli_fetch_assoc($record)){
 
 function forsort($a, $b){ if($a['position'] > $b['position']){ return 1; }else{ return -1; }; };
 uasort($config, 'forsort');	
-
-//echo '<p class="kepka"> sdd </p>';
 
 echo '<div>';
 echo '<table class="table fixed">';
