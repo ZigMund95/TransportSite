@@ -1,4 +1,6 @@
-<? session_start(); ?>
+<? session_start(); 
+$link = mysqli_connect("localhost", "admin", "admin", "test");
+?>
 
 <form method="POST" id="formrecord">
 
@@ -38,13 +40,21 @@
 
 		<td class="tdright" colspan=2>
 		<hr>
+		<?
+		$res = mysqli_query($link, "SELECT `indexCounter` FROM `sluzhebnaya`");
+		$sluz = '';
+		while($res1 = mysqli_fetch_assoc($res)){
+			$sluz = $sluz.$res1["indexCounter"].';';
+		}
+		echo "<input type=hidden id='sluz' value='".$sluz."'>";
+		?>
 		Перевозчик <input type=text class="width156" id="counter"  name="perevozchik" onkeydown="if(event.keyCode != 9){ return false; }"> <button href="counter_search" rule="select" name="perevozchik" id="openfr" class="openfr width25">+</button> <br>
 		код в АТИ <input type=text class="width185" name="ati2" onkeydown="if(event.keyCode != 9){ return false; }"> <br>
 		водитель <input type=text class="width156"  name="driver" onkeydown="if(event.keyCode != 9){ return false; }"> <button href="drivers_search" rule="select" id="openfr" class="openfr width25">+</button> <br>
 		Телефон 1 <input type=text class="width185"  name="phone1" onkeydown="if(event.keyCode != 9){ return false; }"> <br>
 		Телефон 2 <input type=text class="width185" name="phone2" onkeydown="if(event.keyCode != 9){ return false; }"> <br>
 		а/м <input type=text class="width185" name="car" onkeydown="if(event.keyCode != 9){ return false; }"> <br>
-		ставка <input type=text class="width185" name="stavka"> <br>
+		ставка <input type=text class="width185" name="stavka" stavka=""> <br>
 		форма оплаты <select class="width185" name="forma2" onchange="calculateNetto();"> <option> ? </option>  <option> нал </option>  <option> безнал </option>  <option> с НДС </option> </select> <br>
 		срок оплаты <input type=text class="width185"  name="srok_opl"> <br>
 		<br>

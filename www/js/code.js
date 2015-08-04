@@ -97,12 +97,23 @@ if($("[name=forma1]").val() != '?' & $("[name=forma2]").val() != '?'){
 	}
 }
 else{ $("[name=netto]").val("Выберите форму оплаты"); };
+calculateStavka();
 calculateZakaz();
 }
 
 function calculateZakaz(){
 	$("[name=dolg1]").val($("[name=netto]").val()-$("[name=post_sum1]").val()-$("[name=post_sum2]").val()-$("[name=post_sum3]").val()-$("[name=post_sum4]").val());
 	$("[name=dolg2]").val($("[name=stavka]").val()-$("[name=opl_sum1]").val()-$("[name=opl_sum2]").val()-$("[name=opl_sum3]").val()-$("[name=opl_sum4]").val());
+}
+
+function calculateStavka(){
+	var stavka;
+	if($("[name=stavka]").attr("stavka") != ""){
+		$("[name=stavka]").val($("[name=brutto]").val()*(100-$("[name=stavka]").attr("stavka")) / 100);
+	}
+	else{
+		$("[name=stavka]").val($("[name=brutto]").val());
+	}
 }
 
 function setDateFields(){
@@ -179,7 +190,32 @@ $(".deletedate").click(function(){
 });
 };
 
-
+function filter(sort){
+	var data = '';
+	var i = 0;
+	var j = 0;
+	var b = '1';
+	while(typeof $(".filterCol").eq(i).attr("id") != "undefined"){
+		if(($(".filterInp").eq(j).attr("id")) == $(".filterCol").eq(i).attr("id")+"input"){
+			if(b=='1'){ b = ' '; }
+			else{ b = '&'; };
+			data = data+b+"filterC[]="+$(".filterCol").eq(i).attr("id")+"&filter[]="+$(".filterInp").eq(j).val();;
+			j++;
+		};
+		i++;
+	}
+	data = data + '&' + sort;
+	$.ajax({
+		type: "GET",
+		url: "pages/main_filter.php",
+		data: data,
+		success: function(html){ 
+			$(".tableData").html(html); 
+			$(".tableData").css({height: $("#content")[0].offsetHeight-$(".fixed")[0].offsetHeight-22});
+			$(".tableData").css({width: $(".fixed")[0].offsetWidth+21});
+			}
+	})
+}
 
 
 
@@ -356,8 +392,22 @@ jQuery(document).ready(function($){
 	$("body").on("dblclick", ".dblclick_select_counter td", function(){
 		if($("#action").val() == 'select'){
 			$("[name="+$('#fr').attr('name')+"]").val($.trim($("[posX=2][posY="+$(this).attr('posY')+"]").html()));
-			if($('#fr').attr('name') == 'zakazchik'){ $("[name=ati1]").val($.trim($("[posX=3][posY="+$(this).attr('posY')+"]").html())); }
-			else{ $("[name=ati2]").val($.trim($("[posX=3][posY="+$(this).attr('posY')+"]").html())); };
+			if($('#fr').attr('name') == 'zakazchik'){ 
+				$("[name=ati1]").val($.trim($("[posX=3][posY="+$(this).attr('posY')+"]").html())); 
+			}
+			else{ 
+				$("[name=ati2]").val($.trim($("[posX=3][posY="+$(this).attr('posY')+"]").html()));
+				var sluz = $("#sluz").val().split(";");
+				//alert($.trim($("[posX=1][posY="+$(this).attr('posY')+"]").html())+' '+sluz.length);
+				var stavka = '';
+				for(var i = 0; i < sluz.length; i++){
+					if(sluz[i] == $.trim($("[posX=1][posY="+$(this).attr('posY')+"]").html())){
+						stavka = '5';
+					}
+				}
+				$("[name=stavka]").attr("stavka", stavka);
+				calculateStavka();
+			};
 			$("#shadow").hide(); 
 			$("#fr").hide();
 		}
@@ -545,20 +595,26 @@ jQuery(document).ready(function($){
 		});
 	});
 	
-	$("#content").on("click", ".fixed img", function(){
+	$("#content").on("click", ".fixed .sortCol", function(){
 		if($(this).attr("name") == "DESC"){ $(this).attr("name", "ASC"); }
 		else{ $(this).attr("name", "DESC"); };
-		$.ajax({
-			type: "GET",
-			data: "sort="+$(this).attr('id')+"&tsort="+$(this).attr('name'),
-			url: "pages/main.php",
-			success: function(html){
-				$("#content").html(html);
-				$(".tableData").css({height: $("#content")[0].offsetHeight-$(".fixed")[0].offsetHeight-21});
-				$(".tableData").css({width: $(".fixed")[0].offsetWidth+21});
-			}
-		});
+		filter("sort="+$(this).attr('id')+"&tsort="+$(this).attr('name'));
 	});
+	
+	$("#content").on("click", ".fixed .filterCol", function(){
+		if($("[class=filterDiv][id="+$(this).attr("id")+"]").html() == ""){
+			$("[class=filterDiv][id="+$(this).attr("id")+"]").html("<input type=text id='"+$(this).attr("id")+"input' class='filterInp width110' onkeyup='filter()'>");
+			if($(this).attr("id") == "forma1" || $(this).attr("id") == "forma2"){ 
+				$("[class=filterDiv][id="+$(this).attr("id")+"]").html("<select id='"+$(this).attr("id")+"input' class='filterInp width110' onchange='filter()'> <option> ? </option> <option> нал </option> <option> безнал </option> <option> с НДС </option> </select>");
+			};
+		}
+		else{
+			$("[class=filterDiv][id="+$(this).attr("id")+"]").html("");
+			filter();
+		}
+	});
+	
+	
 
 	
 	$("#content").on("click", "#sluzhebnie table td", function(){
@@ -582,49 +638,67 @@ jQuery(document).ready(function($){
 		
 	});
 	
+	
+	/*-----------------------------*/
+	/*-ИЗМЕНЕНИЕ РАЗМЕРОВ СТОЛБЦОВ-*/
+	/*-----------------------------*/
+	//{
+	var indCol = -1;
 	var width = 0;
 	var x1 = 0;
 	var x2 = 0;
 	$("#content").on("mousedown", ".fixed th", function(){
-		width = $(".fixed col").eq($(this).attr("posX")).css("width");
-		x1 = event.offsetX;
+		if(event.which==1){
+			alert(event.pageX+' '+$(".fixed col")[$(this).attr("posX")].x);
+			width = $(".fixed col").eq($(this).attr("posX")).css("width");
+			indCol = $(this).attr("posX");
+			x1 = event.pageX;
+		}
+		if(event.which==3){
+			return false;
+		}
 	});
-	
-	$("#content").on("mousemove", ".fixed th img", function(){
-		return false;
-	});
-	
-	$("#content").on("dblclick", ".fixed th", function(){
-		$(".fixed col").eq($(this).attr("posX")).css("width", "110");
-		$("#reisi col").eq($(this).attr("posX")).css("width", "110");
-	});
-	
-	$("#content").on("mousemove", ".fixed th", function(){
-		if(width != 0){
-		x2 = event.offsetX;
+
+	$("body").mousemove(function(){
+		if(indCol != -1){
+		x2 = event.pageX;
 		if((x1-x2) < -5 || (x1-x2) > 5){
 			
 		width2 = width.split('px');
 		width1 = (+width2[0]+(x2-x1));
-		$(".fixed col").eq($(this).attr("posX")).css("width", width1);
-		$("#reisi col").eq($(this).attr("posX")).css("width", width1);
+		$(".fixed col").eq(indCol).css("width", width1);
+		$("#reisi col").eq(indCol).css("width", width1);
 		$(".tableData").css({height: $("#content")[0].offsetHeight-$(".fixed")[0].offsetHeight-22});
 		$(".tableData").css({width: $(".fixed")[0].offsetWidth+21});
 		}
 		}
 	});
 	
-	$("#content").on("mouseup", ".fixed th", function(){
-		x2 = event.offsetX;
-		if((x1-x2) < -5 || (x1-x2) > 5){
-		width = width.split('px');
-		width1 = (+width[0]+(x2-x1));
-		$(".fixed col").eq($(this).attr("posX")).css("width", width1);
-		$("#reisi col").eq($(this).attr("posX")).css("width", width1);
+	$("#content").on("dblclick", ".fixed th", function(){
+		$(".fixed col").eq($(this).attr("posX")).css("width", "120");
+		$("#reisi col").eq($(this).attr("posX")).css("width", "120");
+		$(".tableData").css({height: $("#content")[0].offsetHeight-$(".fixed")[0].offsetHeight-22});
+		$(".tableData").css({width: $(".fixed")[0].offsetWidth+21});
+	});
+	
+	$("body").mouseup(function(){
+		if(event.which==1){
+			x2 = event.pageX;
+			if((x1-x2) < -5 || (x1-x2) > 5){
+			width = width.split('px');
+			width1 = (+width[0]+(x2-x1));
+			$(".fixed col").eq($(this).attr("posX")).css("width", width1);
+			$("#reisi col").eq($(this).attr("posX")).css("width", width1);
+			}
+			indCol = -1
 		}
-		width = 0;
+		if(event.which==3){
+			return false;
+		}
 	});
 	
 	$("#content").on("selectstart", ".fixed th", function(){ return false; });
-	$("#content").on("selectstart", function(){ if(width != 0){ return false; }});
+	$("body").on("selectstart", function(){ if(width != 0){ return false; }});
+	
+	//}
 });
