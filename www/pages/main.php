@@ -12,7 +12,6 @@ while($record1 = mysqli_fetch_assoc($record)){
 	$config[$record1['name']] = $record1;
 };
 
-
 function forsort($a, $b){ if($a['position'] > $b['position']){ return 1; }else{ return -1; }; };
 uasort($config, 'forsort');	
 
@@ -26,7 +25,11 @@ $tdOut = '';
 foreach($config as $key => $value){
 	if($value){
 		if($visibleColumn[$i] == '1'){
-			echo ('<th posX="'.$indexX.'">'.$config[$key]['value'].' <img src="images/arrow.png" id="'.$config[$key]['name'].'" name="'.$tsort.'">'.'</th>');
+			echo ('<th posX="'.$indexX.'">'.$config[$key]['value'].' 
+					<img src="images/arrow.png" id="'.$config[$key]['name'].'" name="'.$tsort.'" class="sortCol">'.'
+					<img src="images/arrow.png" id="'.$config[$key]['name'].'" name="'.$tsort.'" class="filterCol">'.'
+					<div id="'.$config[$key]['name'].'" class="filterDiv"></div>
+					</th>');
 			if($config[$key]['name'] != 'index'){
 				$tdOut = $tdOut.'<td posX="'.$indexX.'" posY="@posY@" class="cell">@'.$config[$key]['name'].'@</td>';
 				$indexX++;
@@ -63,11 +66,9 @@ while($row = mysqli_fetch_assoc($res)) {
 					$s = split('-', $value);
 					$value = $s[2].'-'.$s[1].'-'.$s[0];
 				}
-				//echo('<td posX="'.$indexX.'" posY="'.$indexY.'" class="cell">'.$value.'</td>');
 			}
 			else{
 				$value = '-';
-				//echo('<td posX="'.$indexX.'" posY="'.$indexY.'" class="cell"> - </td>');
 			};
 			$tdOut1 = str_replace("@posY@", $indexY, $tdOut1);
 			$tdOut1 = str_replace("@".$key."@", $value, $tdOut1);
