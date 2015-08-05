@@ -12,6 +12,7 @@ function loadPage(){
 				$("#action").val("open");
 				if(page1 == "main"){ $("[href=view]").show(); }
 				else{ $("[href=view]").hide(); }
+				
 				if(typeof $(".fixed").css("width") != "undefined"){
 					$(".tableData").css({height: $("#content")[0].offsetHeight-$(".fixed")[0].offsetHeight-22});
 					$(".tableData").css({width: $(".fixed")[0].offsetWidth+21});
@@ -22,6 +23,12 @@ function loadPage(){
 					$(".table1 col").eq(1).css("width", "70%");
 					$(".table1 col").eq(2).css("width", "20%");
 				};
+				
+				$(".fixed th").hover(
+					function(){},
+					function(){ $("body").css("cursor", ""); }
+				);
+				
 			}
 		});
 	}
@@ -211,13 +218,36 @@ function filter(sort){
 		data: data,
 		success: function(html){ 
 			$(".tableData").html(html); 
+			for(i = 0; i<100; i++){
+				$("#reisi col").eq(i).css("width", $(".fixed col").eq(i).css("width"));
+			}
 			$(".tableData").css({height: $("#content")[0].offsetHeight-$(".fixed")[0].offsetHeight-22});
 			$(".tableData").css({width: $(".fixed")[0].offsetWidth+21});
 			}
 	})
 }
 
-
+var colWidths;
+var colVisible;
+function setColWidth(widths, visibleCol){
+	//alert(widths+' '+visibleCol);
+	colWidths = widths;
+	colVisible = visibleCol;
+	var i;
+	for(i = 0; i<100; i++){
+		$(".fixed col").eq(i).css("width", "100");
+		$("#reisi col").eq(i).css("width", '100');
+	}
+	var key;
+	var i = 0;
+	for(key in widths){
+		if(visibleCol[key] == 1){
+		$(".fixed col").eq(i).css("width", widths[key]);
+		$("#reisi col").eq(i).css("width", widths[key]);
+		i++;
+		}
+	}
+};
 
 //-------------------------------------------------------//
 jQuery(document).ready(function($){
@@ -607,6 +637,9 @@ jQuery(document).ready(function($){
 			if($(this).attr("id") == "forma1" || $(this).attr("id") == "forma2"){ 
 				$("[class=filterDiv][id="+$(this).attr("id")+"]").html("<select id='"+$(this).attr("id")+"input' class='filterInp width110' onchange='filter()'> <option> ? </option> <option> нал </option> <option> безнал </option> <option> с НДС </option> </select>");
 			};
+			$("#"+$(this).attr("id")+"input").css("width", "calc("+$(".fixed col").eq($($($("#"+$(this).attr("id")+"input").parent("div")).parent("th")).attr("posX")).css("width")+" - 10px)");
+			//alert("calc("+$(".fixed col").eq($($($("#"+$(this).attr("id")+"input").parent("div")).parent("th")).attr("posX")).css("width")+" - 10px)");
+			
 		}
 		else{
 			$("[class=filterDiv][id="+$(this).attr("id")+"]").html("");
@@ -618,8 +651,16 @@ jQuery(document).ready(function($){
 
 	
 	$("#content").on("click", "#sluzhebnie table td", function(){
-		$("#change_pass").show();
-		$("#change_pass [name=login]").val($(".selected[posX=1]").html());
+		//$("#change_pass").show();
+		$("#shadow").show();
+		$("#fr").show();
+		$.ajax({
+			url: "pages/user_options.php",
+			success: function(html){ 
+			$("#fr").html(html); 
+			$("#change_pass [name=login]").val($(".selected[posX=1]").html());
+			}
+		});
 	});
 
 	
@@ -647,10 +688,12 @@ jQuery(document).ready(function($){
 	var width = 0;
 	var x1 = 0;
 	var x2 = 0;
+	
 	$("#content").on("mousedown", ".fixed th", function(){
-		if(event.which==1){
-			alert(event.pageX+' '+$(".fixed col")[$(this).attr("posX")].x);
+		width2 = $(".fixed col").eq($(this).attr("posX")).css("width").split('px');
+		if((event.which==1)&&((+width2[0]-event.offsetX) <= 10)){
 			width = $(".fixed col").eq($(this).attr("posX")).css("width");
+			$(this).css("border-right", "3px solid #f00");
 			indCol = $(this).attr("posX");
 			x1 = event.pageX;
 		}
@@ -659,42 +702,75 @@ jQuery(document).ready(function($){
 		}
 	});
 
+	$("#content").on("mousemove", ".fixed th", function(){
+		width2 = $(".fixed col").eq($(this).attr("posX")).css("width").split('px');
+		if((+width2[0]-event.offsetX) <= 10){
+			$("body").css("cursor", "url('images/resize.cur'), pointer");
+		}
+		else{
+			$("body").css("cursor", "");
+		};
+	});				
+						
 	$("body").mousemove(function(){
 		if(indCol != -1){
-		x2 = event.pageX;
-		if((x1-x2) < -5 || (x1-x2) > 5){
-			
-		width2 = width.split('px');
-		width1 = (+width2[0]+(x2-x1));
-		$(".fixed col").eq(indCol).css("width", width1);
-		$("#reisi col").eq(indCol).css("width", width1);
-		$(".tableData").css({height: $("#content")[0].offsetHeight-$(".fixed")[0].offsetHeight-22});
-		$(".tableData").css({width: $(".fixed")[0].offsetWidth+21});
-		}
+			x2 = event.pageX;
+			if((x1-x2) < -5 || (x1-x2) > 5){
+				width2 = width.split('px');
+				width1 = (+width2[0]+(x2-x1));
+				$(".fixed col").eq(indCol).css("width", width1);
+				$("#reisi col").eq(indCol).css("width", width1);
+			}
 		}
 	});
 	
 	$("#content").on("dblclick", ".fixed th", function(){
-		$(".fixed col").eq($(this).attr("posX")).css("width", "120");
-		$("#reisi col").eq($(this).attr("posX")).css("width", "120");
-		$(".tableData").css({height: $("#content")[0].offsetHeight-$(".fixed")[0].offsetHeight-22});
-		$(".tableData").css({width: $(".fixed")[0].offsetWidth+21});
+		width2 = $(".fixed col").eq($(this).attr("posX")).css("width").split('px');
+		if((+width2[0]-event.offsetX) <= 10){
+			$(".fixed col").eq($(this).attr("posX")).css("width", colWidths[$(this).attr("posX")]);
+			$("#reisi col").eq($(this).attr("posX")).css("width", colWidths[$(this).attr("posX")]);
+			$(".fixed th").css("border-right", "1px solid #000");
+			$("body").css("cursor", "");
+			$(".tableData").css({height: $("#content")[0].offsetHeight-$(".fixed")[0].offsetHeight-22});
+			$(".tableData").css({width: $(".fixed")[0].offsetWidth+21});
+		}
 	});
 	
 	$("body").mouseup(function(){
-		if(event.which==1){
+		if(event.which==1 && indCol != -1){
 			x2 = event.pageX;
 			if((x1-x2) < -5 || (x1-x2) > 5){
-			width = width.split('px');
-			width1 = (+width[0]+(x2-x1));
-			$(".fixed col").eq($(this).attr("posX")).css("width", width1);
-			$("#reisi col").eq($(this).attr("posX")).css("width", width1);
+			width1 = width.split('px');
+			width2 = (+width1[0]+(x2-x1));
+			var i = 0;
+			var j = 0;
+			indCol++;
+			while((indCol) != j){ 
+				if(colVisible[i] == '1'){  
+					j++; 
+				}
+				i++; 
+			};
+			colWidths[i-1] = width2;
 			}
+			var widthStr = '';
+			for(i in colWidths){
+					widthStr = widthStr + colWidths[i]+';';
+			}
+			$.ajax({
+				type: "GET",
+				url: "pages/setwidth.php",
+				data: "widths="+widthStr
+				//success: function(html){ $("#content").append(html); }
+			})
 			indCol = -1
+			$(".tableData").css({height: $("#content")[0].offsetHeight-$(".fixed")[0].offsetHeight-22});
+			$(".tableData").css({width: $(".fixed")[0].offsetWidth+21});
 		}
 		if(event.which==3){
 			return false;
 		}
+		$(".fixed th").css("border-right", "1px solid #000");
 	});
 	
 	$("#content").on("selectstart", ".fixed th", function(){ return false; });

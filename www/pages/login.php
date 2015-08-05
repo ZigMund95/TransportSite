@@ -10,6 +10,13 @@ if(isset($_POST["login_send"])){
 				echo("YES");
 				$_SESSION['userid'] = $record1['index'];
 				$_SESSION['visible_column'] = $record1['visiblecolumns'];
+				$count = 0;
+				$str = $record1['visiblecolumns'];
+				for($i=0;$i <= strlen($str);$i++){
+					if($str[$i] == '1'){ $count += 1; };
+				}
+				$_SESSION['count_column'] = $count;
+				$_SESSION['width_column'] = $record1['widthcolumns'];
 			}
 			else{
 				echo("NO");

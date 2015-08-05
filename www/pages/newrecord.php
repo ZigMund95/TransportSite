@@ -10,7 +10,18 @@ $link = mysqli_connect("localhost", "admin", "admin", "test");
 		<? $currdate = getdate(); $currdate = $currdate["0"]; ?>
 		<td class="tdright"> Дата <div name="date" class="date_picker"></div> </td>
 		<td class="tdright"> Срыв! <input type=text class="width185" name="sriv"> </td>
-		<td class="tdright"> № заказа <input type=text class="width185" name="number" onkeydown="if(event.keyCode != 9){ return false; }"> </td>
+		<?
+		$res = mysqli_query($link, "SELECT * FROM `reisi` WHERE `manager`=".$_SESSION['userid']);
+		while($res1 = mysqli_fetch_assoc($res)){ $res2 = $res1; };
+		$dateNow = time(); $dateNow = getdate($dateNow);
+		$dateStart = mktime(12,0,0,1,1,2015); $dateStart = getdate($dateStart);
+		$dayNow = $dateNow["yday"] - $dateStart["yday"] + 605;		
+		$numLast = $res2["number"][0].$res2["number"][1].$res2["number"][2];
+		if($numLast == $dayNow){ $count = $res2["number"][3]+1; }
+		else{ $count = 1; };
+		$num = $dayNow.$count.$_SESSION['userid'];
+		echo '<td class="tdright"> № заказа <input type=text class="width185" name="number" onkeydown="if(event.keyCode != 9){ return false; }" value="'.$num.'"> </td>';
+		?>
 		<td class="tdright"> Менеджер <input type=text class="width185" name="manager" value=<? echo $_SESSION['userid']; ?> onkeydown="if(event.keyCode != 9){ return false; }"> </td>
 	</tr>
 	
