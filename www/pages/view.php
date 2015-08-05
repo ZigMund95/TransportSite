@@ -20,6 +20,12 @@ if(isset($_POST['hidden'])){
 	}
 	mysqli_query($link, "UPDATE `users` SET `visiblecolumns`='".$query."' WHERE `index`='".$_SESSION['userid']."'");
 	$_SESSION['visible_column'] = $query;
+	$count = 0;
+	$str = $query;
+	for($i=0;$i <= strlen($str);$i++){
+		if($str[$i] == '1'){ $count += 1; };
+	}
+	$_SESSION['count_column'] = $count;
 };
 
 $visibleColumn = split(';', $_SESSION['visible_column']);
