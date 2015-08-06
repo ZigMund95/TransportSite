@@ -232,10 +232,18 @@ function filter(sort){
 	})
 }
 
+function filterFr(thiss){
+	$.ajax({
+		type: "GET",
+		url: "pages/filter_list.php",
+		data: "idcol="+thiss.attr("idcol")+"&search="+thiss.val(),
+		success: function(html){ $("#fr1 div").html(html); }
+	});
+};
+
 var colWidths;
 var colVisible;
 function setColWidth(widths, visibleCol){
-	//alert(widths+' '+visibleCol);
 	colWidths = widths;
 	colVisible = visibleCol;
 	var i;
@@ -560,7 +568,11 @@ jQuery(document).ready(function($){
 	});
 	
 	$("body").on("click", "#checkall", function(){
-		$('input').attr('checked', 'checked');
+		var i = 0;
+		while(typeof $('input').eq(i).val() != "undefined"){
+			$('input')[i].checked = true;
+			i++;
+		}
 		return false;
 	});
 
@@ -641,7 +653,6 @@ jQuery(document).ready(function($){
 	});
 	
 	$("body").on("click", "a.sortCol", function(){
-		//alert($(this).attr("tsort"));
 		$("#fr1").hide();
 		$("#shadow1").hide();
 		filter("sort="+$(this).attr('idcol')+"&tsort="+$(this).attr("tsort"));
@@ -649,13 +660,10 @@ jQuery(document).ready(function($){
 	
 	$("#content").on("click", ".fixed .filterCol", function(){
 		if($("[class=filterDiv][id="+$(this).attr("id")+"]").html() == ""){
-			
 			$("[class=filterDiv][id="+$(this).attr("id")+"]").html("<input type=hidden id='"+$(this).attr("id")+"input' class='filterInp width110' onkeyup='filter()'>");
-			if($(this).attr("id") == "forma1" || $(this).attr("id") == "forma2"){ 
-				$("[class=filterDiv][id="+$(this).attr("id")+"]").html("<select id='"+$(this).attr("id")+"input' class='filterInp width110' onchange='filter()'> <option> ? </option> <option> нал </option> <option> безнал </option> <option> с НДС </option> </select>");
-			};
 			$("#"+$(this).attr("id")+"input").css("width", "calc("+$(".fixed col").eq($($($("#"+$(this).attr("id")+"input").parent("div")).parent("th")).attr("posX")).css("width")+" - 10px)");
 		}
+		var thiss = this;
 		$("#fr1").show();
 		$("#shadow1").show();
 			var thisth = $($($(this).parent("div")).parent("th"));
@@ -664,7 +672,13 @@ jQuery(document).ready(function($){
 				type: "GET",
 				url: "pages/filter.php",
 				data: "idcol="+$(this).attr("id"),
-				success: function(html){ $("#fr1").html(html); }
+				success: function(html){ 
+					$("#fr1").html(html); 
+					var strval = $("#"+$(thiss).attr("id")+"input").val().split(";");
+					for(var i = 0; i < strval.length-1; i++){
+						$("[value="+strval[i]+"]")[0].checked = true;
+					}
+				}
 			});
 	});
 	

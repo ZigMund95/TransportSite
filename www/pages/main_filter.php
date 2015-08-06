@@ -3,23 +3,22 @@ if(isset($_GET["sort"])){ $sort = $_GET["sort"]; $tsort = $_GET["tsort"]; }
 else{ $sort = ""; $tsort = 'DESC'; }
 
 if($_GET["filter"] != ''){
-	//print_r($_GET["filter"]);
-	//print_r($_GET["filterC"]);
 	$filter = '';
 	foreach($_GET["filter"] as $key => $value){
 		if($key == 0){ $b = ''; }else{ $b = " AND "; };
-		if(($_GET["filterC"][$key] == "forma1" || $_GET["filterC"][$key] == "forma2") && $_GET["filter"][$key] == '?'){
-			$filter = $filter.$b.'`'.$_GET["filterC"][$key].'` LIKE "%"';
-		}
-		else{
-			$filter = $filter.$b.'`'.$_GET["filterC"][$key].'` LIKE "%'.$_GET["filter"][$key].'%"';
-		}
+			$arr = split(";", $_GET["filter"][$key]);
+			$filter = $filter.$b."(";
+			for($i=0; $i < (sizeof($arr)-1); $i++){ 
+				if($i == 0){ $a = ''; }else{ $a = " OR "; };
+				$filter = $filter.$a.'`'.$_GET["filterC"][$key].'` LIKE "'.$arr[$i].'"'; 
+			};
+			$filter = $filter.")";
 	}
 }
 else{
 	$filter = '';
 }
-
+//echo $filter;
 if(isset($_GET["dolg"])){
 	$dolg =  "(`dolg1` <> 0 OR `dolg2` <> 0)";
 }
