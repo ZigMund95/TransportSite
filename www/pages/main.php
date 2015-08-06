@@ -1,4 +1,5 @@
 <? session_start();
+
 if(isset($_GET["sort"])){ $sort = $_GET["sort"]; $tsort = $_GET["tsort"]; }
 else{ $sort = ""; $tsort = 'DESC'; }
 
@@ -25,8 +26,7 @@ $tdOut = '';
 foreach($config as $key => $value){
 	if($value){
 		if($visibleColumn[$i] == '1'){
-			echo ('<th posX="'.$indexX.'"> <div>'.$config[$key]['value'].' 
-					<img src="images/arrow.png" id="'.$config[$key]['name'].'" name="'.$tsort.'" class="sortCol">'.'
+			echo ('<th posX="'.$indexX.'" class="canresize"> <div>'.$config[$key]['value'].'
 					<img src="images/arrow.png" id="'.$config[$key]['name'].'" name="'.$tsort.'" class="filterCol">'.'
 					</div>
 					<div id="'.$config[$key]['name'].'" class="filterDiv"></div>
@@ -44,14 +44,20 @@ echo '</tr>';
 echo '</table>';
 
 echo '<div class="tableData">';
+/*
 echo '<table id="reisi" class="table canselect">';
 for($i=0;$i<$_SESSION["count_column"];$i++){ echo '<col> '; };
 $dateCol = array('date', 'date_pogr', 'date_vig', 'fact_date_vig', 'ttn_poluch', 'ttn_otp', 'post_date1', 'post_date2', 'post_date3', 'post_date4',
 				'opl_date1', 'opl_date2', 'opl_date3', 'opl_date4');
+
+
 if($_SESSION["userid"] == "3"){ $manager = ''; }
 else{ $manager = ' WHERE `manager`="'.$_SESSION["userid"].'"'; };
 if($sort==""){ $res = mysqli_query($link, "SELECT * FROM `reisi`".$manager); }
 else{ $res = mysqli_query($link, "SELECT * FROM `reisi` ORDER BY `".$sort."` ".$tsort.$manager); };
+
+
+
 $indexY = 1;
 while($row = mysqli_fetch_assoc($res)) {
 	$tdOut1 = $tdOut;
@@ -84,18 +90,12 @@ echo '</tr>';
 };
 
 
-echo('</table> </div> </div>');
-
+echo('</table> </div> </div>');*/
+print('<script> filter() </script>'); 
+echo "</div> </div>";
 
 $width_columns = $_SESSION["width_column"];
 $width_columns = split(";", $width_columns);
-//print_r($width_columns);
-/*foreach($config as $key => $value){
-	if($config[$key]["value"] != "1" && $key != ''){
-		$widths[] = $config[$key]["width"];
-		//echo $key.' '.$config[$key]["width"];
-	};
-};*/
 print('<script> setColWidth(('.json_encode($width_columns).'), ('.json_encode($visibleColumn).')) </script>'); 
 ?>
 
