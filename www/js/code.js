@@ -17,6 +17,8 @@ function loadPage(){
 				if(typeof $(".fixed").css("width") != "undefined"){
 					$(".tableData").css({height: $("#content")[0].offsetHeight-$(".fixed")[0].offsetHeight-22});
 					$(".tableData").css({width: $(".fixed")[0].offsetWidth+21});
+					//$("#reisi").css("width", $(".tableData").css("width"));
+					//art($(".tableData").css("width")+' '+$(".fixed").css("width")+' '+$("#reisi").css("width"));
 				}
 				
 				if(typeof $(".table1").css("width") != "undefined"){
@@ -228,6 +230,13 @@ function filter(sort){
 			}
 			$(".tableData").css({height: $("#content")[0].offsetHeight-$(".fixed")[0].offsetHeight-22});
 			$(".tableData").css({width: $(".fixed")[0].offsetWidth+21});
+			$("#reisi col").eq(0).css("background-color", "#d1e3d1");
+				$("#reisi col").eq(1).css("background-color", "#d1e3d1");
+				$("#reisi col").eq(2).css("background-color", "#d1e3d1");
+				//$(".fixed [posX=2]").css("border-right", "3px solid");
+				$(".fixed [posX=3]").css("border-left", "3px solid");
+				//$("#reisi [posX=2]").css("border-right", "3px solid");
+				$("#reisi [posX=3]").css("border-left", "3px solid");
 			}
 	})
 }
@@ -780,7 +789,7 @@ jQuery(document).ready(function($){
 		}
 	});
 	
-	$("#content").on("dblclick", ".fixed th.canresize", function(){
+	/*$("#content").on("dblclick", ".fixed th.canresize", function(){
 		width2 = $(".fixed col").eq($(this).attr("posX")).css("width").split('px');
 		if((+width2[0]-event.offsetX) <= 10){
 			$(".fixed col").eq($(this).attr("posX")).css("width", colWidths[$(this).attr("posX")]);
@@ -790,7 +799,7 @@ jQuery(document).ready(function($){
 			$(".tableData").css({height: $("#content")[0].offsetHeight-$(".fixed")[0].offsetHeight-22});
 			$(".tableData").css({width: $(".fixed")[0].offsetWidth+21});
 		}
-	});
+	});*/
 	
 	$("body").mouseup(function(){
 		if(event.which==1 && indCol != -1){
@@ -833,7 +842,6 @@ jQuery(document).ready(function($){
 	$("body").on("selectstart", function(){ if(width != 0){ return false; }});
 	
 	//}
-	
 	
 	$("html").css("height", $(window).height()-160);
 });

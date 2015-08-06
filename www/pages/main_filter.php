@@ -57,7 +57,7 @@ foreach($config as $key => $value){
 
 echo '<div class="tableData">';
 echo '<table id="reisi" class="table canselect">';
-for($i=0;$i<38;$i++){ echo '<col> '; };
+for($i=0;$i<$_SESSION["count_column"];$i++){ echo '<col posX="'.$i.'"> '; };
 $dateCol = array('date', 'date_pogr', 'date_vig', 'fact_date_vig', 'ttn_poluch', 'ttn_otp', 'post_date1', 'post_date2', 'post_date3', 'post_date4',
 				'opl_date1', 'opl_date2', 'opl_date3', 'opl_date4');
 				

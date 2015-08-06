@@ -28,6 +28,7 @@ if(isset($_POST['hidden'])){
 	$_SESSION['count_column'] = $count;
 };
 
+//echo($_SESSION['visible_column'].' '.$_SESSION['count_column']);
 $visibleColumn = split(';', $_SESSION['visible_column']);
 
 $i = 0;
