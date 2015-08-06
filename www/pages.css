@@ -22,11 +22,10 @@ overflow-y:auto;
 .filterDiv{ display: inline; }
 
 .fixed th{
-height: 55px; 
-vertical-align: top;
+
 }
 
-.fixed th div{ height: 50px; }
+.fixed th div{ }
 
 
 #reisi tr th img{

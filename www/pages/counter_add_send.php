@@ -8,7 +8,7 @@ $link = mysqli_connect('localhost', 'admin', 'admin', 'test');
 
 if(isset($_POST['firm'])){
 	$POST = $_POST;
-	$POST['firm'] = mb_ucwords($POST['firm']);
+	//$POST['firm'] = mb_ucwords($POST['firm']);
 	$query1 = '';
 	$query2 = '';
 	foreach($POST as $key => $value){

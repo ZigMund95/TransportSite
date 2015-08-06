@@ -5,6 +5,7 @@ function loadPage(){
 		page = location.pathname;
 		//alert(page);
 		if(page == '/'){page1='main';}else{page1=page;};
+		if(page == "/dolzhniki"){ page1='main'};
 		$.ajax({
 			url: 'pages/'+page1+'.php',
 			success: function(html){
@@ -29,6 +30,7 @@ function loadPage(){
 					function(){ $("body").css("cursor", ""); }
 				);
 				
+				if(page == "/dolzhniki"){ $("#content").append("<input type=hidden id='dolg' value='1'>"); filter(); };
 			}
 		});
 	}
@@ -206,12 +208,15 @@ function filter(sort){
 		if(($(".filterInp").eq(j).attr("id")) == $(".filterCol").eq(i).attr("id")+"input"){
 			if(b=='1'){ b = ' '; }
 			else{ b = '&'; };
-			data = data+b+"filterC[]="+$(".filterCol").eq(i).attr("id")+"&filter[]="+$(".filterInp").eq(j).val();;
+			if($(".filterInp").eq(j).val() != ''){
+			data = data+b+"filterC[]="+$(".filterCol").eq(i).attr("id")+"&filter[]="+$(".filterInp").eq(j).val();
+			}
 			j++;
 		};
 		i++;
 	}
 	data = data + '&' + sort;
+	if(typeof $("#dolg").val() != "undefined"){ data = data + "&dolg=1"; };
 	$.ajax({
 		type: "GET",
 		url: "pages/main_filter.php",
@@ -625,28 +630,65 @@ jQuery(document).ready(function($){
 		});
 	});
 	
+	/*-------------------------*/
+	/*-ФИЛЬТРАЦИЯ И СОРТИРОВКА-*/
+	/*-------------------------*/
+	//{
 	$("#content").on("click", ".fixed .sortCol", function(){
 		if($(this).attr("name") == "DESC"){ $(this).attr("name", "ASC"); }
 		else{ $(this).attr("name", "DESC"); };
 		filter("sort="+$(this).attr('id')+"&tsort="+$(this).attr('name'));
 	});
 	
+	$("body").on("click", "a.sortCol", function(){
+		//alert($(this).attr("tsort"));
+		$("#fr1").hide();
+		$("#shadow1").hide();
+		filter("sort="+$(this).attr('idcol')+"&tsort="+$(this).attr("tsort"));
+	});
+	
 	$("#content").on("click", ".fixed .filterCol", function(){
 		if($("[class=filterDiv][id="+$(this).attr("id")+"]").html() == ""){
-			$("[class=filterDiv][id="+$(this).attr("id")+"]").html("<input type=text id='"+$(this).attr("id")+"input' class='filterInp width110' onkeyup='filter()'>");
+			
+			$("[class=filterDiv][id="+$(this).attr("id")+"]").html("<input type=hidden id='"+$(this).attr("id")+"input' class='filterInp width110' onkeyup='filter()'>");
 			if($(this).attr("id") == "forma1" || $(this).attr("id") == "forma2"){ 
 				$("[class=filterDiv][id="+$(this).attr("id")+"]").html("<select id='"+$(this).attr("id")+"input' class='filterInp width110' onchange='filter()'> <option> ? </option> <option> нал </option> <option> безнал </option> <option> с НДС </option> </select>");
 			};
 			$("#"+$(this).attr("id")+"input").css("width", "calc("+$(".fixed col").eq($($($("#"+$(this).attr("id")+"input").parent("div")).parent("th")).attr("posX")).css("width")+" - 10px)");
-			//alert("calc("+$(".fixed col").eq($($($("#"+$(this).attr("id")+"input").parent("div")).parent("th")).attr("posX")).css("width")+" - 10px)");
-			
 		}
-		else{
-			$("[class=filterDiv][id="+$(this).attr("id")+"]").html("");
-			filter();
-		}
+		$("#fr1").show();
+		$("#shadow1").show();
+			var thisth = $($($(this).parent("div")).parent("th"));
+			$("#fr1").css({"top": "calc("+thisth.offset().top+'px + '+thisth.css('height')+")", "left": thisth.offset().left});
+			$.ajax({
+				type: "GET",
+				url: "pages/filter.php",
+				data: "idcol="+$(this).attr("id"),
+				success: function(html){ $("#fr1").html(html); }
+			});
 	});
 	
+	
+	$("body").on("click", "#filterstart", function(){
+		filter();
+		$("#fr1").hide();
+		$("#shadow1").hide();
+		$("img#"+$(this).attr("idcol")).attr("src", "images/redarrow.png");
+	});
+	
+	$("body").on("click", "#filtercancel", function(){
+		$("[class=filterDiv][id="+$(this).attr("idcol")+"]").html("");
+		$("#fr1").hide();
+		$("#shadow1").hide();
+		$("img#"+$(this).attr("idcol")).attr("src", "images/arrow.png");
+		filter();
+	});
+	//}
+	
+	$("body").on("click", "#shadow1", function(){
+		$("#fr1").hide();
+		$("#shadow1").hide();
+	});
 	
 
 	
@@ -679,7 +721,7 @@ jQuery(document).ready(function($){
 		
 	});
 	
-	
+	//$("")
 	/*-----------------------------*/
 	/*-ИЗМЕНЕНИЕ РАЗМЕРОВ СТОЛБЦОВ-*/
 	/*-----------------------------*/
@@ -689,7 +731,7 @@ jQuery(document).ready(function($){
 	var x1 = 0;
 	var x2 = 0;
 	
-	$("#content").on("mousedown", ".fixed th", function(){
+	$("#content").on("mousedown", ".fixed th.canresize", function(){
 		width2 = $(".fixed col").eq($(this).attr("posX")).css("width").split('px');
 		if((event.which==1)&&((+width2[0]-event.offsetX) <= 10)){
 			width = $(".fixed col").eq($(this).attr("posX")).css("width");
@@ -702,7 +744,7 @@ jQuery(document).ready(function($){
 		}
 	});
 
-	$("#content").on("mousemove", ".fixed th", function(){
+	$("#content").on("mousemove", ".fixed th.canresize", function(){
 		width2 = $(".fixed col").eq($(this).attr("posX")).css("width").split('px');
 		if((+width2[0]-event.offsetX) <= 10){
 			$("body").css("cursor", "url('images/resize.cur'), pointer");
@@ -724,7 +766,7 @@ jQuery(document).ready(function($){
 		}
 	});
 	
-	$("#content").on("dblclick", ".fixed th", function(){
+	$("#content").on("dblclick", ".fixed th.canresize", function(){
 		width2 = $(".fixed col").eq($(this).attr("posX")).css("width").split('px');
 		if((+width2[0]-event.offsetX) <= 10){
 			$(".fixed col").eq($(this).attr("posX")).css("width", colWidths[$(this).attr("posX")]);
@@ -777,4 +819,7 @@ jQuery(document).ready(function($){
 	$("body").on("selectstart", function(){ if(width != 0){ return false; }});
 	
 	//}
+	
+	
+	$("html").css("height", $(window).height()-160);
 });

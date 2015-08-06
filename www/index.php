@@ -32,6 +32,8 @@ if(isset($_SESSION['userid'])){
 <body>
 <div id="shadow"> </div>
 <div id="fr"> </div>
+<div id="shadow1"> </div>
+<div id="fr1"> </div>
 <div id="page">
 
 <div id="header">
