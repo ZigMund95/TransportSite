@@ -75,6 +75,7 @@ for(var key in data){
 		$(thiss).find(".year").val(date[2]);
 	}
 };
+if($("[name=sriv]").val() == "срыв!"){ $("[name=sriv]").attr("type", "hidden"); $("#sriv")[0].checked = true; };
 };
 
 // ЗАПРЕТ НА ВВОД БУКВ(РАЗРЕШЕНЫ ЦИФРЫ/СТРЕЛКИ/DELETE/BACKSPACE/TAB)
@@ -108,23 +109,23 @@ if($("[name=forma1]").val() != '?' & $("[name=forma2]").val() != '?'){
 	}
 }
 else{ $("[name=netto]").val("Выберите форму оплаты"); };
-calculateStavka();
-calculateZakaz();
+calculateDolg();
+$("[name=ostat]").val($("[name=netto]").val()-$("[name=stavka]").val());
 }
 
-function calculateZakaz(){
+function calculateDolg(){
 	$("[name=dolg1]").val($("[name=netto]").val()-$("[name=post_sum1]").val()-$("[name=post_sum2]").val()-$("[name=post_sum3]").val()-$("[name=post_sum4]").val());
 	$("[name=dolg2]").val($("[name=stavka]").val()-$("[name=opl_sum1]").val()-$("[name=opl_sum2]").val()-$("[name=opl_sum3]").val()-$("[name=opl_sum4]").val());
 }
 
 function calculateStavka(){
-	var stavka;
+	/*var stavka;
 	if($("[name=stavka]").attr("stavka") != ""){
 		$("[name=stavka]").val($("[name=brutto]").val()*(100-$("[name=stavka]").attr("stavka")) / 100);
 	}
 	else{
 		$("[name=stavka]").val($("[name=brutto]").val());
-	}
+	}*/
 }
 
 function setDateFields(){
@@ -139,7 +140,7 @@ for(var i=2015; i<2017; i++){ year = year + '<option>'+i+'</option>'};
 
 var lastDay = today.getDate(); var lastMonth = today.getMonth()+1; var lastYear = today.getFullYear();
 var date_picker = $(".date_picker");
-for(var i=0;i<14;i++){
+for(var i=0;i<15;i++){
 	date_picker.eq(i).html("<select class='day'>"+day+"</select> <select class='month'>"+month+"</select> <select class='year'>"+year+"</select> <input type=hidden name='"+date_picker.eq(i).attr('name')+"' class='date'>");
 
 	if(i<3){
@@ -218,9 +219,10 @@ function filter(sort){
 		i++;
 	}
 	data = data + '&' + sort;
+	//alert('asd');
 	if(typeof $("#dolg").val() != "undefined"){ data = data + "&dolg=1"; };
 	$.ajax({
-		type: "GET",
+		type: "POST",
 		url: "pages/main_filter.php",
 		data: data,
 		success: function(html){ 
@@ -230,24 +232,44 @@ function filter(sort){
 			}
 			$(".tableData").css({height: $("#content")[0].offsetHeight-$(".fixed")[0].offsetHeight-22});
 			$(".tableData").css({width: $(".fixed")[0].offsetWidth+21});
-			$("#reisi col").eq(0).css("background-color", "#d1e3d1");
-				$("#reisi col").eq(1).css("background-color", "#d1e3d1");
-				$("#reisi col").eq(2).css("background-color", "#d1e3d1");
-				//$(".fixed [posX=2]").css("border-right", "3px solid");
-				$(".fixed [posX=3]").css("border-left", "3px solid");
-				//$("#reisi [posX=2]").css("border-right", "3px solid");
-				$("#reisi [posX=3]").css("border-left", "3px solid");
+			
+			setFieldsColor();
 			}
 	})
 }
 
 function filterFr(thiss){
+	var data = filterData();
 	$.ajax({
-		type: "GET",
+		type: "POST",
 		url: "pages/filter_list.php",
-		data: "idcol="+thiss.attr("idcol")+"&search="+thiss.val(),
+		data: "idcol="+thiss.attr("idcol")+"&search="+thiss.val()+"&"+data,
 		success: function(html){ $("#fr1 div").html(html); }
 	});
+};
+
+function filterData(){
+	var data = '';
+	var i = 0;
+	var j = 0;
+	var b = '1';
+	while(typeof $(".filterCol").eq(i).attr("id") != "undefined"){
+		if(($(".filterInp").eq(j).attr("id")) == $(".filterCol").eq(i).attr("id")+"input"){
+			if(b=='1'){ b = ' '; }
+			else{ b = '&'; };
+			if($(".filterInp").eq(j).val() != ''){
+			data = data+b+"filterC[]="+$(".filterCol").eq(i).attr("id")+"&filter[]="+$(".filterInp").eq(j).val();
+			}
+			j++;
+		};
+		i++;
+	}
+	//data = data + '&' + sort;
+	if(typeof $("#dolg").val() != "undefined"){ data = data + "&dolg=1"; };
+	
+	//alert("idcol="+thiss.attr("idcol")+"&search="+thiss.val()+"&"+data);
+	//alert('asd');
+	return data;
 };
 
 var colWidths;
@@ -269,6 +291,26 @@ function setColWidth(widths, visibleCol){
 		i++;
 		}
 	}
+};
+
+function setFieldsColor(){
+	//alert('asd');
+	/*var n = $("#reisi col:last").attr("posX");
+	for(var i = 0; i <= n; i++){
+		$("#reisi col").eq(i).css("background-color", $("#reisi col").eq(i).attr("bgcolor"));
+		$("#reisi [posX="+i+"]").css("border-right", $("#reisi col").eq(i).attr("border-right"));
+		$("#reisi [posX="+i+"]").css("border-left", $("#reisi col").eq(i).attr("border-left"));
+		$(".fixed [posX="+i+"]").css("border-right", $("#reisi col").eq(i).attr("border-right"));
+		$(".fixed [posX="+i+"]").css("border-left", $("#reisi col").eq(i).attr("border-left"));
+	}
+	/*$("#reisi col").eq(0).css("background-color", "#d1e3d1");
+	$("#reisi col").eq(1).css("background-color", "#d1e3d1");
+	$("#reisi col").eq(2).css("background-color", "#d1e3d1");
+	$("#reisi col").eq(3).css("background-color", "#d1e3d1");
+	$(".fixed [posX=3]").css("border-right", "3px solid");
+	$(".fixed [posX=4]").css("border-left", "3px solid");
+	$("#reisi [posX=3]").css("border-right", "3px solid");
+	$("#reisi [posX=4]").css("border-left", "3px solid");*/
 };
 
 //-------------------------------------------------------//
@@ -319,10 +361,11 @@ jQuery(document).ready(function($){
 	//{
 	$("body, #content").on("click", ".canselect td", function(){
 		$(".canselect td").css("border","1px solid black");
-		$(".canselect td").css("background-color","white");
+		$(".canselect td").css("background-color","");
 		$(".canselect td").attr("class","cell");
+		setFieldsColor();
 		var row = '[class=cell][posY='+$(this).attr('posY')+']';
-		$(row).css("border","1px solid red");
+		$(row).css("border-color", "red");
 		$(row).css("background-color","#ccc");
 		$(row).attr("class","cell selected");
 	});
@@ -334,8 +377,9 @@ jQuery(document).ready(function($){
 		if(event.keyCode == 38){
 			if(posY > 1){
 			cell.css("border-color", "black");
-			cell.css("background-color","white");
+			cell.css("background-color","");
 			cell.attr("class", "cell");
+			setFieldsColor();
 			str = '[class=cell][posY='+(parseInt(posY)-1)+']';
 			$(str).css("border-color", "red");
 			$(str).css("background-color","#ccc");
@@ -345,8 +389,9 @@ jQuery(document).ready(function($){
 		
 		if(event.keyCode == 40){
 			cell.css("border-color", "black");
-			cell.css("background-color","white");
+			cell.css("background-color","");
 			cell.attr("class", "cell");
+			setFieldsColor();
 			str = '[class=cell][posY='+(parseInt(posY)+1)+']';
 			$(str).css("border-color", "red"); 
 			$(str).css("background-color","#ccc");
@@ -535,11 +580,10 @@ jQuery(document).ready(function($){
 	
 	
 	$("#content").on("dblclick", "#reisi td", function(){
-		var datasend = 'index='+$("[posX=1][posY="+$(this).attr('posY')+"]").html();
 		$.ajax({
 			type: 'GET',
 			url: 'pages/newrecord.php',
-			data: datasend,
+			data: 'index='+$(this).attr('recid'),
 			success: function(html){ $('#content').html(html); }
 		});
 	});
@@ -585,6 +629,19 @@ jQuery(document).ready(function($){
 		return false;
 	});
 
+	$("body").on("click", "#setpermission", function(){
+		var a = $("#permissionform").serialize()+"&login="+$(this).attr("login");
+		$.ajax({
+			type: 'POST',
+			url: 'pages/user_options.php',
+			data: a
+		});
+		//page = '1';
+		//loadPage();
+		//$("#fr").hide();
+		//$("#shadow").hide();
+		return false;
+	});
 	
 	$("body").bind("keyup", ".name", function(){
 		$('#name').val($('#name1').val()+' '+$('#name2').val()+' '+$('#name3').val());
@@ -668,6 +725,7 @@ jQuery(document).ready(function($){
 	});
 	
 	$("#content").on("click", ".fixed .filterCol", function(){
+		var data = filterData();
 		if($("[class=filterDiv][id="+$(this).attr("id")+"]").html() == ""){
 			$("[class=filterDiv][id="+$(this).attr("id")+"]").html("<input type=hidden id='"+$(this).attr("id")+"input' class='filterInp width110' onkeyup='filter()'>");
 			$("#"+$(this).attr("id")+"input").css("width", "calc("+$(".fixed col").eq($($($("#"+$(this).attr("id")+"input").parent("div")).parent("th")).attr("posX")).css("width")+" - 10px)");
@@ -677,10 +735,11 @@ jQuery(document).ready(function($){
 		$("#shadow1").show();
 			var thisth = $($($(this).parent("div")).parent("th"));
 			$("#fr1").css({"top": "calc("+thisth.offset().top+'px + '+thisth.css('height')+")", "left": thisth.offset().left});
+			//alert($(this).attr("id"));
 			$.ajax({
-				type: "GET",
+				type: "POST",
 				url: "pages/filter.php",
-				data: "idcol="+$(this).attr("id"),
+				data: "idcol="+$(this).attr("id")+"&"+data,
 				success: function(html){ 
 					$("#fr1").html(html); 
 					var strval = $("#"+$(thiss).attr("id")+"input").val().split(";");
@@ -706,7 +765,7 @@ jQuery(document).ready(function($){
 		$("img#"+$(this).attr("idcol")).attr("src", "images/arrow.png");
 		filter();
 	});
-	//}
+	//}------------------------------------------------------------------------------------------
 	
 	$("body").on("click", "#shadow1", function(){
 		$("#fr1").hide();
@@ -720,11 +779,10 @@ jQuery(document).ready(function($){
 		$("#shadow").show();
 		$("#fr").show();
 		$.ajax({
+			type: "POST",
 			url: "pages/user_options.php",
-			success: function(html){ 
-			$("#fr").html(html); 
-			$("#change_pass [name=login]").val($(".selected[posX=1]").html());
-			}
+			data: "login="+$(".selected[posX=1]").html(),
+			success: function(html){ $("#fr").html(html); }
 		});
 	});
 
@@ -744,7 +802,6 @@ jQuery(document).ready(function($){
 		
 	});
 	
-	//$("")
 	/*-----------------------------*/
 	/*-ИЗМЕНЕНИЕ РАЗМЕРОВ СТОЛБЦОВ-*/
 	/*-----------------------------*/
@@ -783,8 +840,10 @@ jQuery(document).ready(function($){
 			if((x1-x2) < -5 || (x1-x2) > 5){
 				width2 = width.split('px');
 				width1 = (+width2[0]+(x2-x1));
-				$(".fixed col").eq(indCol).css("width", width1);
-				$("#reisi col").eq(indCol).css("width", width1);
+				if(width1 > 10){
+					$(".fixed col").eq(indCol).css("width", width1);
+					$("#reisi col").eq(indCol).css("width", width1);
+				}
 			}
 		}
 	});

@@ -1,16 +1,16 @@
 <? session_start();
-if(isset($_GET["sort"])){ $sort = $_GET["sort"]; $tsort = $_GET["tsort"]; }
+if(isset($_POST["sort"])){ $sort = $_POST["sort"]; $tsort = $_POST["tsort"]; }
 else{ $sort = ""; $tsort = 'DESC'; }
 
-if($_GET["filter"] != ''){
+if($_POST["filter"] != ''){
 	$filter = '';
-	foreach($_GET["filter"] as $key => $value){
+	foreach($_POST["filter"] as $key => $value){
 		if($key == 0){ $b = ''; }else{ $b = " AND "; };
-			$arr = split(";", $_GET["filter"][$key]);
+			$arr = split(";", $_POST["filter"][$key]);
 			$filter = $filter.$b."(";
 			for($i=0; $i < (sizeof($arr)-1); $i++){ 
 				if($i == 0){ $a = ''; }else{ $a = " OR "; };
-				$filter = $filter.$a.'`'.$_GET["filterC"][$key].'` LIKE "'.$arr[$i].'"'; 
+				$filter = $filter.$a.'`'.$_POST["filterC"][$key].'` LIKE "'.$arr[$i].'"'; 
 			};
 			$filter = $filter.")";
 	}
@@ -19,16 +19,25 @@ else{
 	$filter = '';
 }
 //echo $filter;
-if(isset($_GET["dolg"])){
+if(isset($_POST["dolg"])){
 	$dolg =  "(`dolg1` <> 0 OR `dolg2` <> 0)";
 }
 else{
 	$dolg = '';
 }
 
-$visibleColumn = split(';', $_SESSION['visible_column']);
-
 $link = mysqli_connect('localhost','admin','admin','test');
+
+$user = mysqli_query($link, "SELECT * FROM `users` WHERE `index`='".$_SESSION["userid"]."'");
+$user = mysqli_fetch_assoc($user);
+$permissionColumn = split(';', $user['permissioncolumns']);
+$visibleColumn = split(';', $_SESSION['visible_column']);
+$a = '1;';
+for($i = 0; $i < strlen($user['permissioncolumns']); $i++){
+	if($user['permissioncolumns'][$i] != ";"){
+	$a[$i] = $user['permissioncolumns'][$i]*$_SESSION['visible_column'][$i];
+	}
+}
 
 $config[] = '0';
 $record = mysqli_query($link, "SELECT * FROM `reisi_config`");
@@ -44,9 +53,9 @@ $indexX = 0;
 $tdOut = '';
 foreach($config as $key => $value){
 	if($value){
-		if($visibleColumn[$i] == '1'){
+		if($visibleColumn[$i] && $permissionColumn[$i]){
 			if($config[$key]['name'] != 'index'){
-				$tdOut = $tdOut.'<td posX="'.$indexX.'" posY="@posY@" class="cell">@'.$config[$key]['name'].'@</td>';
+				$tdOut = $tdOut.'<td posX="'.$indexX.'" posY="@posY@" class="cell" recid="@recid@" ><span style="width: 100%; height: 100%; display: block; margin: 0;@td_color@"><span style="@text_color@">@'.$config[$key]['name'].'@</span> </span></td>';
 				$indexX++;
 			}
 			else{ $indexX++; }
@@ -57,7 +66,9 @@ foreach($config as $key => $value){
 
 echo '<div class="tableData">';
 echo '<table id="reisi" class="table canselect">';
-for($i=0;$i<$_SESSION["count_column"];$i++){ echo '<col posX="'.$i.'"> '; };
+$i = 0;
+$j = 0;
+foreach($config as $key => $value){ if($config[$key]){ if($a[$i]){ echo '<col colname="'.$config[$key]["name"].'" posX="'.$j.'" style="border-right: '.$config[$key]["border-right"].'; border-left: '.$config[$key]["border-left"].'; background-color: '.$config[$key]["bgcolor"].';">'; $j++;} $i += 2; }};
 $dateCol = array('date', 'date_pogr', 'date_vig', 'fact_date_vig', 'ttn_poluch', 'ttn_otp', 'post_date1', 'post_date2', 'post_date3', 'post_date4',
 				'opl_date1', 'opl_date2', 'opl_date3', 'opl_date4');
 				
@@ -76,17 +87,19 @@ if($filter != ''){
 	else{ $where = ' WHERE '.$filter; };
 }
 if($sort != ""){ $order = " ORDER BY `".$sort."` ".$tsort; };
-//echo $query.$where.$order;
 
 $res = mysqli_query($link, $query.$where.$order);
+//echo $query.$where.$order;
 $indexY = 1;
+
 while($row = mysqli_fetch_assoc($res)) {
 	$tdOut1 = $tdOut;
 	echo '<tr>';
 	$indexX = 1;
 	$i = 0;
-	foreach($row as $key => $value){
-		if($visibleColumn[$i] == '1'){
+	foreach($config as $key => $value){
+		if($visibleColumn[$value["position"]-1]){
+		$value = $row[$key];
 		if($key == 'index'){ echo '<th class="greytd" posX="'.$indexX.'" posY="'.$indexY.'">'.$value.'</th>';}
 		else{
 			if($value != '0000-00-00' && $value != ''){
@@ -99,12 +112,16 @@ while($row = mysqli_fetch_assoc($res)) {
 				$value = '-';
 			};
 			$tdOut1 = str_replace("@posY@", $indexY, $tdOut1);
+			$tdOut1 = str_replace("@recid@", $row["index"], $tdOut1);
 			$tdOut1 = str_replace("@".$key."@", $value, $tdOut1);
+			if($row["sriv"] == "срыв!"){ $tdOut1 = str_replace("@text_color@", "color: red; text-decoration: line-through;", $tdOut1); }
+			if($row["stop_opl"] != ""){ $tdOut1 = str_replace("@td_color@", "; background-color: yellow;", $tdOut1); }
 		$indexX++;
 		};
 		};
 		$i++;
 	};
+	//echo '<br>';
 	$indexY++;
 echo $tdOut1;
 echo '</tr>';
