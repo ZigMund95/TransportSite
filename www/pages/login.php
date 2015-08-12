@@ -17,6 +17,7 @@ if(isset($_POST["login_send"])){
 				}
 				$_SESSION['count_column'] = $count;
 				$_SESSION['width_column'] = $record1['widthcolumns'];
+				$_SESSION['permission_column'] = $record1['permissioncolumns'];
 			}
 			else{
 				echo("NO");

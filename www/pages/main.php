@@ -3,9 +3,22 @@
 if(isset($_GET["sort"])){ $sort = $_GET["sort"]; $tsort = $_GET["tsort"]; }
 else{ $sort = ""; $tsort = 'DESC'; }
 
+$link = mysqli_connect('localhost','admin','admin','test');
+
+$user = mysqli_query($link, "SELECT * FROM `users` WHERE `index`='".$_SESSION["userid"]."'");
+$user = mysqli_fetch_assoc($user);
+$permissionColumn = split(';', $user['permissioncolumns']);
 $visibleColumn = split(';', $_SESSION['visible_column']);
 
-$link = mysqli_connect('localhost','admin','admin','test');
+$a = '1;';
+for($i = 0; $i < strlen($user['permissioncolumns']); $i++){
+	if($user['permissioncolumns'][$i] != ";"){
+	$a[$i] = $user['permissioncolumns'][$i]*$_SESSION['visible_column'][$i];
+	}
+}
+
+$_SESSION["count_column"] = substr_count($a, "1");
+
 
 $config[] = '0';
 $record = mysqli_query($link, "SELECT * FROM `reisi_config`");
@@ -25,7 +38,7 @@ $indexX = 0;
 $tdOut = '';
 foreach($config as $key => $value){
 	if($value){
-		if($visibleColumn[$i] == '1'){
+		if($visibleColumn[$i] && $permissionColumn[$i]){
 			echo ('<th posX="'.$indexX.'" class="canresize"> <div>'.$config[$key]['value'].'
 					<img src="images/arrow.png" id="'.$config[$key]['name'].'" name="'.$tsort.'" class="filterCol">'.'
 					</div>

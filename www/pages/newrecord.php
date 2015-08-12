@@ -2,14 +2,13 @@
 $link = mysqli_connect("localhost", "admin", "admin", "test");
 ?>
 
-<form method="POST" id="formrecord">
-
+<form method="POST" id="formrecord" onkeydown=" if(event.keyCode == 13) { $(`input:focus ~ input:first`).focus(); return false; }">
 <table id="newrecord">
 	<tr>
 		<input type=hidden name="index">
 		<? $currdate = getdate(); $currdate = $currdate["0"]; ?>
 		<td class="tdright"> Дата <div name="date" class="date_picker"></div> </td>
-		<td class="tdright"> Срыв! <input type=text class="width185" name="sriv"> </td>
+		<td class="tdright"> <input type=checkbox id="sriv" onchange="if(this.checked){ $(`[name=sriv]`).val(`срыв!`); $(`[name=sriv]`).attr(`type`, `hidden`); }else{ $(`[name=sriv]`).val(``); $(`[name=sriv]`).attr(`type`, `text`); }"> Срыв! <input type=text class="width185" name="sriv"> </td>
 		<?
 		$res = mysqli_query($link, "SELECT * FROM `reisi` WHERE `manager`=".$_SESSION['userid']);
 		while($res1 = mysqli_fetch_assoc($res)){ $res2 = $res1; };
@@ -46,7 +45,7 @@ $link = mysqli_connect("localhost", "admin", "admin", "test");
 		ставка БРУТТО <input type=text class="width185" name="brutto" onkeydown="return noLetters(event.keyCode);" onkeyup="calculateNetto();"> <br>
 		форма оплаты <select class="width185" name="forma1" onchange="calculateNetto();"> <option> ? </option>  <option> нал </option>  <option> безнал </option>  <option> с НДС </option> </select> <br>
 		потери <input type=text class="width185" name="poteri" onkeydown="return noLetters(event.keyCode);" onkeyup="calculateNetto();">  <br>
-		стака НЕТТО <input type=text class="width185"  name="netto" onkeydown="if(event.keyCode != 9){ return false; }">  <br>
+		стака НЕТТО <input type=text class="width185"  name="netto" onkeydown="if(event.keyCode != 9 && event.keyCode != 13){ return false; }">  <br>
 		</td>
 
 		<td class="tdright" colspan=2>
@@ -65,18 +64,21 @@ $link = mysqli_connect("localhost", "admin", "admin", "test");
 		Телефон 1 <input type=text class="width185"  name="phone1" onkeydown="if(event.keyCode != 9){ return false; }"> <br>
 		Телефон 2 <input type=text class="width185" name="phone2" onkeydown="if(event.keyCode != 9){ return false; }"> <br>
 		а/м <input type=text class="width185" name="car" onkeydown="if(event.keyCode != 9){ return false; }"> <br>
-		ставка <input type=text class="width185" name="stavka" stavka=""> <br>
+		ставка <input type=text class="width185" name="stavka" onkeyup="calculateNetto()"> <br>
 		форма оплаты <select class="width185" name="forma2" onchange="calculateNetto();"> <option> ? </option>  <option> нал </option>  <option> безнал </option>  <option> с НДС </option> </select> <br>
 		срок оплаты <input type=text class="width185"  name="srok_opl"> <br>
 		<br>
 		<br>
-		наша фирма <input type=text class="width156" name="our_firm"> <button type=submit class="width25">+</button> <br>
+		наша фирма <input type=text class="width156" name="our_firm"> <button class="width25">+</button> <br>
 		<a href="" id="open_zayavka"> Печать заявки </a>
 		<br>
 		<br>
 		факт дата выгрузки <div name="fact_date_vig" class="date_picker"></div> <br>
 		ТТН получена <div name="ttn_poluch" class="date_picker"></div> <br>
 		ТТН, счет отправлены <div name="ttn_otp" class="date_picker"></div> <br>
+		TTH вручена <div name="ttn_vruch" class="date_picker"></div> <br>
+		<br>
+		Стоп-оплата <input type=text name="stop_opl"> <br>
 		</td>
 	</tr>
 
@@ -107,7 +109,7 @@ $link = mysqli_connect("localhost", "admin", "admin", "test");
 		<hr>
 			наш остаток <input type=text class="width185" name="ostat" onkeydown="if(event.keyCode != 9){ return false; }"> <br>
 			Примечания <input type=text class="width400" name="primech"> <br>
-			<button type=submit class="width156" name="ok">OK</button>
+			<button type=submit id="sendrecord" class="width156" name="ok">OK</button>
 		</td>
 	</tr>
 </table>

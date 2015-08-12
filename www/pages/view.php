@@ -2,6 +2,9 @@
 
 $link = mysqli_connect('localhost', 'admin', 'admin', 'test');
 
+$user = mysqli_query($link, "SELECT * FROM `users` WHERE `index`='".$_SESSION["userid"]."'");
+$user = mysqli_fetch_assoc($user);
+$_SESSION['permission_column'] = $user['permissioncolumns'];
 
 $record = mysqli_query($link, "SELECT * FROM `reisi_config`");
 while($record1 = mysqli_fetch_assoc($record)){
@@ -30,19 +33,20 @@ if(isset($_POST['hidden'])){
 
 //echo($_SESSION['visible_column'].' '.$_SESSION['count_column']);
 $visibleColumn = split(';', $_SESSION['visible_column']);
-
+$permissionColumn = split(';', $_SESSION['permission_column']);
 $i = 0;
 $j = 0;
 echo '<form method=POST id="viewform"> <table id="viewtable"> <tr> <td>';
 echo '<input type=hidden name="hidden" value="yep">';
 foreach($config as $key => $value){
-	if($config[$key]['value'] != '1'){
-	if($visibleColumn[$i]=='1'){ $b = 'checked'; }else{ $b = ''; };
-	echo('<input type=checkbox name="'.$key.'" value="'.$key.'" '.$b.'> '.$config[$key]['value'].' <br>');
-	if(($j+1)%10 == 0){ echo '</td> <td>';};
-	$j++;
-	}
-	
+	//if($config[$key]['value'] != '1'){
+		if($permissionColumn[$i]){
+			if($visibleColumn[$i]){ $b = 'checked'; }else{ $b = ''; };
+			echo('<input type=checkbox name="'.$key.'" value="'.$key.'" '.$b.'> '.$config[$key]['value'].' <br>');
+			if(($j+1)%10 == 0){ echo '</td> <td>';};
+			$j++;
+		};
+	//};
 	$i++;
 	
 };
