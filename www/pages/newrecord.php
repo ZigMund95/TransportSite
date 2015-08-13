@@ -13,11 +13,13 @@ $link = mysqli_connect("localhost", "admin", "admin", "test");
 		$res = mysqli_query($link, "SELECT * FROM `reisi` WHERE `manager`=".$_SESSION['userid']);
 		while($res1 = mysqli_fetch_assoc($res)){ $res2 = $res1; };
 		$dateNow = time(); $dateNow = getdate($dateNow);
+		echo
 		$dateStart = mktime(12,0,0,1,1,2015); $dateStart = getdate($dateStart);
 		$dayNow = $dateNow["yday"] - $dateStart["yday"] + 605;		
 		$numLast = $res2["number"][0].$res2["number"][1].$res2["number"][2];
 		if($numLast == $dayNow){ $count = $res2["number"][3]+1; }
 		else{ $count = 1; };
+		if($count > 9){ $dayNow += 1; $count = 1; };
 		$num = $dayNow.$count.$_SESSION['userid'];
 		echo '<td class="tdright"> № заказа <input type=text class="width185" name="number" onkeydown="if(event.keyCode != 9){ return false; }" value="'.$num.'"> </td>';
 		?>
@@ -57,6 +59,10 @@ $link = mysqli_connect("localhost", "admin", "admin", "test");
 			$sluz = $sluz.$res1["indexCounter"].';';
 		}
 		echo "<input type=hidden id='sluz' value='".$sluz."'>";
+		
+		$file = file("percents.inf");
+		echo "<input type=hidden name='percent1' value='".$file[0]."'>";
+		echo "<input type=hidden name='percent2' value='".$file[1]."'>";
 		?>
 		Перевозчик <input type=text class="width156" id="counter"  name="perevozchik" onkeydown="if(event.keyCode != 9){ return false; }"> <button href="counter_search" rule="select" name="perevozchik" id="openfr" class="openfr width25">+</button> <br>
 		код в АТИ <input type=text class="width185" name="ati2" onkeydown="if(event.keyCode != 9){ return false; }"> <br>
@@ -86,20 +92,52 @@ $link = mysqli_connect("localhost", "admin", "admin", "test");
 		<td class="tdright" colspan=2>
 		<hr>
 		поступление от заказчика <br>
-		<div name="post_date1" class="date_picker"></div> <input type=text class="width185" name="post_sum1" onkeydown="return noLetters(event.keyCode)" onkeyup="calculateZakaz();"> <br>
-		<div name="post_date2" class="date_picker"></div> <input type=text class="width185" name="post_sum2" onkeydown="return noLetters(event.keyCode)" onkeyup="calculateZakaz();"> <br>
-		<div name="post_date3" class="date_picker"></div> <input type=text class="width185" name="post_sum3" onkeydown="return noLetters(event.keyCode)" onkeyup="calculateZakaz();"> <br>
-		<div name="post_date4" class="date_picker"></div> <input type=text class="width185" name="post_sum4" onkeydown="return noLetters(event.keyCode)" onkeyup="calculateZakaz();"> <br>
+		<div name="post_date1" class="date_picker"></div> 
+		<input type=text class="width130" name="post_sum1" onkeydown="return noLetters(event.keyCode)" onkeyup="calculateDolg();"> 
+		<input type=text class="width156" id="counter"  name="post_firm1" <! onkeydown="if(event.keyCode != 9){ if($(`#`+$(this).attr(`name`))[0].checked){ return false; }}"> <button href="counter_search" rule="select" name="post_firm1" id="openfr" class="openfr width25">+</button> 
+		<! <input type=checkbox id="post_firm1" checked>
+		<br>
+		<div name="post_date2" class="date_picker"></div> 
+		<input type=text class="width130" name="post_sum2" onkeydown="return noLetters(event.keyCode)" onkeyup="calculateDolg();"> 
+		<input type=text class="width156" id="counter"  name="post_firm2" <! onkeydown="if(event.keyCode != 9){ if($(`#`+$(this).attr(`name`))[0].checked){ return false; }}"> <button href="counter_search" rule="select" name="post_firm2" id="openfr" class="openfr width25">+</button> 
+		<! <input type=checkbox id="post_firm2" checked>
+		<br>
+		<div name="post_date3" class="date_picker"></div> 
+		<input type=text class="width130" name="post_sum3" onkeydown="return noLetters(event.keyCode)" onkeyup="calculateDolg();"> 
+		<input type=text class="width156" id="counter"  name="post_firm3" onkeydown="if(event.keyCode != 9){ if($(`#`+$(this).attr(`name`))[0].checked){ return false; }}"> <button href="counter_search" rule="select" name="post_firm3" id="openfr" class="openfr width25">+</button> 
+		<! <input type=checkbox id="post_firm3" checked>
+		<br>
+		<div name="post_date4" class="date_picker"></div> 
+		<input type=text class="width130" name="post_sum4" onkeydown="return noLetters(event.keyCode)" onkeyup="calculateDolg();"> 
+		<input type=text class="width156" id="counter"  name="post_firm4" onkeydown="if(event.keyCode != 9){ if($(`#`+$(this).attr(`name`))[0].checked){ return false; }}"> <button href="counter_search" rule="select" name="post_firm4" id="openfr" class="openfr width25">+</button> 
+		<! <input type=checkbox id="post_firm4" checked>
+		<br>
 		долг <input type=text name="dolg1" class="width185" onkeydown="if(event.keyCode != 9){ return false; }"> <br>
 		</td>
 	
 		<td class="tdright" colspan=2>
 		<hr>
 		оплачено перевозчику <br>
-		<div name="opl_date1" class="date_picker"></div> <input type=text class="width185" name="opl_sum1" onkeydown="return noLetters(event.keyCode)" onkeyup="calculateZakaz();"> <br>
-		<div name="opl_date2" class="date_picker"></div> <input type=text class="width185" name="opl_sum2" onkeydown="return noLetters(event.keyCode)" onkeyup="calculateZakaz();"> <br>
-		<div name="opl_date3" class="date_picker"></div> <input type=text class="width185" name="opl_sum3" onkeydown="return noLetters(event.keyCode)" onkeyup="calculateZakaz();"> <br>
-		<div name="opl_date4" class="date_picker"></div> <input type=text class="width185" name="opl_sum4" onkeydown="return noLetters(event.keyCode)" onkeyup="calculateZakaz();"> <br>
+		<div name="opl_date1" class="date_picker"></div> 
+		<input type=text class="width130" name="opl_sum1" onkeydown="return noLetters(event.keyCode)" onkeyup="calculateDolg();"> 
+		<input type=text class="width156" id="counter"  name="opl_firm1" onkeydown="if(event.keyCode != 9){ if($(`#`+$(this).attr(`name`))[0].checked){ return false; }}"> <button href="counter_search" rule="select" name="opl_firm1" id="openfr" class="openfr width25">+</button> 
+		<! <input type=checkbox id="opl_firm1" checked>
+		<br>
+		<div name="opl_date2" class="date_picker"></div> 
+		<input type=text class="width130" name="opl_sum2" onkeydown="return noLetters(event.keyCode)" onkeyup="calculateDolg();"> 
+		<input type=text class="width156" id="counter"  name="opl_firm2" onkeydown="if(event.keyCode != 9){ if($(`#`+$(this).attr(`name`))[0].checked){ return false; }}"> <button href="counter_search" rule="select" name="opl_firm2" id="openfr" class="openfr width25">+</button> 
+		<! <input type=checkbox id="opl_firm2" checked>
+		<br>
+		<div name="opl_date3" class="date_picker"></div> 
+		<input type=text class="width130" name="opl_sum3" onkeydown="return noLetters(event.keyCode)" onkeyup="calculateDolg();"> 
+		<input type=text class="width156" id="counter"  name="opl_firm3" onkeydown="if(event.keyCode != 9){ if($(`#`+$(this).attr(`name`))[0].checked){ return false; }}"> <button href="counter_search" rule="select" name="opl_firm3" id="openfr" class="openfr width25">+</button> 
+		<! <input type=checkbox id="opl_firm3" checked>
+		<br>
+		<div name="opl_date4" class="date_picker"></div> 
+		<input type=text class="width130" name="opl_sum4" onkeydown="return noLetters(event.keyCode)" onkeyup="calculateDolg();"> 
+		<input type=text class="width156" id="counter"  name="opl_firm4" onkeydown="if(event.keyCode != 9){ if($(`#`+$(this).attr(`name`))[0].checked){ return false; }}"> <button href="counter_search" rule="select" name="opl_firm4" id="openfr" class="openfr width25">+</button> 
+		<! <input type=checkbox id="opl_firm4" checked>
+		<br>
 		долг <input type=text name="dolg2" class="width185" onkeydown="if(event.keyCode != 9){ return false; }"> <br>
 		</td>
 	</tr>

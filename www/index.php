@@ -32,6 +32,7 @@ if(isset($_SESSION['userid'])){
 <body>
 <div id="shadow"> </div>
 <div id="fr"> </div>
+<img id="closeimg" src="images/close.png">
 <div id="shadow1"> </div>
 <div id="fr1"> </div>
 <div id="page">
@@ -83,6 +84,7 @@ if(isset($_SESSION['userid'])){
 			<ul>
 				<li> <a href="view" class='openfr'> Вид </a> </li>
 				<li> <a href="sluzhebnie"> Служебные </a> </li>
+				<? echo '<li> <a id="print_table"> Печать </a> </li>'; ?>
 			</ul>
 		</li>
 	</ul>
