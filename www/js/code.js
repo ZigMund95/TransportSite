@@ -4,8 +4,7 @@ function loadPage(){
 	if((page != location.pathname)&&(location.pathname != "")){
 		page = location.pathname;
 		//alert(page);
-		if(page == '/'){page1='main';}else{page1=page;};
-		if(page == "/dolzhniki"){ page1='main'};
+		if(page == '/' || page=="/print.php" || page == "/dolzhniki"){page1='main';}else{page1=page;};
 		$.ajax({
 			url: 'pages/'+page1+'.php',
 			success: function(html){
@@ -32,7 +31,9 @@ function loadPage(){
 					function(){ $("body").css("cursor", ""); }
 				);
 				
-				if(page == "/dolzhniki"){ $("#content").append("<input type=hidden id='dolg' value='1'>"); filter(); };
+				//alert(location.hash);
+				if(page == "/dolzhniki" || location.hash == "#dolg"){ $("#content").append("<input type=hidden id='dolg' value='1'>"); filter(); };
+				
 			}
 		});
 	}
@@ -85,6 +86,9 @@ function noLetters(keyCode){
 };
 
 function calculateNetto(){
+var p1 = 1-$("[name=percent1]").val()/100;
+var p2 = 1-$("[name=percent2]").val()/100;
+//alert(p1+' '+p2);
 if($("[name=forma1]").val() != '?' & $("[name=forma2]").val() != '?'){ 
 	if($("[name=forma1]").val() == 'нал'){
 		$("[name=netto]").val($("[name=brutto]").val()-$("[name=poteri]").val()); 
@@ -95,15 +99,15 @@ if($("[name=forma1]").val() != '?' & $("[name=forma2]").val() != '?'){
 				$("[name=netto]").val($("[name=brutto]").val()-$("[name=poteri]").val()); 
 			}
 			else{
-				$("[name=netto]").val(0.98*$("[name=brutto]").val()-$("[name=poteri]").val()); 
+				$("[name=netto]").val(p1*$("[name=brutto]").val()-$("[name=poteri]").val()); 
 			}
 		}
 		else{
 			if($("[name=forma2]").val() == 'с НДС'){
-				$("[name=netto]").val(0.98*$("[name=brutto]").val()-$("[name=poteri]").val()); 
+				$("[name=netto]").val(p1*$("[name=brutto]").val()-$("[name=poteri]").val()); 
 			}
 			else{
-				$("[name=netto]").val(0.94*$("[name=brutto]").val()-$("[name=poteri]").val()); 
+				$("[name=netto]").val(p2*$("[name=brutto]").val()-$("[name=poteri]").val()); 
 			}
 		}
 	}
@@ -233,6 +237,7 @@ function filter(sort){
 			$(".tableData").css({height: $("#content")[0].offsetHeight-$(".fixed")[0].offsetHeight-22});
 			$(".tableData").css({width: $(".fixed")[0].offsetWidth+21});
 			
+			if(page == "/print.php"){ $("html").css({"height": "99%"}); $("#content").css("border", "0"); $(".tableData").css("overflow-y", "visible"); };
 			setFieldsColor();
 			}
 	})
@@ -579,13 +584,20 @@ jQuery(document).ready(function($){
 	//}
 	
 	
+	
+	$("#content").on("click", "#reisi td", function(){
+		alert($("[posX="+$(this).attr("posX")+"]").attr("colname"));
+	});
+	
 	$("#content").on("dblclick", "#reisi td", function(){
+		if($("#canopencard").val() == "1"){
 		$.ajax({
 			type: 'GET',
 			url: 'pages/newrecord.php',
 			data: 'index='+$(this).attr('recid'),
 			success: function(html){ $('#content').html(html); }
 		});
+		};
 	});
 	
 	$("body").on("click", "#counters td", function(){
@@ -628,9 +640,18 @@ jQuery(document).ready(function($){
 		}
 		return false;
 	});
+	
+	$("body").on("click", "#uncheckall", function(){
+		var i = 0;
+		while(typeof $('input').eq(i).val() != "undefined"){
+			$('input')[i].checked = false;
+			i++;
+		}
+		return false;
+	});
 
 	$("body").on("click", "#setpermission", function(){
-		var a = $("#permissionform").serialize()+"&login="+$(this).attr("login");
+		var a = $("#permissionform").serialize()+"&login="+$(this).attr("login")+"&canopencard="+$("[name=canopencard]")[0].checked;
 		$.ajax({
 			type: 'POST',
 			url: 'pages/user_options.php',
@@ -638,8 +659,8 @@ jQuery(document).ready(function($){
 		});
 		//page = '1';
 		//loadPage();
-		//$("#fr").hide();
-		//$("#shadow").hide();
+		$("#fr").hide();
+		$("#shadow").hide();
 		return false;
 	});
 	
@@ -696,6 +717,13 @@ jQuery(document).ready(function($){
 		var form = $("#formrecord").serialize();
 		window.open('pages/zayavka.php?'+form);
 		return false;
+	});
+	
+	
+	$("#print_table").click(function(){
+		var a = '';
+		if(page == "/dolzhniki"){ a = "#dolg"; };
+		window.open('print.php'+a);
 	});
 	
 	//---------------------------------------------------------------
@@ -903,4 +931,32 @@ jQuery(document).ready(function($){
 	//}
 	
 	$("html").css("height", $(window).height()-160);
+	
+	
+	$("body").on("click", "#tdup", function(){
+		//alert('asd');
+		var tr1 = $($($(this).parent("td")).parent("tr"));
+		var tr2 = $("[pos="+(tr1.attr("pos")-1)+"]");
+		//alert(tr2.html());
+		var a = tr2.find("td").eq(0).html();
+		var b = tr2.find("td").eq(1).html();
+		tr2.find("td").eq(0).html(tr1.find("td").eq(0).html());
+		tr2.find("td").eq(1).html(tr1.find("td").eq(1).html());
+		tr1.find("td").eq(0).html(a);
+		tr1.find("td").eq(1).html(b);
+	});
+	
+	$("body").on("click", "#tddown", function(){
+		//alert('asd');
+		var tr1 = $($($(this).parent("td")).parent("tr"));
+		var tr2 = $("[pos="+(+tr1.attr("pos")+1)+"]");
+		//alert("[pos="+(+tr1.attr("pos")+1)+"]");
+		//alert(tr2.html());
+		var a = tr2.find("td").eq(0).html();
+		var b = tr2.find("td").eq(1).html();
+		tr2.find("td").eq(0).html(tr1.find("td").eq(0).html());
+		tr2.find("td").eq(1).html(tr1.find("td").eq(1).html());
+		tr1.find("td").eq(0).html(a);
+		tr1.find("td").eq(1).html(b);
+	});
 });

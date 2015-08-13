@@ -15,7 +15,7 @@ if(isset($_POST['hidden'])){
 	foreach($config as $key => $value){
 		if(isset($_POST[$key])){ $query = $query.'1;'; } else{ $query = $query.'0;'; };
 	}
-	mysqli_query($link, "UPDATE `users` SET `permissioncolumns`='".$query."' WHERE `login`='".$_POST['login']."'");
+	mysqli_query($link, "UPDATE `users` SET `permissioncolumns`='".$query."', `canopencard`=".$_POST['canopencard']." WHERE `login`='".$_POST['login']."'");
 };
 
 echo '<div id="change_pass">';
@@ -31,6 +31,11 @@ echo '</div>';
 
 $user = mysqli_query($link, "SELECT * FROM `users` WHERE `login`='".$_POST["login"]."'");
 $user = mysqli_fetch_assoc($user);
+
+$a = "";
+if($user["canopencard"]){ $a = "checked"; };
+echo 'Открытие карточки заказа по двойному щелчку по ячейке в таблице: <input type=checkbox name="canopencard" '.$a.'>';
+
 $visibleColumn = split(';', $_SESSION['visible_column']);
 $permissionColumn = split(';', $user['permissioncolumns']);
 $i = 0;

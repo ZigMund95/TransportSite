@@ -42,7 +42,7 @@ foreach($config as $key => $value){
 	//if($config[$key]['value'] != '1'){
 		if($permissionColumn[$i]){
 			if($visibleColumn[$i]){ $b = 'checked'; }else{ $b = ''; };
-			echo('<input type=checkbox name="'.$key.'" value="'.$key.'" '.$b.'> '.$config[$key]['value'].' <br>');
+			echo('<span style="background-color: '.$config[$key]['bgcolor'].'; width: 100%; display: inline-block;"> <input type=checkbox name="'.$key.'" value="'.$key.'" '.$b.'> '.$config[$key]['value'].' </span><br>');
 			if(($j+1)%10 == 0){ echo '</td> <td>';};
 			$j++;
 		};
@@ -55,4 +55,5 @@ echo '</td> </tr> </table>';
 
 <button id='setvision'> OK </button>
 <button id='checkall'> Выделить все </button>
+<button id='uncheckall'> Снять все </button>
 </form>

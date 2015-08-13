@@ -18,7 +18,7 @@ for($i = 0; $i < strlen($user['permissioncolumns']); $i++){
 }
 
 $_SESSION["count_column"] = substr_count($a, "1");
-
+$_SESSION["can_open_card"] = $user["canopencard"];
 
 $config[] = '0';
 $record = mysqli_query($link, "SELECT * FROM `reisi_config`");
@@ -107,6 +107,7 @@ echo('</table> </div> </div>');*/
 print('<script> filter() </script>'); 
 echo "</div> </div>";
 
+echo "<input type=hidden id='canopencard' value='".$_SESSION["can_open_card"]."'>";
 $width_columns = $_SESSION["width_column"];
 $width_columns = split(";", $width_columns);
 print('<script> setColWidth(('.json_encode($width_columns).'), ('.json_encode($visibleColumn).')) </script>'); 
