@@ -10,20 +10,28 @@ $link = mysqli_connect("localhost", "admin", "admin", "test");
 		<td class="tdright"> Дата <div name="date" class="date_picker"></div> </td>
 		<td class="tdright"> <input type=checkbox id="sriv" onchange="if(this.checked){ $(`[name=sriv]`).val(`срыв!`); $(`[name=sriv]`).attr(`type`, `hidden`); }else{ $(`[name=sriv]`).val(``); $(`[name=sriv]`).attr(`type`, `text`); }"> Срыв! <input type=text class="width185" name="sriv"> </td>
 		<?
-		$res = mysqli_query($link, "SELECT * FROM `reisi` WHERE `manager`=".$_SESSION['userid']);
-		while($res1 = mysqli_fetch_assoc($res)){ $res2 = $res1; };
+		
 		$dateNow = time(); $dateNow = getdate($dateNow);
-		echo
 		$dateStart = mktime(12,0,0,1,1,2015); $dateStart = getdate($dateStart);
 		$dayNow = $dateNow["yday"] - $dateStart["yday"] + 605;		
-		$numLast = $res2["number"][0].$res2["number"][1].$res2["number"][2];
-		if($numLast == $dayNow){ $count = $res2["number"][3]+1; }
-		else{ $count = 1; };
-		if($count > 9){ $dayNow += 1; $count = 1; };
-		$num = $dayNow.$count.$_SESSION['userid'];
-		echo '<td class="tdright"> № заказа <input type=text class="width185" name="number" onkeydown="if(event.keyCode != 9){ return false; }" value="'.$num.'"> </td>';
+		
+		$num = "more 10";
+		while($num == "more 10"){
+			//echo "SELECT * FROM `reisi` WHERE `manager`='".$_SESSION['userid']."' AND `number` LIKE '".$dayNow."%".$_SESSION['userid']."' <br>";
+			$res = mysqli_query($link, "SELECT * FROM `reisi` WHERE `manager`='".$_SESSION['userid']."' AND `number` LIKE '".$dayNow."%".$_SESSION['userid']."%'");
+			$res2 = '';
+			while($res1 = mysqli_fetch_assoc($res)){ $res2[] = $res1; };
+			if($res2 == ''){ $count = 1; }
+			else{ $count = $res2[count($res2)-1]["number"][3]+1; };
+			if($count < 10){ $num = $dayNow.$count.$_SESSION['userid']; }
+			else{ $num = "more 10";  $dayNow++; };
+		};
+		echo '<td class="tdright"> № заказа <input type=text class="width185" name="number" number="'.$num.'" onkeydown="if(event.keyCode != 9){ return false; }" value="'.$num.'"> </td>';
 		?>
-		<td class="tdright"> Менеджер <input type=text class="width185" name="manager" value=<? echo $_SESSION['userid']; ?> onkeydown="if(event.keyCode != 9){ return false; }"> </td>
+		<td class="tdright"> 
+		Менеджер <input type=text class="width185" name="manager" value=<? echo $_SESSION['userid']; ?> onkeydown="if(event.keyCode != 9){ return false; }"><br>
+		Совместно с <input type=texe class="width185" onkeyup="$(`[name=number]`).val($(`[name=number]`).attr(`number`)+$(this).val()) ">
+		</td>
 	</tr>
 	
 	<tr>
@@ -146,6 +154,8 @@ $link = mysqli_connect("localhost", "admin", "admin", "test");
 		<td colspan=4 class="tdright">
 		<hr>
 			наш остаток <input type=text class="width185" name="ostat" onkeydown="if(event.keyCode != 9){ return false; }"> <br>
+			<input type=hidden name="zarplata">
+			<input type=hidden name="oplata">
 			Примечания <input type=text class="width400" name="primech"> <br>
 			<button type=submit id="sendrecord" class="width156" name="ok">OK</button>
 		</td>
@@ -153,7 +163,7 @@ $link = mysqli_connect("localhost", "admin", "admin", "test");
 </table>
 </form>
 
-<script> setDateFields(); </script>
+<script> setDateFields(3); </script>
 
 <? 
 if(isset($_GET['index'])){ 
@@ -171,5 +181,7 @@ foreach($dateCol as $key => $value){
 
 print('<script> loadRecordPage(('.json_encode($record1).')) </script>'); 
 } 
+
+//echo '<script> calculateNumber(); </script>';
 ?>
 

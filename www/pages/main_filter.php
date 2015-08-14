@@ -70,7 +70,7 @@ $i = 0;
 $j = 0;
 foreach($config as $key => $value){ if($config[$key]){ if($a[$i]){ echo '<col colname="'.$config[$key]["name"].'" posX="'.$j.'" style="border-right: '.$config[$key]["border-right"].'; border-left: '.$config[$key]["border-left"].'; background-color: '.$config[$key]["bgcolor"].';">'; $j++;} $i += 2; }};
 $dateCol = array('date', 'date_pogr', 'date_vig', 'fact_date_vig', 'ttn_poluch', 'ttn_otp', 'post_date1', 'post_date2', 'post_date3', 'post_date4',
-				'opl_date1', 'opl_date2', 'opl_date3', 'opl_date4');
+				'opl_date1', 'opl_date2', 'opl_date3', 'opl_date4', 'zarplata_vid');
 				
 if($_SESSION["userid"] == "3"){ $manager = ''; }
 else{ $manager = ' WHERE `manager`="'.$_SESSION["userid"].'"'; };

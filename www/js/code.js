@@ -115,24 +115,26 @@ if($("[name=forma1]").val() != '?' & $("[name=forma2]").val() != '?'){
 else{ $("[name=netto]").val("Выберите форму оплаты"); };
 calculateDolg();
 $("[name=ostat]").val($("[name=netto]").val()-$("[name=stavka]").val());
+$("[name=zarplata]").val($("[name=ostat]").val()*0.35);
 }
 
 function calculateDolg(){
 	$("[name=dolg1]").val($("[name=netto]").val()-$("[name=post_sum1]").val()-$("[name=post_sum2]").val()-$("[name=post_sum3]").val()-$("[name=post_sum4]").val());
 	$("[name=dolg2]").val($("[name=stavka]").val()-$("[name=opl_sum1]").val()-$("[name=opl_sum2]").val()-$("[name=opl_sum3]").val()-$("[name=opl_sum4]").val());
-}
-
-function calculateStavka(){
-	/*var stavka;
-	if($("[name=stavka]").attr("stavka") != ""){
-		$("[name=stavka]").val($("[name=brutto]").val()*(100-$("[name=stavka]").attr("stavka")) / 100);
+	if($("[name=dolg1]").val() == 0){
+		if($("[name=dolg2]").val() == 0){
+			$("[name=oplata]").val('ОК');
+		}
+		else{
+			$("[name=oplata]").val('оплачено');
+		};
 	}
 	else{
-		$("[name=stavka]").val($("[name=brutto]").val());
-	}*/
+		$("[name=oplata]").val('');
+	}
 }
 
-function setDateFields(){
+function setDateFields(c){
 var today = new Date();
 
 var day = ''; var month = ''; var year = '';
@@ -147,7 +149,7 @@ var date_picker = $(".date_picker");
 for(var i=0;i<15;i++){
 	date_picker.eq(i).html("<select class='day'>"+day+"</select> <select class='month'>"+month+"</select> <select class='year'>"+year+"</select> <input type=hidden name='"+date_picker.eq(i).attr('name')+"' class='date'>");
 
-	if(i<3){
+	if(i<c){
 		date_picker.eq(i).find(".day").val(lastDay);
 		date_picker.eq(i).find(".month").val(months[lastMonth][0]);
 		date_picker.eq(i).find(".year").val(lastYear);
@@ -161,6 +163,12 @@ for(var i=0;i<15;i++){
 	var j = 0;
 	while(months[j][0] != date_picker.eq(i).find(".month").val() && j < 12){ j++; };
 	date_picker.eq(i).find('.date').val(date_picker.eq(i).find('.day').val()+'-'+j+'-'+date_picker.eq(i).find('.year').val());
+	
+	if(date_picker.eq(i).attr("name") == "date"){ 
+		date_picker.eq(i).find(".day").prop("disabled", true);
+		date_picker.eq(i).find(".month").prop("disabled", true);
+		date_picker.eq(i).find(".year").prop("disabled", true);
+	};
 }
 
 $(".date_picker").on("change", "select", function(){ 
@@ -183,10 +191,13 @@ $(".date_picker").on("change", "select", function(){
 	lastDay = $(thiss).find(".day").val();
 	lastMonth = $(thiss).find(".month").val();
 	lastYear = $(thiss).find(".year").val();
+	
+	//calculateNumber();
 });
 
 $(".date_picker").on("change", "input", function(){
 var date = $(this).val().split("-");
+alert('asd '+date);
 var thiss = $(this).parent("div");
 if(date[0] < 10){ date[0] = date[0][1]; }
 if(date[1] < 10){ date[1] = date[1][1]; }
@@ -586,8 +597,95 @@ jQuery(document).ready(function($){
 	
 	
 	$("#content").on("click", "#reisi td", function(){
-		alert($("[posX="+$(this).attr("posX")+"]").attr("colname"));
+		if($("#reisi [posX="+$(this).attr("posX")+"]").attr("colname") == "sriv"){
+			//$("[posX="+$(this).attr("posX")+"]").
+			$(this).find("span").hide();
+			if(typeof $(this).find("input").val() == "undefined"){
+				$(this).append("<input type=text value='"+$(this).find("span span").html()+"'>");
+				$(this).find("input").focus();
+			};
+			if($(this).find("input").css("display") == "none"){
+				$(this).find("input").show();
+				$(this).find("input").focus();
+			}
+		}
+		
+		if($("#reisi [posX="+$(this).attr("posX")+"]").attr("colname") == "zarplata_vid"){
+			$("span").show();
+			$(this).find("span").hide();
+					
+			if(typeof $(this).find("div").attr("class") == "undefined"){
+				$(".date_picker").hide();
+				$("#reisi td img").hide();
+				$(".date_picker").html("");
+				$(this).append("<div class='date_picker'> </div> <img id='set_zarp_vid' src='../images/greenarrow.png'>");
+				setDateFields();
+				$(".date").val($(this).find("span span").html());
+				var months = ["", ["январь", 31], ["февраль", 28], ["март", 31], ["апрель", 30], ["май", 31], ["июнь", 30], 
+							["июль", 31], ["август", 31], ["сентябрь", 30], ["октябрь", 31], ["ноябрь", 30], ["декабрь", 31]];
+				var date = $('.date').val().split("-");
+				if(date[0] < 10){ date[0] = date[0][1]; }
+				if(date[1] < 10){ date[1] = date[1][1]; }
+				$(".date_picker").find(".day").val(date[0]);
+				$(".date_picker").find(".month").val(months[date[1]][0]);
+				$(".date_picker").find(".year").val(date[2]);
+			};
+			if($(this).find("div").css("display") == "none"){
+				$(".date_picker").hide();
+				$("#reisi td img").hide();
+				$(".date_picker").html("");
+				$(this).find("div").show();
+				$(this).find("img").show();
+				$(this).find("div").focus();
+				setDateFields();
+				$(".date").val($(this).find("span span").html());
+				var months = ["", ["январь", 31], ["февраль", 28], ["март", 31], ["апрель", 30], ["май", 31], ["июнь", 30], 
+							["июль", 31], ["август", 31], ["сентябрь", 30], ["октябрь", 31], ["ноябрь", 30], ["декабрь", 31]];
+				var date = $('.date').val().split("-");
+				if(date[0] < 10){ date[0] = date[0][1]; }
+				if(date[1] < 10){ date[1] = date[1][1]; }
+				$(".date_picker").find(".day").val(date[0]);
+				$(".date_picker").find(".month").val(months[date[1]][0]);
+				$(".date_picker").find(".year").val(date[2]);
+			}
+		}
 	});
+	
+	$("#content").on("keyup", "#reisi td input", function(event){
+		if(event.keyCode == "13"){
+			var thiss = $(this);
+			thiss.hide();
+			$(thiss.parent("td")).find("span").show();
+			$.ajax({
+				type: "POST",
+				url: "pages/main_update.php",
+				data: "index="+$(thiss.parent("td")).attr("recid")+"&sriv="+thiss.val()
+			});
+		};
+		
+		$($(this).parent("td")).find("span span").html($(this).val());
+	});
+		
+	
+	$("#content").on("click", "#reisi td #set_zarp_vid", function(){
+		var thiss = $($(this).parent("td"));
+		thiss.find("div").hide();
+		$("#reisi td img").hide();
+		thiss.find("span").show();
+		$.ajax({
+			type: "POST",
+			url: "pages/main_update.php",
+			data: "index="+thiss.attr("recid")+"&zarplata_vid="+thiss.find(".date").val()
+		});
+		var date = thiss.find(".date").val().split("-");
+		//alert(date);
+		if(date[0] < 10){ date[0] = "0"+date[0]; }
+		if(date[1] < 10){ date[1] = "0"+date[1]; }
+		thiss.find("span span").html(date[0]+"-"+date[1]+"-"+date[2]);
+		return false;
+	});
+	
+	
 	
 	$("#content").on("dblclick", "#reisi td", function(){
 		if($("#canopencard").val() == "1"){
@@ -795,11 +893,7 @@ jQuery(document).ready(function($){
 	});
 	//}------------------------------------------------------------------------------------------
 	
-	$("body").on("click", "#shadow1", function(){
-		$("#fr1").hide();
-		$("#shadow1").hide();
-	});
-	
+	$("body").on("click", "#shadow1", function(){ $("#fr1").hide(); $("#shadow1").hide(); });
 
 	
 	$("#content").on("click", "#sluzhebnie table td", function(){
